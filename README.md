@@ -3,14 +3,15 @@ DT133G Final Project
 
 ### This repository contains source code for my Bachelor thesis in Software Engineering ###
 
-* Project summary
+### [Project proposal](project-proposal)
+#### Project summary
 Android is the most popular operating system used in smart phones. In order to save structured 
 data in Android apps, developers have many frameworks to choose from (SQLite, Room persistence
 Library(Room), ActiveAndroid, greenDAO, Realm, OrmLite, etc). This plethora of database libraries
 implies Android developers must make a choice for storing structured data. 
 
 In order to make this choice, developers have increasingly considered application performance 
-as a major factor [18]. This is because application performance, in terms of response time as 
+as a major factor . This is because application performance, in terms of response time as 
 well as memory consumption (CPU and RAM) plays an important role in user-perceived quality of 
 apps. Using these third-party libraries can also increase the overall application size which 
 in turn increases the memory usage of the application. 
