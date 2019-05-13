@@ -24,13 +24,28 @@
   -->
 
 <resources>
-    <string name="app_name">SQLite Version</string>
-    <string name="initializeDB">Initialize Database</string>
-    <string name="loadData">Load data</string>
-    <string name="dbCreate">Load the database</string>
-    <string name="dbRead">Read from Db</string>
-    <string name="dbDelete">Delete from Db</string>
-    <string name="dbUpdate">Update Entry</string>
-    <string name="dbDropAll">Drop all entries</string>
-    <string name="dbInitialize">Create the database</string>
+
+    <!-- Base application theme. -->
+    <style name="AppTheme" parent="Theme.AppCompat.Light.DarkActionBar">
+        <!-- Customize your theme here. -->
+        <item name="colorPrimary">@color/colorPrimary</item>
+        <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
+        <item name="colorAccent">@color/colorAccent</item>
+    </style>
+
+    <!-- Style buttons -->
+    <style name="buttonFullStyle" parent="Widget.AppCompat.Button">
+        <item name="android:background">@color/buttonBackground</item>
+        <item name="android:radius">@dimen/buttonRadius</item>
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">wrap_content</item>
+    </style>
+    <style name="buttonSideBySide" parent="Widget.AppCompat.Button">
+        <item name="android:background">@color/buttonBackground</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_width">@dimen/zero_dp</item>
+        <item name="android:layout_weight">@dimen/button95</item>
+    </style>
+
+    <dimen name="buttonRadius">10dp</dimen>
 </resources>

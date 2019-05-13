@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="UTF-8" ?>
+<?xml version="1.0" encoding="utf-8"?>
 <!--
   ~ MIT License
   ~
@@ -24,13 +24,9 @@
   -->
 
 <resources>
-    <string name="app_name">SQLite Version</string>
-    <string name="initializeDB">Initialize Database</string>
-    <string name="loadData">Load data</string>
-    <string name="dbCreate">Load the database</string>
-    <string name="dbRead">Read from Db</string>
-    <string name="dbDelete">Delete from Db</string>
-    <string name="dbUpdate">Update Entry</string>
-    <string name="dbDropAll">Drop all entries</string>
-    <string name="dbInitialize">Create the database</string>
+    <dimen name="defaultWidth">16dp</dimen>
+    <dimen name="defaultMargin">@dimen/defaultWidth</dimen>
+    <dimen name="linearHeight">100dp</dimen>
+    <dimen name="zero_dp">0dp</dimen>
+    <item name="button95" type="dimen" format="float">0.95</item>
 </resources>
