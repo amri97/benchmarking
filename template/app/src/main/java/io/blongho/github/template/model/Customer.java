@@ -23,13 +23,12 @@
  */
 
 package io.blongho.github.template.model;
-
 import java.util.List;
 
 /**
- * @author  Bernard Che Longho
  * A Customer object.<br>
  * A Customer object has customer details and the orders done by this customer
+ * @author  Bernard Che Longho
  * @since 2019-05-10
  * @version 1.0
  */

@@ -28,9 +28,9 @@ import java.util.Date;
 import java.util.List;
 
 /**
- * @author  Bernard Che Longho
  * The type Order<br>
- *     An order holds an identifier to the customer and the list of products ordered.
+ * An order holds an identifier to the customer and the list of products ordered.
+ * @author  Bernard Che Longho
  * @since 2019-05-10
  * @version 1.0
  */

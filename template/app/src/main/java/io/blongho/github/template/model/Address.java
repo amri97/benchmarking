@@ -25,9 +25,9 @@
 package io.blongho.github.template.model;
 
 /**
+ * An Address knows the street, city, postalcode and country
  * @author Bernard Che Longho
  * @since 2019-05-10
- * An Address knows the street, city, postalcode and country
  * @version 1.0
  */
 public class Address {
