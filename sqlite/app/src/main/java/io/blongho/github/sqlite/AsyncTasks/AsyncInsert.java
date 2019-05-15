@@ -43,6 +43,7 @@ public class AsyncInsert<T> extends AsyncTask<T, Void, Integer> {
    */
   @Override
   protected Integer doInBackground(final T... ts) {
+    // TODO implement background async insert
     return null;
   }
 

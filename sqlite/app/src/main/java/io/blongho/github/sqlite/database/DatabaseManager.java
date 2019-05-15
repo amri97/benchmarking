@@ -72,7 +72,7 @@ public class DatabaseManager implements DatabaseOperations {
     contentValues.put(Column.CUSTOMER_ID, customer.getId());
     contentValues.put(Column.CUSTOMER_NAME, customer.getName());
     contentValues.put(Column.CUSTOMER_ADDR, customer.getAddress());
-    final long rowid = dbWriter.insertOrThrow(Table.CUSTOMER, null, contentValues);
+    long rowid = dbWriter.insertOrThrow(Table.CUSTOMER, null, contentValues);
     closeWriter();
     return rowid;
   }
