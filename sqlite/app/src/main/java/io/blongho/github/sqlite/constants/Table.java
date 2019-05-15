@@ -25,8 +25,12 @@
 package io.blongho.github.sqlite.constants;
 
 public final class Table {
-	public static final String TABLE_CUSTOMER = "tb_customer";
-	public static final String TABLE_ORDER = "tb_order";
-	public static final String TABLE_PRODUCT = "tb_product";
-	public static final String TABLE_ORDER_ITEM = "tb_order_product";
+
+    public static final String CUSTOMER = "customer";
+
+    public static final String ORDER = "order";
+
+    public static final String PRODUCT = "product";
+
+    public static final String ORDER_PRODUCT = "order_product";
 }

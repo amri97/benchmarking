@@ -28,92 +28,95 @@ package io.blongho.github.sqlite.model;
  * The type Order product.
  */
 public class OrderProduct {
-	private long orderProduct_id;
-	private Customer customer_id;
-	private Order order_id;
 
-	/**
-	 * Instantiates a new Order product.
-	 */
-	public OrderProduct() {
-	}
+    private long customer_id;
 
-	/**
-	 * Instantiates a new Order product.
-	 *
-	 * @param orderProduct_id the order product id
-	 * @param customer_id     the customer id
-	 * @param order_id        the order id
-	 */
-	public OrderProduct(final long orderProduct_id, final Customer customer_id, final Order order_id) {
-		this.orderProduct_id = orderProduct_id;
-		this.customer_id = customer_id;
-		this.order_id = order_id;
-	}
+    private long orderProduct_id;
 
-	/**
-	 * Gets order product id.
-	 *
-	 * @return the order product id
-	 */
-	public long getOrderProduct_id() {
-		return orderProduct_id;
-	}
+    private long order_id;
 
-	/**
-	 * Sets order product id.
-	 *
-	 * @param orderProduct_id the order product id
-	 */
-	public void setOrderProduct_id(final long orderProduct_id) {
-		this.orderProduct_id = orderProduct_id;
-	}
+    /**
+     * Instantiates a new Order product.
+     */
+    public OrderProduct() {
+    }
 
-	/**
-	 * Gets customer id.
-	 *
-	 * @return the customer id
-	 */
-	public Customer getCustomer_id() {
-		return customer_id;
-	}
+    /**
+     * Instantiates a new Order product.
+     *
+     * @param orderProduct_id the order product id
+     * @param customer_id     the customer id
+     * @param order_id        the order id
+     */
+    public OrderProduct(final long orderProduct_id, final long customer_id, final long order_id) {
+        this.orderProduct_id = orderProduct_id;
+        this.customer_id = customer_id;
+        this.order_id = order_id;
+    }
 
-	/**
-	 * Sets customer id.
-	 *
-	 * @param customer_id the customer id
-	 */
-	public void setCustomer_id(final Customer customer_id) {
-		this.customer_id = customer_id;
-	}
+    /**
+     * Gets customer id.
+     *
+     * @return the customer id
+     */
+    public Long getCustomer_id() {
+        return customer_id;
+    }
 
-	/**
-	 * Gets order id.
-	 *
-	 * @return the order id
-	 */
-	public Order getOrder_id() {
-		return order_id;
-	}
+    /**
+     * Sets customer id.
+     *
+     * @param customer_id the customer id
+     */
+    public void setCustomer_id(final Long customer_id) {
+        this.customer_id = customer_id;
+    }
 
-	/**
-	 * Sets order id.
-	 *
-	 * @param order_id the order id
-	 */
-	public void setOrder_id(final Order order_id) {
-		this.order_id = order_id;
-	}
+    /**
+     * Gets order product id.
+     *
+     * @return the order product id
+     */
+    public long getOrderProduct_id() {
+        return orderProduct_id;
+    }
 
-	@Override
-	public String toString() {
-		final StringBuffer sb = new StringBuffer("OrderProduct{");
-		sb.append("orderProduct_id=").append(orderProduct_id);
-		sb.append(", customer_id=").append(customer_id);
-		sb.append(", order_id=").append(order_id);
-		sb.append('}');
-		return sb.toString();
-	}
+    /**
+     * Sets order product id.
+     *
+     * @param orderProduct_id the order product id
+     */
+    public void setOrderProduct_id(final long orderProduct_id) {
+        this.orderProduct_id = orderProduct_id;
+    }
+
+    /**
+     * Gets order id.
+     *
+     * @return the order id
+     */
+    public long getOrder_id() {
+        return order_id;
+    }
+
+    /**
+     * Sets order id.
+     *
+     * @param order_id the order id
+     */
+    public void setOrder_id(final long order_id) {
+        this.order_id = order_id;
+    }
+
+    @Override
+    public String toString() {
+        final StringBuffer sb = new StringBuffer("OrderProduct{");
+        sb.append("orderProduct_id=").append(orderProduct_id);
+        sb.append(", customer_id=").append(customer_id);
+        sb.append(", order_id=").append(order_id);
+        sb.append('}');
+        return sb.toString();
+    }
 
 
 }

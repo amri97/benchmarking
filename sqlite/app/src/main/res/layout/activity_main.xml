@@ -1,5 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
-<!--
+<?xml version="1.0" encoding="utf-8"?><!--
   ~ MIT License
   ~
   ~ Copyright (c) 2019 Bernard Che Longho
@@ -34,9 +33,8 @@
         android:id="@+id/dbInitialize"
         style="@style/buttonFullStyle"
         android:layout_marginTop="64dp"
-        android:text="@string/dbInitialize"
         android:onClick="createDb"
-        />
+        android:text="@string/dbInitialize" />
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -47,8 +45,8 @@
         <Button
             android:id="@+id/dbCreate"
             style="@style/buttonSideBySide"
-            android:text="@string/dbCreate"
-            android:onClick="loadData"/>
+            android:onClick="loadData"
+            android:text="@string/dbCreate" />
 
         <View
             android:layout_width="0dp"
@@ -91,9 +89,9 @@
     </LinearLayout>
 
     <Button
-        android:onClick="clearDb"
         android:id="@+id/dbDropAll"
         style="@style/buttonFullStyle"
         android:layout_marginTop="@dimen/defaultMargin"
+        android:onClick="clearDb"
         android:text="@string/dbDropAll" />
 </LinearLayout>

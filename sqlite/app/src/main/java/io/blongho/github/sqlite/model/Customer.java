@@ -23,120 +23,127 @@
  */
 
 package io.blongho.github.sqlite.model;
+
 import java.util.List;
 
 /**
  * A Customer object.<br>
  * A Customer object has customer details and the orders done by this customer
- * @author  Bernard Che Longho
- * @since 2019-05-10
+ *
+ * @author Bernard Che Longho
  * @version 1.0
+ * @since 2019-05-10
  */
 public class Customer {
-	private Long customer_id;
-	private String name;
-	private Address address;
-	private List<Order> orders;
 
-	/**
-	 * Instantiates a new Customer.
-	 */
-	public Customer() {
-	}
+    private String address;
 
-	/**
-	 * Instantiates a new Customer.
-	 *
-	 * @param customer_id the customer id
-	 * @param name        the name
-	 * @param address     the address
-	 */
-	public Customer(final Long customer_id, final String name, final Address address) {
-		this.customer_id = customer_id;
-		this.name = name;
-		this.address = address;
-	}
+    private Long customer_id;
 
-	/**
-	 * Gets customer id.
-	 *
-	 * @return the customer id
-	 */
-	public Long getCustomer_id() {
-		return customer_id;
-	}
+    private String name;
 
-	/**
-	 * Sets customer id.
-	 *
-	 * @param customer_id the customer id
-	 */
-	public void setCustomer_id(final Long customer_id) {
-		this.customer_id = customer_id;
-	}
+    private List<Order> orders;
 
-	/**
-	 * Gets name.
-	 *
-	 * @return the name
-	 */
-	public String getName() {
-		return name;
-	}
+    /**
+     * Instantiates a new Customer.
+     */
+    public Customer() {
+    }
 
-	/**
-	 * Sets name.
-	 *
-	 * @param name the name
-	 */
-	public void setName(final String name) {
-		this.name = name;
-	}
+    /**
+     * Instantiates a new Customer.
+     *
+     * @param customer_id the customer id
+     * @param name        the name
+     * @param address     the address
+     */
+    public Customer(final Long customer_id, final String name, final String address) {
+        this.customer_id = customer_id;
+        this.name = name;
+        this.address = address;
+    }
 
-	/**
-	 * Gets address.
-	 *
-	 * @return the address
-	 */
-	public Address getAddress() {
-		return address;
-	}
+    /**
+     * Gets address.
+     *
+     * @return the address
+     */
+    public String getAddress() {
+        return address;
+    }
 
-	/**
-	 * Sets address.
-	 *
-	 * @param address the address
-	 */
-	public void setAddress(final Address address) {
-		this.address = address;
-	}
+    /**
+     * Sets address.
+     *
+     * @param address the address
+     */
+    public void setAddress(final String address) {
+        this.address = address;
+    }
 
-	/**
-	 * Gets orders.
-	 *
-	 * @return the orders
-	 */
-	public List<Order> getOrders() {
-		return orders;
-	}
+    /**
+     * Gets customer id.
+     *
+     * @return the customer id
+     */
+    public Long getCustomer_id() {
+        return customer_id;
+    }
 
-	/**
-	 * Sets orders.
-	 *
-	 * @param orders the orders
-	 */
-	public void setOrders(final List<Order> orders) {
-		this.orders = orders;
-	}
+    /**
+     * Sets customer id.
+     *
+     * @param customer_id the customer id
+     */
+    public void setCustomer_id(final Long customer_id) {
+        this.customer_id = customer_id;
+    }
 
-	@Override
-	public String toString() {
-		final StringBuffer sb = new StringBuffer("Customer{");
-		sb.append("customer_id=").append(customer_id);
-		sb.append(", name='").append(name).append('\'');
-		sb.append(", address=").append(address);
-		sb.append('}');
-		return sb.toString();
-	}
+    /**
+     * Gets name.
+     *
+     * @return the name
+     */
+    public String getName() {
+        return name;
+    }
+
+    /**
+     * Sets name.
+     *
+     * @param name the name
+     */
+    public void setName(final String name) {
+        this.name = name;
+    }
+
+    /**
+     * Gets orders.
+     *
+     * @return the orders
+     */
+    public List<Order> getOrders() {
+        return orders;
+    }
+
+    /**
+     * Sets orders.
+     *
+     * @param orders the orders
+     */
+    public void setOrders(final List<Order> orders) {
+        this.orders = orders;
+    }
+
+
+    @Override
+    public String toString() {
+        final StringBuffer sb = new StringBuffer("Customer{");
+        sb.append("customer_id=").append(customer_id);
+        sb.append(", name='").append(name).append('\'');
+        sb.append(", address=").append(address);
+        sb.append('}');
+        return sb.toString();
+    }
 
 }

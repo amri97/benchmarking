@@ -30,113 +30,118 @@ import java.util.List;
 /**
  * The type Order<br>
  * An order holds an identifier to the customer and the list of products ordered.
- * @author  Bernard Che Longho
- * @since 2019-05-10
+ *
+ * @author Bernard Che Longho
  * @version 1.0
+ * @since 2019-05-10
  */
 public class Order {
-	private long order_id;
-	private Customer customer_id;
-	private List<Product> products;
-	private Date date;
 
-	/**
-	 * Instantiates a new Order.
-	 */
-	public Order() {
-	}
+    private Customer customer_id;
 
-	/**
-	 * Instantiates a new Order.
-	 *
-	 * @param order_id    the order id
-	 * @param customer_id the customer id
-	 */
-	public Order(final long order_id, final Customer customer_id) {
-		this.order_id = order_id;
-		this.customer_id = customer_id;
-		date = new Date();
-	}
+    private Date date;
 
-	/**
-	 * Gets order id.
-	 *
-	 * @return the order id
-	 */
-	public long getOrder_id() {
-		return order_id;
-	}
+    private long order_id;
 
-	/**
-	 * Sets order id.
-	 *
-	 * @param order_id the order id
-	 */
-	public void setOrder_id(final long order_id) {
-		this.order_id = order_id;
-	}
+    private List<Product> products;
 
-	/**
-	 * Gets customer id.
-	 *
-	 * @return the customer id
-	 */
-	public Customer getCustomer_id() {
-		return customer_id;
-	}
+    /**
+     * Instantiates a new Order.
+     */
+    public Order() {
+    }
 
-	/**
-	 * Sets customer id.
-	 *
-	 * @param customer_id the customer id
-	 */
-	public void setCustomer_id(final Customer customer_id) {
-		this.customer_id = customer_id;
-	}
+    /**
+     * Instantiates a new Order.
+     *
+     * @param order_id    the order id
+     * @param customer_id the customer id
+     */
+    public Order(final long order_id, final Customer customer_id) {
+        this.order_id = order_id;
+        this.customer_id = customer_id;
+        date = new Date();
+    }
 
-	/**
-	 * Gets products.
-	 *
-	 * @return the products
-	 */
-	public List<Product> getProducts() {
-		return products;
-	}
+    /**
+     * Gets customer id.
+     *
+     * @return the customer id
+     */
+    public Customer getCustomer_id() {
+        return customer_id;
+    }
 
-	/**
-	 * Sets products.
-	 *
-	 * @param products the products
-	 */
-	public void setProducts(final List<Product> products) {
-		this.products = products;
-	}
+    /**
+     * Sets customer id.
+     *
+     * @param customer_id the customer id
+     */
+    public void setCustomer_id(final Customer customer_id) {
+        this.customer_id = customer_id;
+    }
 
-	@Override
-	public String toString() {
-		final StringBuffer sb = new StringBuffer("Order{");
-		sb.append("order_id=").append(order_id);
-		sb.append(", customer_id=").append(customer_id);
-		sb.append(", products=").append(products);
-		sb.append('}');
-		return sb.toString();
-	}
+    /**
+     * Gets date.
+     *
+     * @return the date
+     */
+    public Date getDate() {
+        return date;
+    }
 
-	/**
-	 * Gets date.
-	 *
-	 * @return the date
-	 */
-	public Date getDate() {
-		return date;
-	}
+    /**
+     * Sets date.
+     *
+     * @param date the date
+     */
+    public void setDate(final Date date) {
+        this.date = date;
+    }
 
-	/**
-	 * Sets date.
-	 *
-	 * @param date the date
-	 */
-	public void setDate(final Date date) {
-		this.date = date;
-	}
+    /**
+     * Gets order id.
+     *
+     * @return the order id
+     */
+    public long getOrder_id() {
+        return order_id;
+    }
+
+    /**
+     * Sets order id.
+     *
+     * @param order_id the order id
+     */
+    public void setOrder_id(final long order_id) {
+        this.order_id = order_id;
+    }
+
+    /**
+     * Gets products.
+     *
+     * @return the products
+     */
+    public List<Product> getProducts() {
+        return products;
+    }
+
+    /**
+     * Sets products.
+     *
+     * @param products the products
+     */
+    public void setProducts(final List<Product> products) {
+        this.products = products;
+    }
+
+    @Override
+    public String toString() {
+        final StringBuffer sb = new StringBuffer("Order{");
+        sb.append("order_id=").append(order_id);
+        sb.append(", customer_id=").append(customer_id);
+        sb.append(", products=").append(products);
+        sb.append('}');
+        return sb.toString();
+    }
 }

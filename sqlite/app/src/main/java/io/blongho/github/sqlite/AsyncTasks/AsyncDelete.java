@@ -25,53 +25,50 @@
 package io.blongho.github.sqlite.AsyncTasks;
 
 import android.app.Application;
-import android.content.Context;
 import android.os.AsyncTask;
 import android.widget.Toast;
 
-import com.google.android.material.snackbar.Snackbar;
-
 public class AsyncDelete<T> extends AsyncTask<T, Void, Integer> {
-private Application context;
 
-	public AsyncDelete(final Application context) {this.context = context;}
+    private Application context;
 
-	/**
-	 * Override this method to perform a computation on a background thread. The specified parameters are the
-	 * parameters
-	 * passed to {@link #execute} by the caller of this task.
-	 * <p>
-	 * This method can call {@link #publishProgress} to publish updates on the UI thread.
-	 *
-	 * @param ts The parameters of the task.
-	 *
-	 * @return A result, defined by the subclass of this task.
-	 *
-	 * @see #onPreExecute()
-	 * @see #onPostExecute
-	 * @see #publishProgress
-	 */
-	@Override
-	protected Integer doInBackground(final T... ts) {
-		// TODO complete this
-		return null;
-	}
+    public AsyncDelete(final Application context) {
+        this.context = context;
+    }
 
-	/**
-	 * <p>Runs on the UI thread after {@link #doInBackground}. The
-	 * specified result is the value returned by {@link #doInBackground}.</p>
-	 *
-	 * <p>This method won't be invoked if the task was cancelled.</p>
-	 *
-	 * @param integer The result of the operation computed by {@link #doInBackground}.
-	 *
-	 * @see #onPreExecute
-	 * @see #doInBackground
-	 * @see #onCancelled(Object)
-	 */
-	@Override
-	protected void onPostExecute(final Integer integer) {
-		super.onPostExecute(integer);
-		Toast.makeText(context.getApplicationContext(), "Yeahhhh", Toast.LENGTH_SHORT).show();
-	}
+    /**
+     * Override this method to perform a computation on a background thread. The specified parameters are the
+     * parameters
+     * passed to {@link #execute} by the caller of this task.
+     * <p>
+     * This method can call {@link #publishProgress} to publish updates on the UI thread.
+     *
+     * @param ts The parameters of the task.
+     * @return A result, defined by the subclass of this task.
+     * @see #onPreExecute()
+     * @see #onPostExecute
+     * @see #publishProgress
+     */
+    @Override
+    protected Integer doInBackground(final T... ts) {
+        // TODO complete this
+        return null;
+    }
+
+    /**
+     * <p>Runs on the UI thread after {@link #doInBackground}. The
+     * specified result is the value returned by {@link #doInBackground}.</p>
+     *
+     * <p>This method won't be invoked if the task was cancelled.</p>
+     *
+     * @param integer The result of the operation computed by {@link #doInBackground}.
+     * @see #onPreExecute
+     * @see #doInBackground
+     * @see #onCancelled(Object)
+     */
+    @Override
+    protected void onPostExecute(final Integer integer) {
+        super.onPostExecute(integer);
+        Toast.makeText(context.getApplicationContext(), "Yeahhhh", Toast.LENGTH_SHORT).show();
+    }
 }
