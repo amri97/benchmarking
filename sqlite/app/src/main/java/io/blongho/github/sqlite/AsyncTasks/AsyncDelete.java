@@ -30,45 +30,45 @@ import android.widget.Toast;
 
 public class AsyncDelete<T> extends AsyncTask<T, Void, Integer> {
 
-    private Application context;
+  private Application context;
 
-    public AsyncDelete(final Application context) {
-        this.context = context;
-    }
+  public AsyncDelete(final Application context) {
+    this.context = context;
+  }
 
-    /**
-     * Override this method to perform a computation on a background thread. The specified parameters are the
-     * parameters
-     * passed to {@link #execute} by the caller of this task.
-     * <p>
-     * This method can call {@link #publishProgress} to publish updates on the UI thread.
-     *
-     * @param ts The parameters of the task.
-     * @return A result, defined by the subclass of this task.
-     * @see #onPreExecute()
-     * @see #onPostExecute
-     * @see #publishProgress
-     */
-    @Override
-    protected Integer doInBackground(final T... ts) {
-        // TODO complete this
-        return null;
-    }
+  /**
+   * Override this method to perform a computation on a background thread. The specified parameters are the
+   * parameters
+   * passed to {@link #execute} by the caller of this task.
+   * <p>
+   * This method can call {@link #publishProgress} to publish updates on the UI thread.
+   *
+   * @param ts The parameters of the task.
+   * @return A result, defined by the subclass of this task.
+   * @see #onPreExecute()
+   * @see #onPostExecute
+   * @see #publishProgress
+   */
+  @Override
+  protected Integer doInBackground(final T... ts) {
+    // TODO complete this do in background for async delete task
+    return null;
+  }
 
-    /**
-     * <p>Runs on the UI thread after {@link #doInBackground}. The
-     * specified result is the value returned by {@link #doInBackground}.</p>
-     *
-     * <p>This method won't be invoked if the task was cancelled.</p>
-     *
-     * @param integer The result of the operation computed by {@link #doInBackground}.
-     * @see #onPreExecute
-     * @see #doInBackground
-     * @see #onCancelled(Object)
-     */
-    @Override
-    protected void onPostExecute(final Integer integer) {
-        super.onPostExecute(integer);
-        Toast.makeText(context.getApplicationContext(), "Yeahhhh", Toast.LENGTH_SHORT).show();
-    }
+  /**
+   * <p>Runs on the UI thread after {@link #doInBackground}. The
+   * specified result is the value returned by {@link #doInBackground}.</p>
+   *
+   * <p>This method won't be invoked if the task was cancelled.</p>
+   *
+   * @param integer The result of the operation computed by {@link #doInBackground}.
+   * @see #onPreExecute
+   * @see #doInBackground
+   * @see #onCancelled(Object)
+   */
+  @Override
+  protected void onPostExecute(final Integer integer) {
+    super.onPostExecute(integer);
+    Toast.makeText(context.getApplicationContext(), "Yeahhhh", Toast.LENGTH_SHORT).show();
+  }
 }

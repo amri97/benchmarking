@@ -38,7 +38,7 @@ public class Product {
 
   private String name;
 
-  private long product_id;
+  private long id;
 
   /**
    * Instantiates a new Product.
@@ -54,7 +54,7 @@ public class Product {
    * @param description the description
    */
   public Product(final long product_id, final String name, final String description) {
-    this.product_id = product_id;
+    this.id = product_id;
     this.name = name;
     this.description = description;
   }
@@ -100,23 +100,23 @@ public class Product {
    *
    * @return the product id
    */
-  public long getProduct_id() {
-    return product_id;
+  public long getId() {
+    return id;
   }
 
   /**
    * Sets product id.
    *
-   * @param product_id the product id
+   * @param id the product id
    */
-  public void setProduct_id(final long product_id) {
-    this.product_id = product_id;
+  public void setId(final long id) {
+    this.id = id;
   }
 
   @Override
   public String toString() {
     final StringBuffer sb = new StringBuffer("Product{");
-    sb.append("product_id=").append(product_id);
+    sb.append("id=").append(id);
     sb.append(", name='").append(name).append('\'');
     sb.append(", description='").append(description).append('\'');
     sb.append('}');

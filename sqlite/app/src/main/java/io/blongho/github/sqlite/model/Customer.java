@@ -36,114 +36,113 @@ import java.util.List;
  */
 public class Customer {
 
-    private String address;
+  private String address;
 
-    private Long customer_id;
+  private Long id;
 
-    private String name;
+  private String name;
 
-    private List<Order> orders;
+  private List<Order> orders;
 
-    /**
-     * Instantiates a new Customer.
-     */
-    public Customer() {
-    }
+  /**
+   * Instantiates a new Customer.
+   */
+  public Customer() {
+  }
 
-    /**
-     * Instantiates a new Customer.
-     *
-     * @param customer_id the customer id
-     * @param name        the name
-     * @param address     the address
-     */
-    public Customer(final Long customer_id, final String name, final String address) {
-        this.customer_id = customer_id;
-        this.name = name;
-        this.address = address;
-    }
+  /**
+   * Instantiates a new Customer.
+   *
+   * @param customer_id the customer id
+   * @param name        the name
+   * @param address     the address
+   */
+  public Customer(final Long customer_id, final String name, final String address) {
+    this.id = customer_id;
+    this.name = name;
+    this.address = address;
+  }
 
-    /**
-     * Gets address.
-     *
-     * @return the address
-     */
-    public String getAddress() {
-        return address;
-    }
+  /**
+   * Gets address.
+   *
+   * @return the address
+   */
+  public String getAddress() {
+    return address;
+  }
 
-    /**
-     * Sets address.
-     *
-     * @param address the address
-     */
-    public void setAddress(final String address) {
-        this.address = address;
-    }
+  /**
+   * Sets address.
+   *
+   * @param address the address
+   */
+  public void setAddress(final String address) {
+    this.address = address;
+  }
 
-    /**
-     * Gets customer id.
-     *
-     * @return the customer id
-     */
-    public Long getCustomer_id() {
-        return customer_id;
-    }
+  /**
+   * Gets customer id.
+   *
+   * @return the customer id
+   */
+  public Long getId() {
+    return id;
+  }
 
-    /**
-     * Sets customer id.
-     *
-     * @param customer_id the customer id
-     */
-    public void setCustomer_id(final Long customer_id) {
-        this.customer_id = customer_id;
-    }
+  /**
+   * Sets customer id.
+   *
+   * @param id the customer id
+   */
+  public void setId(final Long id) {
+    this.id = id;
+  }
 
-    /**
-     * Gets name.
-     *
-     * @return the name
-     */
-    public String getName() {
-        return name;
-    }
+  /**
+   * Gets name.
+   *
+   * @return the name
+   */
+  public String getName() {
+    return name;
+  }
 
-    /**
-     * Sets name.
-     *
-     * @param name the name
-     */
-    public void setName(final String name) {
-        this.name = name;
-    }
+  /**
+   * Sets name.
+   *
+   * @param name the name
+   */
+  public void setName(final String name) {
+    this.name = name;
+  }
 
-    /**
-     * Gets orders.
-     *
-     * @return the orders
-     */
-    public List<Order> getOrders() {
-        return orders;
-    }
+  /**
+   * Gets orders.
+   *
+   * @return the orders
+   */
+  public List<Order> getOrders() {
+    return orders;
+  }
 
-    /**
-     * Sets orders.
-     *
-     * @param orders the orders
-     */
-    public void setOrders(final List<Order> orders) {
-        this.orders = orders;
-    }
+  /**
+   * Sets orders.
+   *
+   * @param orders the orders
+   */
+  public void setOrders(final List<Order> orders) {
+    this.orders = orders;
+  }
 
-
-    @Override
-    public String toString() {
-        final StringBuffer sb = new StringBuffer("Customer{");
-        sb.append("customer_id=").append(customer_id);
-        sb.append(", name='").append(name).append('\'');
-        sb.append(", address=").append(address);
-        sb.append('}');
-        return sb.toString();
-    }
+  @Override
+  public String toString() {
+    final StringBuffer sb = new StringBuffer("Customer{");
+    sb.append("id=").append(id);
+    sb.append(", name='").append(name).append('\'');
+    sb.append(", address=").append(address);
+    sb.append('}');
+    return sb.toString();
+  }
 
 }
