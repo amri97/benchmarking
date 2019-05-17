@@ -27,6 +27,7 @@ package io.blongho.github.sqlite.database;
 import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
+import android.util.Log;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -34,6 +35,7 @@ import io.blongho.github.sqlite.constants.Column;
 import io.blongho.github.sqlite.constants.Table;
 
 public class DatabaseHelper extends SQLiteOpenHelper {
+  private static final String TAG = "DatabaseHelper";
   private final static String dbName = "customer_order_sqlite";
   private static int dbVersion = 1;
 
@@ -65,7 +67,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
    *
    * @param context to use for locating paths to the the database
    */
-  public DatabaseHelper(@NonNull Context context) {
+  public DatabaseHelper(@NonNull final Context context) {
     this(context, dbName, null, dbVersion);
   }
 
@@ -77,29 +79,30 @@ public class DatabaseHelper extends SQLiteOpenHelper {
    */
   @Override
   public void onCreate(final SQLiteDatabase db) {
-
     final String CREATE_CUSTOMER_TABLE = String.format(
-        "CREATE TABLE %s (%s INTEGER PRIMARY KEY, %s TEXT NOT NULL, %s TEXT);",
+        "CREATE TABLE %s(%s INTEGER PRIMARY KEY, %s TEXT NOT NULL, %s TEXT);",
         Table.CUSTOMER, Column.CUSTOMER_ID, Column.CUSTOMER_NAME, Column.CUSTOMER_ADDR);
     final String CREATE_PRODUCT_TABLE = String.format(
-        "CREATE TABLE %s (%s INTEGER PRIMARY KEY, %s TEXT NOT NULL, %s TEXT);",
+        "CREATE TABLE %s(%s INTEGER PRIMARY KEY, %s TEXT NOT NULL, %s TEXT);",
         Table.PRODUCT, Column.PRODUCT_ID, Column.PRODUCT_NAME, Column.PRODUCT_DESC);
     final String CREATE_ORDER_TABLE = String.format(
-        "CREATE TABLE %s (%s INTEGER PRIMARY KEY, %s INTEGER, %s datetime default current_timestamp," +
-            " FOREIGN KEY(%s) REFERENCES %s(%s) ON UPDATE CASCADE );",
+        "CREATE TABLE %s(%s INTEGER PRIMARY KEY, %s INTEGER, %s datetime default current_timestamp," +
+            " FOREIGN KEY(%s) REFERENCES %s(%s) ON DELETE CASCADE ON UPDATE CASCADE);",
         Table.ORDER, Column.ORDER_ID, Column.ORDER_CUSTOMER, Column.ORDER_DATE, Column.ORDER_CUSTOMER, Table.CUSTOMER
         , Column.CUSTOMER_ID);
     final String CREATE_ORDER_PRODUCT_TABLE = String.format(
-        "CREATE TABLE %s (%s INTEGER PRIMARY KEY, %s INTEGER, %s INTEGER, " +
-            "FOREIGN KEY(%s) REFERENCES %s(%s) ON UPDATE CASCADE" +
-            "FOREIGN KEY(%s) REFERENCES %s(%s)) ON UPDATE CASCADE;",
-        Table.ORDER_PRODUCT, Column.ORDER_PRODUCT_ID, Column.ORDER_ID, Column.CUSTOMER_ID,
-        Column.ORDER_ID, Table.ORDER, Column.ORDER_ID, Column.CUSTOMER_ID, Table.CUSTOMER,
-        Column.CUSTOMER_ID);
+        "CREATE TABLE %s(%s INTEGER PRIMARY KEY, %s INTEGER, %s INTEGER, " +
+            "FOREIGN KEY(%s) REFERENCES %s(%s) ON DELETE CASCADE ON UPDATE CASCADE, " +
+            "FOREIGN KEY(%s) REFERENCES %s(%s) ON DELETE CASCADE ON UPDATE CASCADE);",
+        Table.ORDER_PRODUCT, Column.ORDER_PRODUCT_ID, Column.ORDER_ID, Column.PRODUCT_ID,
+        Column.ORDER_ID, Table.ORDER, Column.ORDER_ID, Column.PRODUCT_ID, Table.PRODUCT,
+        Column.PRODUCT_ID);
     db.execSQL(CREATE_CUSTOMER_TABLE);
     db.execSQL(CREATE_PRODUCT_TABLE);
     db.execSQL(CREATE_ORDER_TABLE);
     db.execSQL(CREATE_ORDER_PRODUCT_TABLE);
+    Log.e(TAG,
+        "onCreate: Database: " + getDatabaseName() + " created successfully @" + this.getWritableDatabase().getPath());
   }
 
   /**
@@ -129,10 +132,10 @@ public class DatabaseHelper extends SQLiteOpenHelper {
   }
 
   private void dropTables(final SQLiteDatabase db) {
-    db.execSQL(String.format("DROP TABLE IF EXISTS %s", Table.CUSTOMER));
-    db.execSQL(String.format("DROP TABLE IF EXISTS %s", Table.ORDER));
-    db.execSQL(String.format("DROP TABLE IF EXISTS %s", Table.PRODUCT));
-    db.execSQL(String.format("DROP TABLE IF EXISTS %s", Table.ORDER_PRODUCT));
+    db.execSQL(String.format("DROP TABLE IF EXISTS %s;", Table.CUSTOMER));
+    db.execSQL(String.format("DROP TABLE IF EXISTS %s;", Table.ORDER));
+    db.execSQL(String.format("DROP TABLE IF EXISTS %s;", Table.PRODUCT));
+    db.execSQL(String.format("DROP TABLE IF EXISTS %s;", Table.ORDER_PRODUCT));
   }
 
 }

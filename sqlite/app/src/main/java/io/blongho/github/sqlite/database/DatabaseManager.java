@@ -26,13 +26,17 @@ package io.blongho.github.sqlite.database;
 
 import android.content.ContentValues;
 import android.content.Context;
+import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
+import android.text.format.DateFormat;
 
+import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
+import java.util.Locale;
 
 import io.blongho.github.sqlite.constants.Column;
 import io.blongho.github.sqlite.constants.Table;
-import io.blongho.github.sqlite.interfaces.DatabaseOperations;
 import io.blongho.github.sqlite.model.Customer;
 import io.blongho.github.sqlite.model.Order;
 import io.blongho.github.sqlite.model.OrderProduct;
@@ -48,190 +52,257 @@ public class DatabaseManager implements DatabaseOperations {
   }
 
   @Override
-  public void populateDatabase(List<Customer> customers, List<Product> products, List<Order> orders, List<OrderProduct> orderProducts) {
+  public void populateDatabase(final List<Customer> customers, final List<Product> products, final List<Order> orders,
+                               final List<OrderProduct> orderProducts) {
     dbWriter.beginTransaction();
-    for (Customer customer : customers) {
+    for (final Customer customer : customers) {
       addCustomer(customer);
     }
-    for (Product product : products) {
+    for (final Product product : products) {
       addProduct(product);
     }
-    for (Order order : orders) {
+    for (final Order order : orders) {
       addOrder(order);
     }
-    for (OrderProduct orderProduct : orderProducts) {
-      updateOrderProductTable(orderProduct.getCustomer_id(), orderProduct.getOrder_id());
+    for (final OrderProduct orderProduct : orderProducts) {
+      updateOrderProductTable(orderProduct.getProduct_id(), orderProduct.getOrder_id());
     }
     dbWriter.endTransaction();
   }
 
   @Override
-  public long addCustomer(Customer customer) {
+  public long addCustomer(final Customer customer) {
     openWriter();
-    ContentValues contentValues = new ContentValues();
+    final ContentValues contentValues = new ContentValues();
     contentValues.put(Column.CUSTOMER_ID, customer.getId());
     contentValues.put(Column.CUSTOMER_NAME, customer.getName());
     contentValues.put(Column.CUSTOMER_ADDR, customer.getAddress());
-    long rowid = dbWriter.insertOrThrow(Table.CUSTOMER, null, contentValues);
+    final long rowid = dbWriter.insertOrThrow(Table.CUSTOMER, null, contentValues);
     closeWriter();
     return rowid;
   }
 
   @Override
-  public long deleteCustomer(Customer customer) {
+  public long deleteCustomer(final Customer customer) {
     return deleteCustomerWithId(customer.getId());
   }
 
   @Override
-  public long deleteCustomerWithName(String customerName) {
+  public long deleteCustomerWithName(final String customerName) {
     openWriter();
-    int row = dbWriter.delete(Table.CUSTOMER, Column.CUSTOMER_NAME + "=?",
+    final int row = dbWriter.delete(Table.CUSTOMER, Column.CUSTOMER_NAME + "=?",
         new String[]{customerName});
     closeWriter();
     return row;
   }
 
   @Override
-  public long deleteCustomerWithId(long customerID) {
+  public long deleteCustomerWithId(final long customerID) {
     openWriter();
-    int row = dbWriter.delete(Table.CUSTOMER, Column.CUSTOMER_ID + "=?",
+    final int row = dbWriter.delete(Table.CUSTOMER, Column.CUSTOMER_ID + "=?",
         new String[]{String.valueOf(customerID)});
     closeWriter();
     return row;
   }
 
   @Override
-  public long deleteAllCustomers() {
+  public long updateCustomer(final Customer customer) {
+    final ContentValues values = new ContentValues();
+    values.put(Column.CUSTOMER_ID, customer.getId());
+    values.put(Column.CUSTOMER_NAME, customer.getName());
+    values.put(Column.CUSTOMER_ADDR, customer.getAddress());
     openWriter();
-    dbWriter.execSQL("DELETE FROM " + Table.CUSTOMER);
+    final int row = dbWriter.update(Table.CUSTOMER, values, Column.CUSTOMER_ID + "=" + customer.getId(), null);
     closeWriter();
-    return 0;
-  }
-
-  @Override
-  public long updateCustomer(long customerID) {
-    //TODO update customer record
-    return 0;
+    return row;
   }
 
   @Override
   public List<Customer> getAllCustomers() {
-    //TODO list all customers in the database
-    return null;
+    openReader();
+    final Cursor cursor = dbReader.rawQuery("SELECT * FROM " + Table.CUSTOMER, null);
+    final List<Customer> customers = new ArrayList<>();
+    if (cursor.moveToFirst()) {
+      while (!cursor.isAfterLast()) {
+        final long id = cursor.getLong(cursor.getColumnIndex(Column.CUSTOMER_ID));
+        final String name = cursor.getString(cursor.getColumnIndex(Column.CUSTOMER_NAME));
+        final String address = cursor.getString(cursor.getColumnIndex(Column.CUSTOMER_ADDR));
+        final Customer customer = new Customer(id, name, address);
+        customers.add(customer);
+        cursor.moveToNext();
+      }
+    }
+    cursor.close();
+    closeReader();
+    return customers;
   }
 
   @Override
-  public long addProduct(Product product) {
-    openWriter();
-    ContentValues contentValues = new ContentValues();
+  public long addProduct(final Product product) {
+    final ContentValues contentValues = new ContentValues();
     contentValues.put(Column.PRODUCT_ID, product.getId());
     contentValues.put(Column.PRODUCT_NAME, product.getName());
     contentValues.put(Column.PRODUCT_NAME, product.getDescription());
-    final long rowid = dbWriter.insertOrThrow(Table.PRODUCT, null, contentValues);
-    closeWriter();
-    return rowid;
-  }
-
-  @Override
-  public long deleteProduct(Product product) {
-    //TODO delete a product
-    return 0;
-  }
-
-  @Override
-  public long deleteProductWithName(String productName) {
-    //TODO delete product with known name
-    return 0;
-  }
-
-  @Override
-  public long deleteProductWithId(long productID) {
-    //TODO delete product with known id
-    return 0;
-  }
-
-  @Override
-  public long deleteAllProducts() {
     openWriter();
-    dbWriter.execSQL("DELETE FROM " + Table.PRODUCT);
+    final long row = dbWriter.insertOrThrow(Table.PRODUCT, null, contentValues);
     closeWriter();
-    return 0;
+    return row;
   }
 
   @Override
-  public long updateProduct(long productID) {
-    //TODO update a product
-    return 0;
+  public long deleteProduct(final Product product) {
+    return deleteProductWithName(product.getName());
+  }
+
+  @Override
+  public long deleteProductWithName(final String productName) {
+    openWriter();
+    final long row = dbWriter.delete(Table.PRODUCT, Column.PRODUCT_NAME + "?=", new String[]{productName});
+    closeWriter();
+    return row;
+  }
+
+  @Override
+  public long deleteProductWithId(final long productID) {
+    openWriter();
+    final long row = dbWriter.delete(Table.PRODUCT, Column.PRODUCT_ID + "?=",
+        new String[]{String.valueOf(productID)});
+    closeWriter();
+    return row;
+  }
+
+  @Override
+  public long updateProduct(final Product product) {
+    final ContentValues values = new ContentValues();
+    values.put(Column.PRODUCT_ID, product.getId());
+    values.put(Column.PRODUCT_NAME, product.getName());
+    values.put(Column.PRODUCT_DESC, product.getDescription());
+    openWriter();
+    final int row = dbWriter.update(Table.CUSTOMER, values, Column.CUSTOMER_ID + "=" + product.getId(), null);
+    closeWriter();
+    return row;
   }
 
   @Override
   public List<Product> getAllProducts() {
-    //TODO get all products
-    return null;
+    openReader();
+    final Cursor cursor = dbReader.rawQuery("SELECT * FROM " + Table.PRODUCT, null);
+    final List<Product> products = new ArrayList<>();
+    if (cursor.moveToFirst()) {
+      while (!cursor.isAfterLast()) {
+        final long id = cursor.getLong(cursor.getColumnIndex(Column.PRODUCT_ID));
+        final String name = cursor.getString(cursor.getColumnIndex(Column.PRODUCT_NAME));
+        final String desc = cursor.getString(cursor.getColumnIndex(Column.PRODUCT_DESC));
+        final Product product = new Product(id, name, desc);
+        products.add(product);
+        cursor.moveToNext();
+      }
+    }
+    cursor.close();
+    closeReader();
+    return products;
   }
 
   @Override
-  public long addOrder(Order order) {
+  public long addOrder(final Order order) {
     openWriter();
-    ContentValues contentValues = new ContentValues();
+    final ContentValues contentValues = new ContentValues();
     contentValues.put(Column.ORDER_ID, order.getId());
     contentValues.put(Column.ORDER_CUSTOMER, order.getCustomer_id());
     contentValues.put(Column.ORDER_DATE, order.getDate().toString());
-    final long rowid = dbWriter.insertOrThrow(Table.ORDER, null, contentValues);
+    final long row = dbWriter.insertOrThrow(Table.ORDER, null, contentValues);
     closeWriter();
-    return rowid;
+    return row;
   }
 
   @Override
-  public long deleteOrder(Order order) {
-    //TODO delete an order
-    return 0;
+  public long deleteOrder(final Order order) {
+    return deleteOrderWithId(order.getId());
   }
 
   @Override
-  public long deleteOrderWithId(long orderID) {
-    //TODO delete order with id
-    return 0;
-  }
-
-  @Override
-  public long deleteAllOrders() {
+  public long deleteOrderWithId(final long orderID) {
     openWriter();
-    dbWriter.execSQL("DELETE FROM " + Table.ORDER);
+    final long row = dbWriter.delete(Table.ORDER, Column.ORDER_ID + "?=",
+        new String[]{String.valueOf(orderID)});
     closeWriter();
-    return 0;
+    return row;
   }
 
   @Override
   public List<Order> getAllOrders() {
-    //TODO get all orders
-    return null;
+    openReader();
+    final Cursor cursor = dbReader.rawQuery("SELECT * FROM " + Table.ORDER, null);
+    final List<Order> orders = new ArrayList<>();
+    if (cursor.moveToFirst()) {
+      while (!cursor.isAfterLast()) {
+        final long id = cursor.getLong(cursor.getColumnIndex(Column.ORDER_ID));
+        final long customer = cursor.getLong(cursor.getColumnIndex(Column.CUSTOMER_ID));
+        final String dateString = cursor.getString(cursor.getColumnIndex(Column.ORDER_DATE));
+        final Date date = new Date(DateFormat.getBestDateTimePattern(Locale.getDefault(), dateString));
+        final Order order = new Order(id, customer, date);
+        orders.add(order);
+        cursor.moveToNext();
+      }
+    }
+    cursor.close();
+    closeReader();
+    return orders;
   }
 
   @Override
-  public long updateOrderProductTable(long customerID, long orderID) {
-    //TODO update OrderProduct
-    return 0;
+  public long updateOrderProductTable(final long product, final long orderID) {
+    final ContentValues values = new ContentValues();
+    values.put(Column.PRODUCT_ID, product);
+    values.put(Column.ORDER_ID, orderID);
+    openWriter();
+    final long row = dbWriter.insertOrThrow(Table.ORDER_PRODUCT, null, values);
+    closeWriter();
+    return row;
+  }
+
+  @Override
+  public long updateOrderProductTable(final long orderProductID, final long productID, final long orderID) {
+    final ContentValues values = new ContentValues();
+    values.put(Column.ORDER_PRODUCT_ID, orderProductID);
+    values.put(Column.PRODUCT_ID, productID);
+    values.put(Column.ORDER_ID, orderID);
+    openWriter();
+    final long row = dbWriter.insertOrThrow(Table.ORDER_PRODUCT, null, values);
+    closeWriter();
+    return row;
+  }
+
+  @Override
+  public void deleteAll(final String table) {
+    openWriter();
+    dbWriter.delete(table, null, null);
+    closeWriter();
   }
 
   private synchronized void openWriter() {
-    if (dbWriter == null)
+    if (dbWriter == null) {
       dbWriter = dbHelper.getWritableDatabase();
+    }
   }
 
   private synchronized void closeWriter() {
-    if (dbWriter != null)
+    if (dbWriter != null) {
       dbWriter.close();
+    }
+    dbWriter = null;
   }
 
   private synchronized void openReader() {
-    if (dbReader == null)
+    if (dbReader == null) {
       dbReader = dbHelper.getReadableDatabase();
+    }
   }
 
   private synchronized void closeReader() {
     if (dbReader != null) {
       dbReader.close();
     }
+    dbReader = null;
   }
 }

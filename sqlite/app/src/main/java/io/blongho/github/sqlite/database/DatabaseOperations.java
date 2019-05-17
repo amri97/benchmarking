@@ -22,7 +22,7 @@
  * SOFTWARE.
  */
 
-package io.blongho.github.sqlite.interfaces;
+package io.blongho.github.sqlite.database;
 
 import java.util.List;
 
@@ -80,19 +80,12 @@ public interface DatabaseOperations {
   long deleteCustomerWithId(final long customerID);
 
   /**
-   * Delete all customers long.
-   *
-   * @return the long
-   */
-  long deleteAllCustomers();
-
-  /**
    * Update customer long.
    *
    * @param customerID the customer id
    * @return the long
    */
-  long updateCustomer(final long customerID);
+  long updateCustomer(final Customer customer);
 
   /**
    * Gets all customers.
@@ -135,19 +128,12 @@ public interface DatabaseOperations {
   long deleteProductWithId(final long productID);
 
   /**
-   * Delete all products long.
-   *
-   * @return the long
-   */
-  long deleteAllProducts();
-
-  /**
    * Update product long.
    *
    * @param productID the product id
    * @return the long
    */
-  long updateProduct(final long productID);
+  long updateProduct(final Product product);
 
   /**
    * Gets all products.
@@ -182,13 +168,6 @@ public interface DatabaseOperations {
   long deleteOrderWithId(final long orderID);
 
   /**
-   * Delete all orders long.
-   *
-   * @return the long
-   */
-  long deleteAllOrders();
-
-  /**
    * Gets all orders.
    *
    * @return the list of orders in the system
@@ -205,4 +184,20 @@ public interface DatabaseOperations {
    * @return the number of rows affected
    */
   long updateOrderProductTable(long customerID, long orderID);
+
+  /**
+   * Call this method whenever an order is made
+   *
+   * @param customerID the customer who made the order
+   * @param orderID    the id of the order
+   * @return the number of rows affected
+   */
+  long updateOrderProductTable(long orderProductID, long customerID, long orderID);
+
+  /**
+   * Delete all items from a particular table
+   *
+   * @param table the table
+   */
+  void deleteAll(final String table);
 }

@@ -34,7 +34,5 @@ public final class Column {
   final public static String PRODUCT_NAME = "product_name";
   final public static String PRODUCT_DESC = "product_desc";
   final public static String ORDER_PRODUCT_ID = "order_product_id";
-  final public static String ORDER_PRODUCT_CUSTOMER = CUSTOMER_ID;
-  final public static String ORDER_PRODUCT_ORDER = ORDER_ID;
   public static final String ORDER_CUSTOMER = CUSTOMER_ID;
 }

@@ -22,15 +22,37 @@
  * SOFTWARE.
  */
 
-package io.blongho.github.sqlite.constants;
+package io.blongho.github.sqlite.AsyncTasks;
 
-public final class Table {
+import android.app.Application;
+import android.os.AsyncTask;
 
-  public static final String CUSTOMER = "customer";
+import io.blongho.github.sqlite.database.DatabaseHelper;
 
-  public static final String ORDER = "order_tb";
+public class AsyncInitialize extends AsyncTask<Void, Void, Void> {
+  private final Application application;
 
-  public static final String PRODUCT = "product";
+  public AsyncInitialize(final Application app) {
+    application = app;
+  }
 
-  public static final String ORDER_PRODUCT = "order_product";
+  /**
+   * Override this method to perform a computation on a background thread. The
+   * specified parameters are the parameters passed to {@link #execute}
+   * by the caller of this task.
+   * <p>
+   * This method can call {@link #publishProgress} to publish updates
+   * on the UI thread.
+   *
+   * @param voids The parameters of the task.
+   * @return A result, defined by the subclass of this task.
+   * @see #onPreExecute()
+   * @see #onPostExecute
+   * @see #publishProgress
+   */
+  @Override
+  protected Void doInBackground(final Void... voids) {
+    final DatabaseHelper helper = new DatabaseHelper(this.application.getApplicationContext());
+    return null;
+  }
 }

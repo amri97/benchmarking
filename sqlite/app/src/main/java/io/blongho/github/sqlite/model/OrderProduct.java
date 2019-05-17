@@ -29,7 +29,7 @@ package io.blongho.github.sqlite.model;
  */
 public class OrderProduct {
 
-  private long customer_id;
+  private long product_id;
 
   private long orderProduct_id;
 
@@ -45,12 +45,12 @@ public class OrderProduct {
    * Instantiates a new Order product.
    *
    * @param orderProduct_id the order product id
-   * @param customer_id     the customer id
+   * @param product_id      the customer id
    * @param order_id        the order id
    */
-  public OrderProduct(final long orderProduct_id, final long customer_id, final long order_id) {
+  public OrderProduct(final long orderProduct_id, final long product_id, final long order_id) {
     this.orderProduct_id = orderProduct_id;
-    this.customer_id = customer_id;
+    this.product_id = product_id;
     this.order_id = order_id;
   }
 
@@ -59,17 +59,17 @@ public class OrderProduct {
    *
    * @return the customer id
    */
-  public Long getCustomer_id() {
-    return customer_id;
+  public Long getProduct_id() {
+    return product_id;
   }
 
   /**
    * Sets customer id.
    *
-   * @param customer_id the customer id
+   * @param product_id the customer id
    */
-  public void setCustomer_id(final Long customer_id) {
-    this.customer_id = customer_id;
+  public void setProduct_id(final Long product_id) {
+    this.product_id = product_id;
   }
 
   /**
@@ -112,7 +112,7 @@ public class OrderProduct {
   public String toString() {
     final StringBuffer sb = new StringBuffer("OrderProduct{");
     sb.append("orderProduct_id=").append(orderProduct_id);
-    sb.append(", customer_id=").append(customer_id);
+    sb.append(", product_id=").append(product_id);
     sb.append(", order_id=").append(order_id);
     sb.append('}');
     return sb.toString();

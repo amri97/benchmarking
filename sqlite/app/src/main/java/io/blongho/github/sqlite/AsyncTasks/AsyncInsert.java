@@ -28,6 +28,9 @@ import android.os.AsyncTask;
 
 public class AsyncInsert<T> extends AsyncTask<T, Void, Integer> {
 
+  public AsyncInsert() {
+  }
+
   /**
    * Override this method to perform a computation on a background thread. The specified parameters are the
    * parameters
@@ -43,7 +46,7 @@ public class AsyncInsert<T> extends AsyncTask<T, Void, Integer> {
    */
   @Override
   protected Integer doInBackground(final T... ts) {
-    // TODO implement background async insert
+    // TODO implement async insert
     return null;
   }
 

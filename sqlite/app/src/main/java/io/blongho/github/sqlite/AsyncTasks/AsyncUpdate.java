@@ -26,7 +26,15 @@ package io.blongho.github.sqlite.AsyncTasks;
 
 import android.os.AsyncTask;
 
+import io.blongho.github.sqlite.database.DatabaseManager;
+
 public class AsyncUpdate<T> extends AsyncTask<T, Void, Integer> {
+
+  private final DatabaseManager databaseManger;
+
+  public AsyncUpdate(final DatabaseManager databaseManger) {
+    this.databaseManger = databaseManger;
+  }
 
   /**
    * Override this method to perform a computation on a background thread. The specified parameters are the
@@ -43,7 +51,7 @@ public class AsyncUpdate<T> extends AsyncTask<T, Void, Integer> {
    */
   @Override
   protected Integer doInBackground(final T... ts) {
-    // TODO implement background async update
+    // TODO implement asyncupdate
     return null;
   }
 
