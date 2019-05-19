@@ -31,7 +31,8 @@ import androidx.annotation.Nullable;
 
 /**
  * The type Order<br>
- * An order holds an identifier to the customer and the list of products ordered.
+ * An order holds an identifier to the customer and the list of products
+ * ordered.
  *
  * @author Bernard Che Longho
  * @version 1.0
@@ -39,7 +40,7 @@ import androidx.annotation.Nullable;
  */
 public class Order {
 
-  private long customer_id;
+  private long customer;
 
   private Date date;
 
@@ -61,7 +62,7 @@ public class Order {
    */
   public Order(final long order_id, final long customer_id, @Nullable final Date date) {
     this.id = order_id;
-    this.customer_id = customer_id;
+    this.customer = customer_id;
     if (date == null) {
       this.date = new Date();
     }
@@ -73,8 +74,8 @@ public class Order {
    *
    * @return the customer id
    */
-  public long getCustomer_id() {
-    return customer_id;
+  public long getCustomerd() {
+    return customer;
   }
 
   /**
@@ -82,8 +83,8 @@ public class Order {
    *
    * @param customer_id the customer id
    */
-  public void setCustomer_id(final long customer_id) {
-    this.customer_id = customer_id;
+  public void setCustomer(final long customer_id) {
+    this.customer = customer_id;
   }
 
   /**
@@ -144,7 +145,7 @@ public class Order {
   public String toString() {
     final StringBuffer sb = new StringBuffer("Order{");
     sb.append("id=").append(id);
-    sb.append(", customer_id=").append(customer_id);
+    sb.append(", customer=").append(customer);
     sb.append(", products=").append(products);
     sb.append('}');
     return sb.toString();

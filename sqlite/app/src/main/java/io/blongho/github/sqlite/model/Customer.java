@@ -28,7 +28,8 @@ import java.util.List;
 
 /**
  * A Customer object.<br>
- * A Customer object has customer details and the orders done by this customer
+ * A Customer object has customer details and the orders done by this
+ * customer
  *
  * @author Bernard Che Longho
  * @version 1.0
@@ -36,7 +37,7 @@ import java.util.List;
  */
 public class Customer {
 
-  private String address;
+  private String city;
 
   private Long id;
 
@@ -60,25 +61,7 @@ public class Customer {
   public Customer(final Long customer_id, final String name, final String address) {
     this.id = customer_id;
     this.name = name;
-    this.address = address;
-  }
-
-  /**
-   * Gets address.
-   *
-   * @return the address
-   */
-  public String getAddress() {
-    return address;
-  }
-
-  /**
-   * Sets address.
-   *
-   * @param address the address
-   */
-  public void setAddress(final String address) {
-    this.address = address;
+    this.city = address;
   }
 
   /**
@@ -118,6 +101,20 @@ public class Customer {
   }
 
   /**
+   * @return the city
+   */
+  public String getCity() {
+    return city;
+  }
+
+  /**
+   * @param city the city to set
+   */
+  public void setCity(final String city) {
+    this.city = city;
+  }
+
+  /**
    * Gets orders.
    *
    * @return the orders
@@ -140,7 +137,7 @@ public class Customer {
     final StringBuffer sb = new StringBuffer("Customer{");
     sb.append("id=").append(id);
     sb.append(", name='").append(name).append('\'');
-    sb.append(", address=").append(address);
+    sb.append(", address=").append(city);
     sb.append('}');
     return sb.toString();
   }

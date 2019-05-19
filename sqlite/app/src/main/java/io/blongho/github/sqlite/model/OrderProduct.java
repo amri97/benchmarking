@@ -24,16 +24,17 @@
 
 package io.blongho.github.sqlite.model;
 
+
 /**
  * The type Order product.
  */
 public class OrderProduct {
 
-  private long product_id;
+  private long product;
 
-  private long orderProduct_id;
+  private long id;
 
-  private long order_id;
+  private long order;
 
   /**
    * Instantiates a new Order product.
@@ -49,73 +50,60 @@ public class OrderProduct {
    * @param order_id        the order id
    */
   public OrderProduct(final long orderProduct_id, final long product_id, final long order_id) {
-    this.orderProduct_id = orderProduct_id;
-    this.product_id = product_id;
-    this.order_id = order_id;
+    this.id = orderProduct_id;
+    this.product = product_id;
+    this.order = order_id;
   }
 
   /**
-   * Gets customer id.
-   *
-   * @return the customer id
+   * @return the product
    */
-  public Long getProduct_id() {
-    return product_id;
+  public long getProduct() {
+    return product;
   }
 
   /**
-   * Sets customer id.
-   *
-   * @param product_id the customer id
+   * @param product the product to set
    */
-  public void setProduct_id(final Long product_id) {
-    this.product_id = product_id;
+  public void setProduct(final long product) {
+    this.product = product;
   }
 
   /**
-   * Gets order product id.
-   *
-   * @return the order product id
+   * @return the id
    */
-  public long getOrderProduct_id() {
-    return orderProduct_id;
+  public long getId() {
+    return id;
   }
 
   /**
-   * Sets order product id.
-   *
-   * @param orderProduct_id the order product id
+   * @param id the id to set
    */
-  public void setOrderProduct_id(final long orderProduct_id) {
-    this.orderProduct_id = orderProduct_id;
+  public void setId(final long id) {
+    this.id = id;
   }
 
   /**
-   * Gets order id.
-   *
-   * @return the order id
+   * @return the order
    */
-  public long getOrder_id() {
-    return order_id;
+  public long getOrder() {
+    return order;
   }
 
   /**
-   * Sets order id.
-   *
-   * @param order_id the order id
+   * @param order the order to set
    */
-  public void setOrder_id(final long order_id) {
-    this.order_id = order_id;
+  public void setOrder(final long order) {
+    this.order = order;
   }
 
   @Override
   public String toString() {
     final StringBuffer sb = new StringBuffer("OrderProduct{");
-    sb.append("orderProduct_id=").append(orderProduct_id);
-    sb.append(", product_id=").append(product_id);
-    sb.append(", order_id=").append(order_id);
+    sb.append("orderProduct_id=").append(id);
+    sb.append(", product_id=").append(product);
+    sb.append(", order_id=").append(order);
     sb.append('}');
     return sb.toString();
   }
-
 }
