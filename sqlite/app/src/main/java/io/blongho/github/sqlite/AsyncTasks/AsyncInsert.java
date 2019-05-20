@@ -25,10 +25,19 @@
 package io.blongho.github.sqlite.AsyncTasks;
 
 import android.os.AsyncTask;
+import android.util.Log;
+
+import java.util.concurrent.atomic.AtomicLong;
+
+import io.blongho.github.sqlite.database.DatabaseManager;
 
 public class AsyncInsert<T> extends AsyncTask<T, Void, Integer> {
+  private static final String TAG = "AsyncInsert";
+  private DatabaseManager databaseManager;
+  private AtomicLong atomicLong = new AtomicLong(0);
 
-  public AsyncInsert() {
+  public AsyncInsert(final DatabaseManager db) {
+    databaseManager = db;
   }
 
   /**
@@ -46,7 +55,9 @@ public class AsyncInsert<T> extends AsyncTask<T, Void, Integer> {
    */
   @Override
   protected Integer doInBackground(final T... ts) {
-    // TODO implement async insert
+    for (final T t : ts) {
+      databaseManager.addItem(t);
+    }
     return null;
   }
 
@@ -64,6 +75,7 @@ public class AsyncInsert<T> extends AsyncTask<T, Void, Integer> {
   @Override
   protected void onPostExecute(final Integer integer) {
     super.onPostExecute(integer);
-  }
 
+    Log.e(TAG, "onPostExecute: " + databaseManager.getAllCustomers().size());
+  }
 }

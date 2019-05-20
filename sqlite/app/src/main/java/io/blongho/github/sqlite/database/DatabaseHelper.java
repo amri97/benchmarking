@@ -27,7 +27,6 @@ package io.blongho.github.sqlite.database;
 import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
-import android.util.Log;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -101,8 +100,6 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     db.execSQL(CREATE_PRODUCT_TABLE);
     db.execSQL(CREATE_ORDER_TABLE);
     db.execSQL(CREATE_ORDER_PRODUCT_TABLE);
-    Log.e(TAG,
-        "onCreate: Database: " + getDatabaseName() + " created successfully @" + this.getWritableDatabase().getPath());
   }
 
   /**
@@ -131,7 +128,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     onCreate(db);
   }
 
-  private void dropTables(final SQLiteDatabase db) {
+  public void dropTables(final SQLiteDatabase db) {
     db.execSQL(String.format("DROP TABLE IF EXISTS %s;", Table.CUSTOMER));
     db.execSQL(String.format("DROP TABLE IF EXISTS %s;", Table.ORDER));
     db.execSQL(String.format("DROP TABLE IF EXISTS %s;", Table.PRODUCT));

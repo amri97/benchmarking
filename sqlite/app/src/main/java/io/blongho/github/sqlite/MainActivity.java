@@ -25,16 +25,25 @@
 package io.blongho.github.sqlite;
 
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 
 import com.google.android.material.snackbar.Snackbar;
+import com.google.gson.Gson;
 
+import java.util.List;
 import java.util.concurrent.ExecutionException;
 
 import androidx.appcompat.app.AppCompatActivity;
 import io.blongho.github.sqlite.AsyncTasks.AsyncDelete;
 import io.blongho.github.sqlite.AsyncTasks.AsyncInitialize;
+import io.blongho.github.sqlite.AsyncTasks.AsyncInsert;
+import io.blongho.github.sqlite.database.DatabaseManager;
 import io.blongho.github.sqlite.model.Customer;
+import io.blongho.github.sqlite.model.Order;
+import io.blongho.github.sqlite.model.OrderProduct;
+import io.blongho.github.sqlite.model.Product;
+import io.blongho.github.sqlite.util.AssetsReader;
 
 /**
  * The type Main activity.
@@ -76,13 +85,7 @@ public class MainActivity extends AppCompatActivity {
    * @param view the view
    */
   public void createDb(final View view) {
-    try {
-      new AsyncInitialize(this.getApplication()).execute().get();
-    } catch (final ExecutionException e) {
-      e.printStackTrace();
-    } catch (final InterruptedException e) {
-      e.printStackTrace();
-    }
+    new AsyncInitialize(this.getApplication()).execute();
     // TODO implement code for creating the database here
     showSnackBar(view, "createDb ");
 
@@ -95,6 +98,7 @@ public class MainActivity extends AppCompatActivity {
    */
   public void deleteFromDb(final View view) {
     // TODO implement code for deleting an item or items from the database
+
     showSnackBar(view, "deleteFromDb");
   }
 
@@ -104,7 +108,20 @@ public class MainActivity extends AppCompatActivity {
    * @param view the view
    */
   public void loadData(final View view) {
-    // TODO logic for loading the database with data
+    final Gson gson = new Gson();
+    final String cust = AssetsReader.readFromAssets(this.getApplicationContext(), R.raw.customer);
+    final Customer[] customers = gson.fromJson(cust, Customer[].class);
+    final Product[] products = gson.fromJson(AssetsReader.readFromAssets(getApplicationContext(), R.raw.products),
+        Product[].class);
+    final Order[] orders = gson.fromJson(AssetsReader.readFromAssets(getApplicationContext(), R.raw.orders),
+        Order[].class);
+    final OrderProduct[] orderProducts = gson.fromJson(AssetsReader.readFromAssets(getApplicationContext(),
+        R.raw.order_products), OrderProduct[].class);
+
+    new AsyncInsert<Customer>(new DatabaseManager(getApplicationContext())).execute(customers);
+    new AsyncInsert<Product>(new DatabaseManager(getApplicationContext())).execute(products);
+    new AsyncInsert<Order>(new DatabaseManager(getApplicationContext())).execute(orders);
+    new AsyncInsert<OrderProduct>(new DatabaseManager(getApplicationContext())).execute(orderProducts);
     showSnackBar(view, "loadData");
   }
 
@@ -114,7 +131,26 @@ public class MainActivity extends AppCompatActivity {
    * @param view the view
    */
   public void readData(final View view) {
-    // TODO implement logic for reading some data from the database
+
+    final DatabaseManager manager = new DatabaseManager(getApplicationContext());
+
+    final List<Product> products = manager.getAllProducts();
+    for (final Product product : products) {
+      Log.d(TAG, "run: " + product);
+    }
+
+    final List<Customer> customers = manager.getAllCustomers();
+    for (final Customer customer : customers) {
+      Log.d(TAG, "readData: " + customer);
+    }
+
+    final List<Order> orders = manager.getAllOrders();
+    for (final Order order : orders) {
+      Log.d(TAG, "readData: " + order);
+    }
+
+    final Long deleteCustomer = manager.deleteCustomer(customers.get(23));
+    Log.e(TAG, "readData: " + deleteCustomer);
     showSnackBar(view, "readData");
   }
 

@@ -74,7 +74,7 @@ public class Order {
    *
    * @return the customer id
    */
-  public long getCustomerd() {
+  public long getCustomer() {
     return customer;
   }
 
@@ -146,7 +146,7 @@ public class Order {
     final StringBuffer sb = new StringBuffer("Order{");
     sb.append("id=").append(id);
     sb.append(", customer=").append(customer);
-    sb.append(", products=").append(products);
+    sb.append(", date=").append(date);
     sb.append('}');
     return sb.toString();
   }

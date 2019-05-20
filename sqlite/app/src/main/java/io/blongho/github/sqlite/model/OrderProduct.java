@@ -24,7 +24,6 @@
 
 package io.blongho.github.sqlite.model;
 
-
 /**
  * The type Order product.
  */

@@ -26,11 +26,14 @@ package io.blongho.github.sqlite.AsyncTasks;
 
 import android.app.Application;
 import android.os.AsyncTask;
+import android.util.Log;
 
 import io.blongho.github.sqlite.database.DatabaseHelper;
 
 public class AsyncInitialize extends AsyncTask<Void, Void, Void> {
+  private static final String TAG = "AsyncInitialize";
   private final Application application;
+  private DatabaseHelper helper;
 
   public AsyncInitialize(final Application app) {
     application = app;
@@ -52,7 +55,24 @@ public class AsyncInitialize extends AsyncTask<Void, Void, Void> {
    */
   @Override
   protected Void doInBackground(final Void... voids) {
-    final DatabaseHelper helper = new DatabaseHelper(this.application.getApplicationContext());
+    helper = new DatabaseHelper(this.application.getApplicationContext());
     return null;
+  }
+
+  /**
+   * <p>Runs on the UI thread after {@link #doInBackground}. The
+   * specified result is the value returned by {@link #doInBackground}.</p>
+   *
+   * <p>This method won't be invoked if the task was cancelled.</p>
+   *
+   * @param aVoid The result of the operation computed by {@link #doInBackground}.
+   * @see #onPreExecute
+   * @see #doInBackground
+   * @see #onCancelled(Object)
+   */
+  @Override
+  protected void onPostExecute(final Void aVoid) {
+    super.onPostExecute(aVoid);
+    Log.d(TAG, "onPostExecute: " + helper.getDatabaseName() + " created");
   }
 }
