@@ -23,19 +23,36 @@
  */
 
 package io.blongho.github.room.model;
+
+import androidx.room.ColumnInfo;
+import androidx.room.Entity;
+import androidx.room.Ignore;
+import androidx.room.PrimaryKey;
+import androidx.room.Relation;
+
 import java.util.List;
 
+import io.blongho.github.room.constants.Column;
+import io.blongho.github.room.constants.Table;
+
 /**
- * A Customer object.<br>
- * A Customer object has customer details and the orders done by this customer
- * @author  Bernard Che Longho
- * @since 2019-05-10
+ * A Customer object.<br> A Customer object has customer details and the orders done by this customer
+ *
+ * @author Bernard Che Longho
  * @version 1.0
+ * @since 2019-05-10
  */
+@Entity (tableName = Table.CUSTOMER)
 public class Customer {
-	private Long customer_id;
+	@PrimaryKey
+	@ColumnInfo (name = Column.CUSTOMER_ID)
+	private Long id;
+	@ColumnInfo (name = Column.CUSTOMER_NAME)
 	private String name;
-	private Address address;
+	@ColumnInfo (name = Column.CUSTOMER_ADDR)
+	private String address;
+
+	@Ignore
 	private List<Order> orders;
 
 	/**
@@ -48,11 +65,12 @@ public class Customer {
 	 * Instantiates a new Customer.
 	 *
 	 * @param customer_id the customer id
-	 * @param name        the name
-	 * @param address     the address
+	 * @param name the name
+	 * @param address the address
 	 */
-	public Customer(final Long customer_id, final String name, final Address address) {
-		this.customer_id = customer_id;
+	@Ignore
+	public Customer(final Long customer_id, final String name, final String address) {
+		this.id = customer_id;
 		this.name = name;
 		this.address = address;
 	}
@@ -62,17 +80,17 @@ public class Customer {
 	 *
 	 * @return the customer id
 	 */
-	public Long getCustomer_id() {
-		return customer_id;
+	public Long getId() {
+		return id;
 	}
 
 	/**
 	 * Sets customer id.
 	 *
-	 * @param customer_id the customer id
+	 * @param id the customer id
 	 */
-	public void setCustomer_id(final Long customer_id) {
-		this.customer_id = customer_id;
+	public void setId(final Long id) {
+		this.id = id;
 	}
 
 	/**
@@ -98,7 +116,7 @@ public class Customer {
 	 *
 	 * @return the address
 	 */
-	public Address getAddress() {
+	public String getAddress() {
 		return address;
 	}
 
@@ -107,7 +125,7 @@ public class Customer {
 	 *
 	 * @param address the address
 	 */
-	public void setAddress(final Address address) {
+	public void setAddress(final String address) {
 		this.address = address;
 	}
 
@@ -132,7 +150,7 @@ public class Customer {
 	@Override
 	public String toString() {
 		final StringBuffer sb = new StringBuffer("Customer{");
-		sb.append("customer_id=").append(customer_id);
+		sb.append("id=").append(id);
 		sb.append(", name='").append(name).append('\'');
 		sb.append(", address=").append(address);
 		sb.append('}');

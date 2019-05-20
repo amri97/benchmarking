@@ -24,21 +24,36 @@
 
 package io.blongho.github.room.model;
 
+import androidx.room.ColumnInfo;
+import androidx.room.Entity;
+import androidx.room.Ignore;
+import androidx.room.PrimaryKey;
+import androidx.room.TypeConverters;
+
 import java.util.Date;
 import java.util.List;
 
+import io.blongho.github.room.constants.Column;
+import io.blongho.github.room.constants.Table;
+
 /**
- * The type Order<br>
- * An order holds an identifier to the customer and the list of products ordered.
- * @author  Bernard Che Longho
- * @since 2019-05-10
+ * The type Order<br> An order holds an identifier to the customer and the list of products ordered.
+ *
+ * @author Bernard Che Longho
  * @version 1.0
+ * @since 2019-05-10
  */
+@Entity (tableName = Table.ORDER)
 public class Order {
-	private long order_id;
-	private Customer customer_id;
-	private List<Product> products;
+	@ColumnInfo (name = Column.ORDER_DATE)
+	@TypeConverters (DateConverter.class)
 	private Date date;
+	@PrimaryKey
+	@ColumnInfo (name = Column.ORDER_ID)
+	private long id;
+	@ColumnInfo (name = Column.ORDER_CUSTOMER)
+	private long customer;
+	private List<Product> products;
 
 	/**
 	 * Instantiates a new Order.
@@ -49,12 +64,13 @@ public class Order {
 	/**
 	 * Instantiates a new Order.
 	 *
-	 * @param order_id    the order id
+	 * @param order_id the order id
 	 * @param customer_id the customer id
 	 */
-	public Order(final long order_id, final Customer customer_id) {
-		this.order_id = order_id;
-		this.customer_id = customer_id;
+	@Ignore
+	public Order(final long order_id, final long customer_id) {
+		this.id = order_id;
+		this.customer = customer_id;
 		date = new Date();
 	}
 
@@ -63,17 +79,17 @@ public class Order {
 	 *
 	 * @return the order id
 	 */
-	public long getOrder_id() {
-		return order_id;
+	public long getId() {
+		return id;
 	}
 
 	/**
 	 * Sets order id.
 	 *
-	 * @param order_id the order id
+	 * @param id the order id
 	 */
-	public void setOrder_id(final long order_id) {
-		this.order_id = order_id;
+	public void setId(final long id) {
+		this.id = id;
 	}
 
 	/**
@@ -81,17 +97,17 @@ public class Order {
 	 *
 	 * @return the customer id
 	 */
-	public Customer getCustomer_id() {
-		return customer_id;
+	public long getCustomer() {
+		return customer;
 	}
 
 	/**
 	 * Sets customer id.
 	 *
-	 * @param customer_id the customer id
+	 * @param customer the customer id
 	 */
-	public void setCustomer_id(final Customer customer_id) {
-		this.customer_id = customer_id;
+	public void setCustomer(final long customer) {
+		this.customer = customer;
 	}
 
 	/**
@@ -115,9 +131,9 @@ public class Order {
 	@Override
 	public String toString() {
 		final StringBuffer sb = new StringBuffer("Order{");
-		sb.append("order_id=").append(order_id);
-		sb.append(", customer_id=").append(customer_id);
-		sb.append(", products=").append(products);
+		sb.append("id=").append(id);
+		sb.append(", customer=").append(customer);
+		sb.append(", date=").append(date);
 		sb.append('}');
 		return sb.toString();
 	}

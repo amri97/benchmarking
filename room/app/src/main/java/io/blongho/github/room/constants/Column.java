@@ -22,20 +22,19 @@
  * SOFTWARE.
  */
 
-package io.blongho.github.room;
+package io.blongho.github.room.constants;
 
-import org.junit.Test;
-
-import static org.junit.Assert.assertEquals;
-
-/**
- * Example local unit test, which will execute on the development machine (host).
- *
- * @see <a href="http://d.android.com/tools/testing">Testing documentation</a>
- */
-public class ExampleUnitTest {
-	@Test
-	public void addition_isCorrect() {
-		assertEquals(4, 2 + 2);
-	}
+public final class Column {
+	final public static String CUSTOMER_ID = "customer_id";
+	final public static String CUSTOMER_NAME = "customer_name";
+	final public static String CUSTOMER_ADDR = "customer_addr";
+	final public static String ORDER_ID = "order_id";
+	final public static String ORDER_DATE = "order_date";
+	final public static String PRODUCT_ID = "product_id";
+	final public static String PRODUCT_NAME = "product_name";
+	final public static String ORDER_CUSTOMER= CUSTOMER_ID;
+	final public static String PRODUCT_DESC = "product_desc";
+	final public static String ORDER_PRODUCT_ID = "order_product_id";
+	final public static String ORDER_PRODUCT_CUSTOMER = CUSTOMER_ID;
+	final public static String ORDER_PRODUCT_ORDER = ORDER_ID;
 }

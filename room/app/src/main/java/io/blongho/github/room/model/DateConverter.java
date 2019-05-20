@@ -22,20 +22,20 @@
  * SOFTWARE.
  */
 
-package io.blongho.github.room;
+package io.blongho.github.room.model;
 
-import org.junit.Test;
+import androidx.room.TypeConverter;
 
-import static org.junit.Assert.assertEquals;
+import java.util.Date;
 
-/**
- * Example local unit test, which will execute on the development machine (host).
- *
- * @see <a href="http://d.android.com/tools/testing">Testing documentation</a>
- */
-public class ExampleUnitTest {
-	@Test
-	public void addition_isCorrect() {
-		assertEquals(4, 2 + 2);
+class DateConverter {
+	@TypeConverter
+	public static Date toDate(Long timestamp) {
+		return timestamp == null ? null : new Date(timestamp);
+	}
+
+	@TypeConverter
+	public static Long toTimestamp(Date date) {
+		return date == null ? null : date.getTime();
 	}
 }

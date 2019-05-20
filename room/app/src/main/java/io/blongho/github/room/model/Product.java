@@ -24,16 +24,31 @@
 
 package io.blongho.github.room.model;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.room.ColumnInfo;
+import androidx.room.Entity;
+import androidx.room.Ignore;
+import androidx.room.PrimaryKey;
+
+import io.blongho.github.room.constants.Column;
+import io.blongho.github.room.constants.Table;
+
 /**
- * The type Product<br>
- * A product has a name and a description
- * @author  Bernard Che Longho
- * @since 2019-05-10
+ * The type Product<br> A product has a name and a description
+ *
+ * @author Bernard Che Longho
  * @version 1.0
+ * @since 2019-05-10
  */
+@Entity (tableName = Table.PRODUCT)
 public class Product {
-	private long product_id;
+	@PrimaryKey
+	@ColumnInfo (name = Column.PRODUCT_ID)
+	private long id;
+	@ColumnInfo (name = Column.PRODUCT_NAME)
 	private String name;
+	@ColumnInfo (name = Column.PRODUCT_DESC)
 	private String description;
 
 	/**
@@ -45,12 +60,13 @@ public class Product {
 	/**
 	 * Instantiates a new Product.
 	 *
-	 * @param product_id  the product id
-	 * @param name        the name
+	 * @param product_id the product id
+	 * @param name the name
 	 * @param description the description
 	 */
-	public Product(final long product_id, final String name, final String description) {
-		this.product_id = product_id;
+	@Ignore
+	public Product(@NonNull final long product_id, @NonNull final String name, @Nullable final String description) {
+		this.id = product_id;
 		this.name = name;
 		this.description = description;
 	}
@@ -60,17 +76,17 @@ public class Product {
 	 *
 	 * @return the product id
 	 */
-	public long getProduct_id() {
-		return product_id;
+	public long getId() {
+		return id;
 	}
 
 	/**
 	 * Sets product id.
 	 *
-	 * @param product_id the product id
+	 * @param id the product id
 	 */
-	public void setProduct_id(final long product_id) {
-		this.product_id = product_id;
+	public void setId(final long id) {
+		this.id = id;
 	}
 
 	/**
@@ -112,7 +128,7 @@ public class Product {
 	@Override
 	public String toString() {
 		final StringBuffer sb = new StringBuffer("Product{");
-		sb.append("product_id=").append(product_id);
+		sb.append("id=").append(id);
 		sb.append(", name='").append(name).append('\'');
 		sb.append(", description='").append(description).append('\'');
 		sb.append('}');

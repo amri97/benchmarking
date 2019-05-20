@@ -22,20 +22,62 @@
  * SOFTWARE.
  */
 
-package io.blongho.github.room;
+package io.blongho.github.room.Database.dao;
 
-import org.junit.Test;
+import androidx.room.Dao;
+import androidx.room.Delete;
+import androidx.room.Insert;
+import androidx.room.Query;
+import androidx.room.Update;
 
-import static org.junit.Assert.assertEquals;
+import java.util.List;
+
+import io.blongho.github.room.model.Product;
 
 /**
- * Example local unit test, which will execute on the development machine (host).
- *
- * @see <a href="http://d.android.com/tools/testing">Testing documentation</a>
+ * The interface Product dao.
  */
-public class ExampleUnitTest {
-	@Test
-	public void addition_isCorrect() {
-		assertEquals(4, 2 + 2);
-	}
+@Dao
+interface ProductDao {
+	/**
+	 * Gets all products.
+	 *
+	 * @return the all products
+	 */
+	@Query ("SELECT * FROM TB_PRODUCT")
+	List<Product> getAllProducts();
+
+	/**
+	 * Insert products.
+	 *
+	 * @param products the products
+	 *
+	 * @return the affected row.
+	 */
+	@Insert
+	int insertProducts(Product... products);
+
+	/**
+	 * Update product.
+	 *
+	 * @param product the product
+	 *
+	 * @return the affected row.
+	 */
+	@Update
+	int updateProduct(Product product);
+
+	/**
+	 * Delete product.
+	 *
+	 * @param product the product
+	 */
+	@Delete
+	void deleteProduct(Product product);
+
+	/**
+	 * Delete all products.
+	 */
+	@Query ("DELETE FROM TB_PRODUCT")
+	void deleteAllProducts();
 }
