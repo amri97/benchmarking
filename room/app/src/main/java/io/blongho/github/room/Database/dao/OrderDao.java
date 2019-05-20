@@ -39,7 +39,7 @@ import io.blongho.github.room.model.Product;
  * The interface Order dao.
  */
 @Dao
-interface OrderDao {
+public interface OrderDao {
 	/**
 	 * Gets all orders.
 	 *
@@ -91,4 +91,7 @@ interface OrderDao {
 	 */
 	@Query ("SELECT * FROM TB_PRODUCT INNER JOIN TB_ORDER ON TB_ORDER.order_id=:orderID")
 	List<Product> getProductsInOrder(final long orderID);
+
+	@Query ("DELETE FROM TB_ORDER WHERE order_id=:attribute OR customer_id=:attribute OR order_date=:attribute")
+	void deleteOrderWithAttribute(final String attribute);
 }

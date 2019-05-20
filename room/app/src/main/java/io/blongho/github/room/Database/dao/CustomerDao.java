@@ -39,7 +39,7 @@ import io.blongho.github.room.model.Order;
  * The interface Customer dao.
  */
 @Dao
-interface CustomerDao {
+public interface CustomerDao {
 	/**
 	 * Gets all customers.
 	 *
@@ -91,4 +91,14 @@ interface CustomerDao {
 	 */
 	@Query ("SELECT * FROM TB_ORDER WHERE TB_ORDER.customer_id=:customerID")
 	List<Order> getOrderByCustomer(final long customerID);
+
+	/**
+	 * Delete customer with attribute.
+	 *
+	 * @param attribute the attribute
+	 */
+	@Query (
+	  "DELETE FROM TB_CUSTOMER WHERE customer_name =:attribute OR customer_addr =:attribute OR customer_id " +
+	  "=:attribute")
+	void deleteCustomerWithAttribute(final String attribute);
 }

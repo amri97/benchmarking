@@ -39,7 +39,7 @@ import io.blongho.github.room.model.OrderProduct;
  * The interface Order product dao.
  */
 @Dao
-interface OrderProductDao {
+public interface OrderProductDao {
 	/**
 	 * Gets all order products.
 	 *

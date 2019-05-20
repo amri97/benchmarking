@@ -38,7 +38,7 @@ import io.blongho.github.room.model.Product;
  * The interface Product dao.
  */
 @Dao
-interface ProductDao {
+public interface ProductDao {
 	/**
 	 * Gets all products.
 	 *
@@ -80,4 +80,15 @@ interface ProductDao {
 	 */
 	@Query ("DELETE FROM TB_PRODUCT")
 	void deleteAllProducts();
+
+	/**
+	 * Delete product with attribute.
+	 * <p> This method gets an order based on the id, the date, the id of the
+	 * customer</p>
+	 *
+	 * @param attribute the attribute
+	 */
+	@Query ("DELETE FROM TB_PRODUCT WHERE product_id =:attribute OR product_name=:attribute OR " +
+	        "product_desc=:attribute")
+	void deleteProductWithAttribute(final String attribute);
 }
