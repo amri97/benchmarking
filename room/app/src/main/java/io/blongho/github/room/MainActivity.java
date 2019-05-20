@@ -22,14 +22,14 @@
  * SOFTWARE.
  */
 
-package io.blongho.github.template;
+package io.blongho.github.room;
 
 import android.os.Bundle;
 import android.view.View;
-import com.google.android.material.snackbar.Snackbar;
+
 import androidx.appcompat.app.AppCompatActivity;
 
-import java.util.Objects;
+import com.google.android.material.snackbar.Snackbar;
 
 /**
  * The type Main activity.
@@ -52,6 +52,10 @@ public class MainActivity extends AppCompatActivity {
 		// TODO implement code for creating the database here
 		showSnackBar(view, "createDb");
 
+	}
+
+	private void showSnackBar(View view, final String method) {
+		Snackbar.make(view, method + " ==> Implement this method", Snackbar.LENGTH_SHORT).show();
 	}
 
 	/**
@@ -102,9 +106,5 @@ public class MainActivity extends AppCompatActivity {
 	public void loadData(View view) {
 		// TODO logic for loading the database with data
 		showSnackBar(view, "loadData");
-	}
-
-	private void showSnackBar(View view, final String method){
-		Snackbar.make(view, method + " ==> Implement this method", Snackbar.LENGTH_SHORT).show();
 	}
 }

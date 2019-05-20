@@ -22,7 +22,7 @@
  * SOFTWARE.
  */
 
-package io.blongho.github.template;
+package io.blongho.github.room;
 
 import org.junit.Test;
 

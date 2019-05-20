@@ -22,7 +22,7 @@
  * SOFTWARE.
  */
 
-package io.blongho.github.template.model;
+package io.blongho.github.room.model;
 
 /**
  * An Address knows the street, city, postalcode and country

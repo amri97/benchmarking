@@ -22,7 +22,7 @@
  * SOFTWARE.
  */
 
-package io.blongho.github.template.model;
+package io.blongho.github.room.model;
 
 import java.util.Date;
 import java.util.List;
