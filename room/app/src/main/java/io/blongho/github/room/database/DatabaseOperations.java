@@ -22,7 +22,7 @@
  * SOFTWARE.
  */
 
-package io.blongho.github.room.util;
+package io.blongho.github.room.database;
 
 import java.util.List;
 
@@ -34,7 +34,7 @@ import io.blongho.github.room.model.Product;
 /**
  * Defines the operations done on the database
  */
-public interface DatabaseOperations {
+interface DatabaseOperations {
 	/**
 	 * Populate datbase.
 	 *
@@ -50,11 +50,9 @@ public interface DatabaseOperations {
 	 * Add customer long.
 	 *
 	 * @param customer the customer
-	 *
-	 * @return the int
 	 */
 // Customer operations
-	int addCustomer(final Customer customer);
+	void addCustomer(final Customer... customer);
 
 	/**
 	 * Delete customer long.
@@ -97,11 +95,9 @@ public interface DatabaseOperations {
 	 * Add product long.
 	 *
 	 * @param product the product
-	 *
-	 * @return the long
 	 */
 // Product operations
-	int addProduct(final Product product);
+	void addProduct(final Product... product);
 
 	/**
 	 * Delete product long.
@@ -144,18 +140,14 @@ public interface DatabaseOperations {
 	 * Add order long.
 	 *
 	 * @param order the order
-	 *
-	 * @return the long
 	 */
 // Order operations
-	int addOrder(final Order order);
+	void addOrder(final Order... order);
 
 	/**
 	 * Delete order long.
 	 *
 	 * @param order the order
-	 *
-	 * @return the long
 	 */
 	void deleteOrder(final Order order);
 
@@ -179,10 +171,8 @@ public interface DatabaseOperations {
 	 * Call this method whenever an order is made
 	 *
 	 * @param orderProduct the order product
-	 *
-	 * @return the number of rows affected
 	 */
-	int updateOrderProductTable(final OrderProduct orderProduct);
+	void insertOrderProduct(final OrderProduct... orderProduct);
 
 	/**
 	 * Call this method whenever an order is made
@@ -193,7 +183,7 @@ public interface DatabaseOperations {
 	 *
 	 * @return the number of rows affected
 	 */
-	int updateOrderProductTable(long orderProductID, long customerID, long orderID);
+	//int insertOrderProduct(long orderProductID, long customerID, long orderID);
 
 	/**
 	 * Delete all items from a particular table

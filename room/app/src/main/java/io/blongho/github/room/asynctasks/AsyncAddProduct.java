@@ -22,20 +22,23 @@
  * SOFTWARE.
  */
 
-package io.blongho.github.room.model;
+package io.blongho.github.room.asynctasks;
 
-import androidx.room.TypeConverter;
+import android.os.AsyncTask;
 
-import java.util.Date;
+import io.blongho.github.room.database.AppDatabaseRepository;
+import io.blongho.github.room.model.Product;
 
-public class DateConverter {
-	@TypeConverter
-	public static Date toDate(Long timestamp) {
-		return timestamp == null ? null : new Date(timestamp);
+public class AsyncAddProduct extends AsyncTask<Product, Void, Void> {
+	private final AppDatabaseRepository repository;
+
+	public AsyncAddProduct(final AppDatabaseRepository repository) {
+		this.repository = repository;
 	}
 
-	@TypeConverter
-	public static Long toTimestamp(Date date) {
-		return date == null ? null : date.getTime();
+	@Override
+	protected Void doInBackground(final Product... products) {
+		repository.addProduct(products);
+		return null;
 	}
 }

@@ -22,7 +22,7 @@
  * SOFTWARE.
  */
 
-package io.blongho.github.room.Database;
+package io.blongho.github.room.database;
 
 import android.content.Context;
 
@@ -30,17 +30,17 @@ import androidx.room.Database;
 import androidx.room.Room;
 import androidx.room.RoomDatabase;
 
-import io.blongho.github.room.Database.dao.CustomerDao;
-import io.blongho.github.room.Database.dao.OrderDao;
-import io.blongho.github.room.Database.dao.OrderProductDao;
-import io.blongho.github.room.Database.dao.ProductDao;
+import io.blongho.github.room.database.dao.CustomerDao;
+import io.blongho.github.room.database.dao.OrderDao;
+import io.blongho.github.room.database.dao.OrderProductDao;
+import io.blongho.github.room.database.dao.ProductDao;
 import io.blongho.github.room.model.Customer;
 import io.blongho.github.room.model.Order;
 import io.blongho.github.room.model.OrderProduct;
 import io.blongho.github.room.model.Product;
 
 @Database (entities = {Customer.class, Product.class, Order.class, OrderProduct.class}, version = 1)
-public abstract class AppDatabase extends RoomDatabase {
+abstract class AppDatabase extends RoomDatabase {
 	private final static String databaseName = "customer_order_room";
 
 	private static AppDatabase instance;
@@ -56,9 +56,7 @@ public abstract class AppDatabase extends RoomDatabase {
 		return instance;
 	}
 
-	public static void destroyInstance() {
-		instance = null;
-	}
+	public static void destroyInstance() { instance = null; }
 
 	abstract CustomerDao customerDao();
 

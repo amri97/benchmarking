@@ -22,20 +22,24 @@
  * SOFTWARE.
  */
 
-package io.blongho.github.room.model;
+package io.blongho.github.room.asynctasks;
 
-import androidx.room.TypeConverter;
+import android.os.AsyncTask;
 
-import java.util.Date;
+import java.util.List;
 
-public class DateConverter {
-	@TypeConverter
-	public static Date toDate(Long timestamp) {
-		return timestamp == null ? null : new Date(timestamp);
+import io.blongho.github.room.database.AppDatabaseRepository;
+import io.blongho.github.room.model.Customer;
+
+public class AsyncReadCustomer extends AsyncTask<Void, Void, List<Customer>> {
+	private final AppDatabaseRepository repository;
+
+	public AsyncReadCustomer(final AppDatabaseRepository repository) {
+		this.repository = repository;
 	}
 
-	@TypeConverter
-	public static Long toTimestamp(Date date) {
-		return date == null ? null : date.getTime();
+	@Override
+	protected List<Customer> doInBackground(final Void... voids) {
+		return repository.getAllCustomers();
 	}
 }

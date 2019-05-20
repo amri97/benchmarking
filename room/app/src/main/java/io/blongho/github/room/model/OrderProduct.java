@@ -28,8 +28,9 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.room.ColumnInfo;
 import androidx.room.Entity;
+import androidx.room.ForeignKey;
 import androidx.room.Ignore;
-import androidx.room.PrimaryKey;
+import androidx.room.Index;
 
 import io.blongho.github.room.constants.Column;
 import io.blongho.github.room.constants.Table;
@@ -37,15 +38,19 @@ import io.blongho.github.room.constants.Table;
 /**
  * The type Order product.
  */
-@Entity (tableName = Table.ORDER_PRODUCT)
+@Entity (tableName = Table.ORDER_PRODUCT,
+  primaryKeys = {Column.ORDER_PRODUCT_ID, Column.ORDER_PRODUCT_ORDER, Column.ORDER_PRODUCT_PRODUCT},
+  foreignKeys = {@ForeignKey (entity = Order.class, parentColumns = Column.ORDER_ID,
+	childColumns = Column.ORDER_PRODUCT_ID), @ForeignKey (entity = Product.class, parentColumns = Column.PRODUCT_ID,
+	childColumns = Column.ORDER_PRODUCT_PRODUCT)},
+  indices = {@Index (value = {Column.ORDER_PRODUCT_ORDER, Column.ORDER_PRODUCT_PRODUCT}, unique = true)})
 public class OrderProduct {
-	@PrimaryKey
 	@ColumnInfo (name = Column.ORDER_PRODUCT_ID)
 	private long id;
-	@ColumnInfo (name = Column.ORDER_PRODUCT_CUSTOMER)
-	private long customer;
 	@ColumnInfo (name = Column.ORDER_PRODUCT_ORDER)
 	private long order;
+	@ColumnInfo (name = Column.ORDER_PRODUCT_PRODUCT)
+	private long product;
 
 	/**
 	 * Instantiates a new Order product.
@@ -57,66 +62,66 @@ public class OrderProduct {
 	 * Instantiates a new Order product.
 	 *
 	 * @param orderProductID the order product id
-	 * @param customerID the customer id
 	 * @param orderID the order id
+	 * @param productID the product id
 	 */
 	@Ignore
 	public OrderProduct(
-	  @Nullable final long orderProductID, @NonNull final long customerID, @NonNull final long orderID) {
+	  @Nullable final long orderProductID, @NonNull final long orderID, @NonNull final long productID) {
 		this.id = orderProductID;
-		this.customer = customerID;
 		this.order = orderID;
+		this.product = productID;
 	}
 
 	/**
-	 * Gets order product id.
+	 * Gets id.
 	 *
-	 * @return the order product id
+	 * @return the id
 	 */
 	public long getId() {
 		return id;
 	}
 
 	/**
-	 * Sets order product id.
+	 * Sets id.
 	 *
-	 * @param id the order product id
+	 * @param id the id
 	 */
 	public void setId(final long id) {
 		this.id = id;
 	}
 
 	/**
-	 * Gets customer id.
+	 * Gets product.
 	 *
-	 * @return the customer id
+	 * @return the product
 	 */
-	public long getCustomer() {
-		return customer;
+	public long getProduct() {
+		return product;
 	}
 
 	/**
-	 * Sets customer id.
+	 * Sets product.
 	 *
-	 * @param customer the customer id
+	 * @param product the product
 	 */
-	public void setCustomer(final long customer) {
-		this.customer = customer;
+	public void setProduct(final long product) {
+		this.product = product;
 	}
 
 	/**
-	 * Gets order id.
+	 * Gets order.
 	 *
-	 * @return the order id
+	 * @return the order
 	 */
 	public long getOrder() {
 		return order;
 	}
 
 	/**
-	 * Sets order id.
+	 * Sets order.
 	 *
-	 * @param order the order id
+	 * @param order the order
 	 */
 	public void setOrder(final long order) {
 		this.order = order;
@@ -126,8 +131,9 @@ public class OrderProduct {
 	public String toString() {
 		final StringBuffer sb = new StringBuffer("OrderProduct{");
 		sb.append("id=").append(id);
-		sb.append(", customer=").append(customer);
 		sb.append(", order=").append(order);
+		sb.append(", product=");
+		sb.append(product);
 		sb.append('}');
 		return sb.toString();
 	}

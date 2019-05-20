@@ -26,7 +26,9 @@ package io.blongho.github.room.model;
 
 import androidx.room.ColumnInfo;
 import androidx.room.Entity;
+import androidx.room.ForeignKey;
 import androidx.room.Ignore;
+import androidx.room.Index;
 import androidx.room.PrimaryKey;
 import androidx.room.TypeConverters;
 
@@ -43,7 +45,9 @@ import io.blongho.github.room.constants.Table;
  * @version 1.0
  * @since 2019-05-10
  */
-@Entity (tableName = Table.ORDER)
+@Entity (tableName = Table.ORDER,
+  foreignKeys = {@ForeignKey (entity = Customer.class, parentColumns = Column.CUSTOMER_ID,
+	childColumns = Column.ORDER_CUSTOMER)}, indices = {@Index (value = {Column.ORDER_CUSTOMER}, unique = true)})
 public class Order {
 	@ColumnInfo (name = Column.ORDER_DATE)
 	@TypeConverters (DateConverter.class)
@@ -53,6 +57,7 @@ public class Order {
 	private long id;
 	@ColumnInfo (name = Column.ORDER_CUSTOMER)
 	private long customer;
+	@Ignore
 	private List<Product> products;
 
 	/**

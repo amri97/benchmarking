@@ -28,7 +28,6 @@ import androidx.room.ColumnInfo;
 import androidx.room.Entity;
 import androidx.room.Ignore;
 import androidx.room.PrimaryKey;
-import androidx.room.Relation;
 
 import java.util.List;
 
@@ -50,7 +49,7 @@ public class Customer {
 	@ColumnInfo (name = Column.CUSTOMER_NAME)
 	private String name;
 	@ColumnInfo (name = Column.CUSTOMER_ADDR)
-	private String address;
+	private String city;
 
 	@Ignore
 	private List<Order> orders;
@@ -66,13 +65,13 @@ public class Customer {
 	 *
 	 * @param customer_id the customer id
 	 * @param name the name
-	 * @param address the address
+	 * @param address the city
 	 */
 	@Ignore
 	public Customer(final Long customer_id, final String name, final String address) {
 		this.id = customer_id;
 		this.name = name;
-		this.address = address;
+		this.city = address;
 	}
 
 	/**
@@ -112,21 +111,21 @@ public class Customer {
 	}
 
 	/**
-	 * Gets address.
+	 * Gets city.
 	 *
-	 * @return the address
+	 * @return the city
 	 */
-	public String getAddress() {
-		return address;
+	public String getCity() {
+		return city;
 	}
 
 	/**
-	 * Sets address.
+	 * Sets city.
 	 *
-	 * @param address the address
+	 * @param city the city
 	 */
-	public void setAddress(final String address) {
-		this.address = address;
+	public void setCity(final String city) {
+		this.city = city;
 	}
 
 	/**
@@ -152,7 +151,7 @@ public class Customer {
 		final StringBuffer sb = new StringBuffer("Customer{");
 		sb.append("id=").append(id);
 		sb.append(", name='").append(name).append('\'');
-		sb.append(", address=").append(address);
+		sb.append(", city=").append(city);
 		sb.append('}');
 		return sb.toString();
 	}
