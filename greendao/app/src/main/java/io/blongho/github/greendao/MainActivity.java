@@ -26,13 +26,19 @@ package io.blongho.github.greendao;
 
 import android.os.Bundle;
 import android.util.Log;
+import android.util.TimingLogger;
 import android.view.View;
 
 import com.google.android.material.snackbar.Snackbar;
 import com.google.gson.Gson;
 
+import java.util.List;
+
 import androidx.appcompat.app.AppCompatActivity;
+import io.blongho.github.greendao.database.DatabaseHelper;
 import io.blongho.github.greendao.model.Customer;
+import io.blongho.github.greendao.model.DaoMaster;
+import io.blongho.github.greendao.model.DaoSession;
 import io.blongho.github.greendao.model.Order;
 import io.blongho.github.greendao.model.OrderProduct;
 import io.blongho.github.greendao.model.Product;
@@ -44,6 +50,9 @@ import io.blongho.github.greendao.util.MethodTimer;
  */
 public class MainActivity extends AppCompatActivity {
   private static final String TAG = "MainActivity";
+  private static DaoSession daoSession;
+  final String dbName = "customer_order_greendao";
+  private final Object lock = new Object();
   private Gson gson;
 
   @Override
@@ -60,7 +69,10 @@ public class MainActivity extends AppCompatActivity {
    * @param view the view
    */
   public void createDb(View view) {
-    // TODO implement code for creating the database here
+    final TimingLogger logger = new TimingLogger(TAG, "Performance of greenDao");
+    logger.addSplit("Initialize database");
+    daoSession = getDaoSession();
+    logger.dumpToLog();
     showSnackBar(view, "createDb");
 
   }
@@ -71,7 +83,11 @@ public class MainActivity extends AppCompatActivity {
    * @param view the view
    */
   public void clearDb(View view) {
-    // TODO implement code for clearing the database
+    getDaoSession();
+    daoSession.getCustomerDao().deleteAll();
+    daoSession.getProductDao().deleteAll();
+    daoSession.getOrderDao().deleteAll();
+    daoSession.getOrderProductDao().deleteAll();
     showSnackBar(view, "clearDb");
   }
 
@@ -101,12 +117,34 @@ public class MainActivity extends AppCompatActivity {
    * @param view the view
    */
   public void readData(View view) {
+    getDaoSession();
     // TODO implement logic for reading some data from the database
+    List<Customer> customers = daoSession.getCustomerDao().loadAll();
+    //showItems(customers);
 
+    List<Order> orders = daoSession.getOrderDao()._queryProduct_OrdersWithThisProduct(12);
+    Order order = orders.get(0);
+    Customer customer = order.getOrderCustomer();
+    showItems(customer);
+    List<Product> products = daoSession.getProductDao()._queryOrder_Products(10249);
+    showItems(products);
+
+    long key = daoSession.getCustomerDao().getKey(customers.get(43));
+    showItems(key);
     showSnackBar(view, "readData");
   }
 
-  private void showItems(Object[] items) {
+  private <T> void showItems(List<T> customers) {
+    for (Object customer : customers) {
+      Log.i(TAG, "showItems: " + customer);
+    }
+  }
+
+  private <T> void showItems(T item) {
+    Log.i(TAG, "showItems: " + item);
+  }
+
+  private <T> void showItems(T[] items) {
     for (Object item : items) {
       Log.i(TAG, "showItems: " + item);
     }
@@ -118,13 +156,12 @@ public class MainActivity extends AppCompatActivity {
    * @param view the view
    */
   public void loadData(View view) {
+    getDaoSession();
     // TODO logic for loading the database with data
     MethodTimer timer = new MethodTimer("LoadCustomers");
-    timer.start();
+
     Customer[] customers = gson.fromJson(AssetsReader.readFromAssets(getApplicationContext(), R.raw.customer),
         Customer[].class);
-    timer.stop();
-    timer.results();
 
     //showItems(customers);
     Product[] products = gson.fromJson(AssetsReader.readFromAssets(getApplicationContext(), R.raw.products),
@@ -136,11 +173,33 @@ public class MainActivity extends AppCompatActivity {
 
     OrderProduct[] orderProducts = gson.fromJson(AssetsReader.readFromAssets(getApplicationContext(),
         R.raw.order_products), OrderProduct[].class);
+
+    final TimingLogger logger = new TimingLogger(TAG, "Performance of greenDao");
+    logger.addSplit("addCustomers");
+    daoSession.getCustomerDao().insertOrReplaceInTx(customers);
     //showItems(orderProducts);
+    logger.addSplit("addProducts");
+    daoSession.getProductDao().insertOrReplaceInTx(products);
+
+    logger.addSplit("addOrders");
+    daoSession.getOrderDao().insertOrReplaceInTx(orders);
+
+    logger.addSplit("addOrderProducts");
+    daoSession.getOrderProductDao().insertOrReplaceInTx(orderProducts);
+    logger.dumpToLog();
     showSnackBar(view, "loadData");
   }
 
   private void showSnackBar(View view, final String method) {
     Snackbar.make(view, method + " ==> Implement this method", Snackbar.LENGTH_SHORT).show();
+  }
+
+  private DaoSession getDaoSession() {
+    synchronized (lock) {
+      if (daoSession == null) {
+        daoSession = new DaoMaster(new DatabaseHelper(getApplicationContext(), dbName).getWritableDb()).newSession();
+      }
+    }
+    return daoSession;
   }
 }

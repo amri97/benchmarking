@@ -216,9 +216,9 @@ public class Product {
   }
 
   /** called by internal mechanisms, do not call yourself. */
-  @Generated(hash = 1171535257)
-  public void __setDaoSession(DaoSession daoSession) {
-      this.daoSession = daoSession;
-      myDao = daoSession != null ? daoSession.getProductDao() : null;
-  }
+@Generated(hash = 1171535257)
+public void __setDaoSession(DaoSession daoSession) {
+    this.daoSession = daoSession;
+    myDao = daoSession != null ? daoSession.getProductDao() : null;
+}
 }
