@@ -31,7 +31,6 @@
     tools:context=".MainActivity">
 
     <Button
-        android:id="@+id/dbInitialize"
         style="@style/buttonFullStyle"
         android:layout_marginTop="64dp"
         android:text="@string/dbInitialize"
@@ -45,7 +44,6 @@
         android:orientation="horizontal">
 
         <Button
-            android:id="@+id/dbCreate"
             style="@style/buttonSideBySide"
             android:text="@string/dbCreate"
             android:onClick="loadData"/>
@@ -56,7 +54,6 @@
             android:layout_weight="0.05" />
 
         <Button
-            android:id="@+id/dbRead"
             style="@style/buttonSideBySide"
             android:onClick="readData"
             android:text="@string/dbRead" />
@@ -73,7 +70,6 @@
         android:orientation="horizontal">
 
         <Button
-            android:id="@+id/dbUpdate"
             style="@style/buttonSideBySide"
             android:onClick="updateEntry"
             android:text="@string/dbUpdate" />
@@ -84,7 +80,6 @@
             android:layout_weight="0.05" />
 
         <Button
-            android:id="@+id/dbDelete"
             style="@style/buttonSideBySide"
             android:onClick="deleteFromDb"
             android:text="@string/dbDelete" />
@@ -92,7 +87,6 @@
 
     <Button
         android:onClick="clearDb"
-        android:id="@+id/dbDropAll"
         style="@style/buttonFullStyle"
         android:layout_marginTop="@dimen/defaultMargin"
         android:text="@string/dbDropAll" />

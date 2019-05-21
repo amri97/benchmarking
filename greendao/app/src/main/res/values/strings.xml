@@ -25,9 +25,7 @@
 
 <resources>
     <string name="app_name">DT133G-greenDAO version</string>
-    <string name="initializeDB">Initialize Database</string>
-    <string name="loadData">Load data</string>
-    <string name="dbCreate">Load the database</string>
+  <string name="dbCreate">Load the database</string>
     <string name="dbRead">Read from Db</string>
     <string name="dbDelete">Delete from Db</string>
     <string name="dbUpdate">Update Entry</string>
