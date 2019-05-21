@@ -26,9 +26,8 @@ package io.blongho.github.room;
 
 import android.os.Bundle;
 import android.util.Log;
+import android.util.TimingLogger;
 import android.view.View;
-
-import androidx.appcompat.app.AppCompatActivity;
 
 import com.google.android.material.snackbar.Snackbar;
 import com.google.gson.Gson;
@@ -37,10 +36,12 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.ExecutionException;
 
+import androidx.appcompat.app.AppCompatActivity;
 import io.blongho.github.room.asynctasks.AsyncAddCustomer;
 import io.blongho.github.room.asynctasks.AsyncAddOrder;
 import io.blongho.github.room.asynctasks.AsyncAddOrderProduct;
 import io.blongho.github.room.asynctasks.AsyncAddProduct;
+import io.blongho.github.room.asynctasks.AsyncDeleteAllEntries;
 import io.blongho.github.room.asynctasks.AsyncReadCustomer;
 import io.blongho.github.room.asynctasks.AsyncReadOrderProduct;
 import io.blongho.github.room.asynctasks.AsyncReadOrders;
@@ -56,131 +57,139 @@ import io.blongho.github.room.util.AssetsReader;
  * The type Main activity.
  */
 public class MainActivity extends AppCompatActivity {
-	private static final String TAG = "MainActivity";
-	private AppDatabaseRepository repository;
+  private static final String TAG = "MainActivity";
+  private AppDatabaseRepository repository;
 
-	@Override
-	protected void onCreate(Bundle savedInstanceState) {
-		super.onCreate(savedInstanceState);
-		setContentView(R.layout.activity_main);
+  @Override
+  protected void onCreate(Bundle savedInstanceState) {
+    super.onCreate(savedInstanceState);
+    setContentView(R.layout.activity_main);
 
-	}
+  }
 
-	/**
-	 * Create db.
-	 *
-	 * @param view the view
-	 */
-	public void createDb(View view) {
-		initializeRepository();
-		showSnackBar(view, "createDb");
+  /**
+   * Create db.
+   *
+   * @param view the view
+   */
+  public void createDb(View view) {
+    initializeRepository();
+    showSnackBar(view, "createDb");
 
-	}
+  }
 
-	private void initializeRepository() {
-		if (repository == null) {
-			repository = new AppDatabaseRepository(getApplicationContext());
-		}
-	}
+  private void initializeRepository() {
+    if (repository == null) {
+      final TimingLogger logger = new TimingLogger(TAG, "Initializing the database");
+      logger.addSplit("create database");
+      repository = new AppDatabaseRepository(getApplicationContext());
+      logger.dumpToLog();
+    }
+  }
 
-	private void showSnackBar(View view, final String method) {
-		Snackbar.make(view, method + " ==> Implement this method", Snackbar.LENGTH_SHORT).show();
-	}
+  private void showSnackBar(View view, final String method) {
+    Snackbar.make(view, method + " ==> Implement this method", Snackbar.LENGTH_SHORT).show();
+  }
 
-	/**
-	 * Clear db.
-	 *
-	 * @param view the view
-	 */
-	public void clearDb(View view) {
-		initializeRepository();
-		repository.deleteAll();
-		showSnackBar(view, "clearDb");
-	}
+  /**
+   * Clear db.
+   *
+   * @param view the view
+   */
+  public void clearDb(View view) {
+    initializeRepository();
+    final TimingLogger logger = new TimingLogger(TAG, "Clearing database entries");
+    logger.addSplit("Drop entries");
+    new AsyncDeleteAllEntries(repository).execute();
+    logger.dumpToLog();
+    showSnackBar(view, "clearDb");
+  }
 
-	/**
-	 * Delete from db.
-	 *
-	 * @param view the view
-	 */
-	public void deleteFromDb(View view) {
-		// TODO implement code for deleting an item or items from the database
-		showSnackBar(view, "deleteFromDb");
-	}
+  /**
+   * Delete from db.
+   *
+   * @param view the view
+   */
+  public void deleteFromDb(View view) {
+    // TODO implement code for deleting an item or items from the database
+    showSnackBar(view, "deleteFromDb");
+  }
 
-	/**
-	 * Update entry.
-	 *
-	 * @param view the view
-	 */
-	public void updateEntry(View view) {
-		// TODO implement code for updating an entry or entries in the database
-		showSnackBar(view, "updateEntry");
-	}
+  /**
+   * Update entry.
+   *
+   * @param view the view
+   */
+  public void updateEntry(View view) {
+    // TODO implement code for updating an entry or entries in the database
+    showSnackBar(view, "updateEntry");
+  }
 
-	/**
-	 * Read data.
-	 *
-	 * @param view the view
-	 */
-	public void readData(View view) {
-		List<Customer>     customers     = new ArrayList<>();
-		List<Product>      products      = new ArrayList<>();
-		List<Order>        orders        = new ArrayList<>();
-		List<OrderProduct> orderProducts = new ArrayList<>();
-		initializeRepository();
-		try {
-			customers = new AsyncReadCustomer(repository).execute().get();
-			products = new AsyncReadProduct(repository).execute().get();
-			orders = new AsyncReadOrders(repository).execute().get();
-			orderProducts = new AsyncReadOrderProduct(repository).execute().get();
-			/*for (final Customer customer : customers) {
-				Log.e(TAG, "readData: " + customer);
-			}*/
+  /**
+   * Read data.
+   *
+   * @param view the view
+   */
+  public void readData(View view) {
+    List<Customer> customers = new ArrayList<>();
+    List<Product> products = new ArrayList<>();
+    List<Order> orders = new ArrayList<>();
+    List<OrderProduct> orderProducts = new ArrayList<>();
+    initializeRepository();
+    try {
+      final TimingLogger logger = new TimingLogger(TAG, "Read from database");
+      logger.addSplit("readCustomers");
+      customers = new AsyncReadCustomer(repository).execute().get();
+      logger.addSplit("readProducts");
+      products = new AsyncReadProduct(repository).execute().get();
+      logger.addSplit("readOrders");
+      orders = new AsyncReadOrders(repository).execute().get();
+      logger.addSplit("readOrderProducts");
+      orderProducts = new AsyncReadOrderProduct(repository).execute().get();
+      logger.dumpToLog();
+    } catch (ExecutionException e) {
+      e.printStackTrace();
+    } catch (InterruptedException e) {
+      e.printStackTrace();
+    }
+    showSnackBar(view, "readData");
+  }
 
-			/*showItems(customers);
-			showItems(products);
-			showItems(orders);*/
-			showItems(orderProducts);
+  private <T> void showItems(List<T> items) {
+    if (items.isEmpty()) {
+      Log.i(TAG, "showItems: Nothting to show for " + items.getClass().getName());
+    }
+    for (final T item : items) {
+      Log.i(TAG, "showItems: " + item);
+    }
+  }
 
-		} catch (ExecutionException e) {
-			e.printStackTrace();
-		} catch (InterruptedException e) {
-			e.printStackTrace();
-		}
-		// TODO implement logic for reading some data from the database
-		showSnackBar(view, "readData");
-	}
+  /**
+   * Load data.
+   *
+   * @param view the view
+   */
+  public void loadData(View view) {
+    Gson gson = new Gson();
+    Customer[] customers = gson
+        .fromJson(AssetsReader.readFromAssets(getApplicationContext(), R.raw.customer), Customer[].class);
+    Product[] products = gson
+        .fromJson(AssetsReader.readFromAssets(getApplicationContext(), R.raw.products), Product[].class);
+    Order[] orders = gson
+        .fromJson(AssetsReader.readFromAssets(getApplicationContext(), R.raw.orders), Order[].class);
+    OrderProduct[] orderProducts = gson
+        .fromJson(AssetsReader.readFromAssets(getApplicationContext(), R.raw.order_products), OrderProduct[].class);
 
-	private <T> void showItems(List<T> items) {
-		for (final T item : items) {
-			Log.i(TAG, "showItems: " + item);
-		}
-	}
-
-	/**
-	 * Load data.
-	 *
-	 * @param view the view
-	 */
-	public void loadData(View view) {
-		Gson gson = new Gson();
-		Customer[] customers = gson
-		  .fromJson(AssetsReader.readFromAssets(getApplicationContext(), R.raw.customer), Customer[].class);
-		Product[] products = gson
-		  .fromJson(AssetsReader.readFromAssets(getApplicationContext(), R.raw.products), Product[].class);
-		Order[] orders = gson
-		  .fromJson(AssetsReader.readFromAssets(getApplicationContext(), R.raw.orders), Order[].class);
-		OrderProduct[] orderProducts = gson
-		  .fromJson(AssetsReader.readFromAssets(getApplicationContext(), R.raw.order_products), OrderProduct[].class);
-		for (final OrderProduct orderProduct : orderProducts) {
-			Log.e(TAG, "loadData: " + orderProduct );
-		}
-		initializeRepository();
-		new AsyncAddCustomer(repository).execute(customers);
-		new AsyncAddProduct(repository).execute(products);
-		new AsyncAddOrder(repository).execute(orders);
-		new AsyncAddOrderProduct(repository).execute(orderProducts);
-		showSnackBar(view, "loadData");
-	}
+    initializeRepository();
+    final TimingLogger logger = new TimingLogger(TAG, "Populating the database");
+    logger.addSplit("loadCustomers");
+    new AsyncAddCustomer(repository).execute(customers);
+    logger.addSplit("loadProducts");
+    new AsyncAddProduct(repository).execute(products);
+    logger.addSplit("loadOrders");
+    new AsyncAddOrder(repository).execute(orders);
+    logger.addSplit("loadOrderProducts");
+    new AsyncAddOrderProduct(repository).execute(orderProducts);
+    logger.dumpToLog();
+  }
 }

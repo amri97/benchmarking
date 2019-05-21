@@ -63,7 +63,7 @@ public interface ProductDao {
 	 *
 	 * @return the affected row.
 	 */
-	@Update
+	@Update(onConflict = OnConflictStrategy.REPLACE)
 	int updateProduct(Product product);
 
 	/**

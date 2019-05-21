@@ -24,15 +24,14 @@
 
 package io.blongho.github.room.database.dao;
 
+import java.util.List;
+
 import androidx.room.Dao;
 import androidx.room.Delete;
 import androidx.room.Insert;
 import androidx.room.OnConflictStrategy;
 import androidx.room.Query;
 import androidx.room.Update;
-
-import java.util.List;
-
 import io.blongho.github.room.model.Order;
 import io.blongho.github.room.model.Product;
 
@@ -41,62 +40,63 @@ import io.blongho.github.room.model.Product;
  */
 @Dao
 public interface OrderDao {
-	/**
-	 * Gets all orders.
-	 *
-	 * @return the all orders
-	 */
-	@Query ("SELECT * FROM TB_ORDER")
-	List<Order> getAllOrders();
+  /**
+   * Gets all orders.
+   *
+   * @return the all orders
+   */
+  @Query("SELECT * FROM TB_ORDER")
+  List<Order> getAllOrders();
 
-	/**
-	 * Insert orders.
-	 *
-	 * @param orders the orders
-	 */
-	@Insert (onConflict = OnConflictStrategy.REPLACE)
-	void insertOrders(Order... orders);
+  /**
+   * Insert orders.
+   *
+   * @param orders the orders
+   */
+  @Insert(onConflict = OnConflictStrategy.REPLACE)
+  void insertOrders(Order... orders);
 
-	/**
-	 * Update order.
-	 *
-	 * @param orders the orders
-	 *
-	 * @return the affected row
-	 */
-	@Update
-	int updateOrder(Order orders);
+  /**
+   * Update order.
+   *
+   * @param orders the orders
+   * @return the affected row
+   */
+  @Update(onConflict = OnConflictStrategy.REPLACE)
+  int updateOrder(Order orders);
 
-	/**
-	 * Delete order.
-	 *
-	 * @param order the order
-	 */
-	@Delete
-	void deleteOrder(Order order);
+  /**
+   * Delete order.
+   *
+   * @param order the order
+   */
+  @Delete
+  void deleteOrder(Order order);
 
-	/**
-	 * Delete all orders.
-	 */
-	@Query ("DELETE FROM TB_ORDER")
-	void deleteAllOrders();
+  /**
+   * Delete all orders.
+   */
+  @Query("DELETE FROM TB_ORDER")
+  void deleteAllOrders();
 
-	/**
-	 * Gets products in order.
-	 *
-	 * @param orderID the order id
-	 *
-	 * @return the products in order
-	 */
+  /**
+   * Gets products in order.
+   *
+   * @param orderID the order id
+   * @return the products in order
+   */
 
-	@Query ("SELECT * FROM TB_PRODUCT LEFT JOIN TB_ORDER ON TB_ORDER.order_id=:orderID")
-	List<Product> getProductsInOrder(final long orderID);
+  @Query("SELECT * FROM TB_PRODUCT " +
+      "INNER JOIN TB_ORDER_PRODUCT " +
+      "ON TB_PRODUCT.product_id=TB_ORDER_PRODUCT.op_product_id " +
+      "WHERE TB_ORDER_PRODUCT.op_order_id=:orderID")
+  List<Product> getProductsInOrder(final long orderID);
 
-	/**
-	 * Delete order with attribute.
-	 *
-	 * @param attribute the attribute
-	 */
-	@Query ("DELETE FROM TB_ORDER WHERE order_id=:attribute OR customer_id=:attribute OR order_date=:attribute")
-	void deleteOrderWithAttribute(final String attribute);
+  /**
+   * Delete order with attribute.
+   *
+   * @param attribute the attribute
+   */
+  @Query("DELETE FROM TB_ORDER WHERE order_id=:attribute OR customer_id=:attribute OR order_date=:attribute")
+  void deleteOrderWithAttribute(final String attribute);
 }

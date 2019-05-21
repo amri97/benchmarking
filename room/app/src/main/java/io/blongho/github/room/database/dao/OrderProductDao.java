@@ -24,15 +24,14 @@
 
 package io.blongho.github.room.database.dao;
 
+import java.util.List;
+
 import androidx.room.Dao;
 import androidx.room.Delete;
 import androidx.room.Insert;
 import androidx.room.OnConflictStrategy;
 import androidx.room.Query;
 import androidx.room.Update;
-
-import java.util.List;
-
 import io.blongho.github.room.model.OrderProduct;
 
 /**
@@ -40,43 +39,49 @@ import io.blongho.github.room.model.OrderProduct;
  */
 @Dao
 public interface OrderProductDao {
-	/**
-	 * Gets all order products.
-	 *
-	 * @return the all order products
-	 */
-	@Query ("SELECT * FROM TB_ORDER_PRODUCT")
-	List<OrderProduct> getAllOrderProducts();
+  /**
+   * Gets all order products.
+   *
+   * @return the all order products
+   */
+  @Query("SELECT * FROM TB_ORDER_PRODUCT")
+  List<OrderProduct> getAllOrderProducts();
 
-	/**
-	 * Insert order products.
-	 *
-	 * @param orderProducts the order products
-	 */
-	@Insert (onConflict = OnConflictStrategy.REPLACE)
-	void insertOrderProducts(OrderProduct... orderProducts);
+  /**
+   * Insert order products.
+   *
+   * @param orderProducts the order products
+   */
+  @Insert(onConflict = OnConflictStrategy.REPLACE)
+  void insertOrderProducts(OrderProduct... orderProducts);
 
-	/**
-	 * Update order product.
-	 *
-	 * @param orderProduct the order product
-	 *
-	 * @return the long
-	 */
-	@Update (onConflict = OnConflictStrategy.REPLACE)
-	int updateOrderProduct(OrderProduct... orderProduct);
+  /**
+   * Update order product.
+   *
+   * @param orderProduct the order product
+   * @return the long
+   */
+  @Update(onConflict = OnConflictStrategy.REPLACE)
+  int updateOrderProduct(OrderProduct... orderProduct);
 
-	/**
-	 * Delete order product long.
-	 *
-	 * @param orderProduct the order product
-	 */
-	@Delete
-	void deleteOrderProduct(OrderProduct orderProduct);
+  /**
+   * Delete order product long.
+   *
+   * @param orderProduct the order product
+   */
+  @Delete
+  void deleteOrderProduct(OrderProduct orderProduct);
 
-	/**
-	 * Delete all order products long.
-	 */
-	@Query ("DELETE FROM TB_ORDER_PRODUCT")
-	void deleteAllOrderProducts();
+  /**
+   * Delete all order products long.
+   */
+  @Query("DELETE FROM TB_ORDER_PRODUCT")
+  void deleteAllOrderProducts();
+
+  /*
+  @Query("SELECT * FROM TB_PRODUCT " +
+      "INNER JOIN TB_ORDER_PRODUCT " +
+      "ON TB_PRODUCT.product_id=TB_ORDER_PRODUCT.op_product_id " +
+      "WHERE TB_ORDER_PRODUCT.op_order_id=:orderID")
+  List<Product> getProductForOrder(final long orderID);*/
 }

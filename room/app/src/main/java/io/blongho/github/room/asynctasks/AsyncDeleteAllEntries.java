@@ -25,41 +25,27 @@
 package io.blongho.github.room.asynctasks;
 
 import android.os.AsyncTask;
+import android.util.Log;
 
 import io.blongho.github.room.database.AppDatabaseRepository;
 
-public abstract class AsyncInsert<T> extends AsyncTask<T[], Void, Void> {
-	private static final String TAG = "AsyncInsert";
-	protected AppDatabaseRepository repository;
+public class AsyncDeleteAllEntries extends AsyncTask<Void, Void, Void> {
+  private static final String TAG = "AsyncDeleteAllEntries";
+  protected AppDatabaseRepository repository;
 
-	public AsyncInsert(final AppDatabaseRepository repository) {
-		this.repository = repository;
-	}
+  public AsyncDeleteAllEntries(final AppDatabaseRepository repository) {
+    this.repository = repository;
+  }
 
+  @Override
+  protected Void doInBackground(Void... voids) {
+    repository.deleteAll();
+    return null;
+  }
 
-	/*
-	private <T> void callRightMethod(T... items) {
-		final Customer     customer     = new Customer();
-		final Product      product      = new Product();
-		final Order        order        = new Order();
-		final OrderProduct orderProduct = new OrderProduct();
-
-		if (items.getClass().isInstance(customer)) {
-			Log.e(TAG, "callRightMethod: customer::");
-			for (final T item : items) {
-				repository.addCustomer((Customer) item);
-			}
-		}
-		else if (items.getClass().isInstance(product)) {
-			repository.addProduct((Product[]) items);
-		}
-		else if (items.getClass().isInstance(order)) {
-			repository.addOrder((Order[]) items);
-		}
-		else if (items.getClass().isInstance(orderProduct)) {
-			repository.insertOrderProduct((OrderProduct[]) items);
-		}
-		else Log.e(TAG, "callRightMethod: " + "Bullshit");
-	}
-	*/
+  @Override
+  protected void onPostExecute(Void aVoid) {
+    super.onPostExecute(aVoid);
+    Log.i(TAG, "onPostExecute: DROPPED ALL ENTRIES");
+  }
 }

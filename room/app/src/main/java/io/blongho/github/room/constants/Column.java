@@ -25,16 +25,16 @@
 package io.blongho.github.room.constants;
 
 public final class Column {
-	final public static String CUSTOMER_ID = "customer_id";
-	final public static String CUSTOMER_NAME = "customer_name";
-	final public static String CUSTOMER_ADDR = "customer_addr";
-	final public static String ORDER_ID = "order_id";
-	final public static String ORDER_DATE = "order_date";
-	final public static String PRODUCT_ID = "product_id";
-	final public static String PRODUCT_NAME = "product_name";
-	final public static String ORDER_CUSTOMER= CUSTOMER_ID;
-	final public static String PRODUCT_DESC = "product_desc";
-	final public static String ORDER_PRODUCT_ID = "order_product_id";
-	final public static String ORDER_PRODUCT_ORDER = ORDER_ID;
-	public static final String ORDER_PRODUCT_PRODUCT = PRODUCT_ID;
+  final public static String CUSTOMER_ID = "customer_id";
+  final public static String CUSTOMER_NAME = "customer_name";
+  final public static String CUSTOMER_ADDR = "customer_addr";
+  final public static String ORDER_ID = "order_id";
+  final public static String ORDER_DATE = "order_date";
+  final public static String PRODUCT_ID = "product_id";
+  final public static String PRODUCT_NAME = "product_name";
+  final public static String ORDER_CUSTOMER = CUSTOMER_ID;
+  final public static String PRODUCT_DESC = "product_desc";
+  final public static String ORDER_PRODUCT_ID = "order_product_id";
+  final public static String ORDER_PRODUCT_ORDER = "op_" + ORDER_ID;
+  public static final String ORDER_PRODUCT_PRODUCT = "op_" + PRODUCT_ID;
 }

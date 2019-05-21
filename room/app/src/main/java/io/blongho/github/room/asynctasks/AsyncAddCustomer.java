@@ -40,12 +40,7 @@ public class AsyncAddCustomer extends AsyncTask<Customer, Void, Void> {
 	@Override
 	protected Void doInBackground(final Customer... customers) {
 		repository.addCustomer(customers);
+    Log.i(TAG, "doInBackground: Customers added: " + customers.length);
 		return null;
-	}
-
-	@Override
-	protected void onPostExecute(final Void aVoid) {
-		super.onPostExecute(aVoid);
-		Log.e(TAG, "onPostExecute: COMPLETED" );
 	}
 }

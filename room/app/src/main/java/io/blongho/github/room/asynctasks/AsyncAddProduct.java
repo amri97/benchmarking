@@ -25,20 +25,23 @@
 package io.blongho.github.room.asynctasks;
 
 import android.os.AsyncTask;
+import android.util.Log;
 
 import io.blongho.github.room.database.AppDatabaseRepository;
 import io.blongho.github.room.model.Product;
 
 public class AsyncAddProduct extends AsyncTask<Product, Void, Void> {
-	private final AppDatabaseRepository repository;
+  private static final String TAG = "AsyncAddProduct";
+  private final AppDatabaseRepository repository;
 
-	public AsyncAddProduct(final AppDatabaseRepository repository) {
-		this.repository = repository;
-	}
+  public AsyncAddProduct(final AppDatabaseRepository repository) {
+    this.repository = repository;
+  }
 
-	@Override
-	protected Void doInBackground(final Product... products) {
-		repository.addProduct(products);
-		return null;
-	}
+  @Override
+  protected Void doInBackground(final Product... products) {
+    repository.addProduct(products);
+    Log.i(TAG, "doInBackground: Products added: " + products.length);
+    return null;
+  }
 }

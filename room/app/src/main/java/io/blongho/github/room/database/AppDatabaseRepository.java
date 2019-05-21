@@ -26,10 +26,9 @@ package io.blongho.github.room.database;
 
 import android.content.Context;
 
-import androidx.annotation.Nullable;
-
 import java.util.List;
 
+import androidx.annotation.Nullable;
 import io.blongho.github.room.database.dao.CustomerDao;
 import io.blongho.github.room.database.dao.OrderDao;
 import io.blongho.github.room.database.dao.OrderProductDao;
@@ -40,137 +39,139 @@ import io.blongho.github.room.model.OrderProduct;
 import io.blongho.github.room.model.Product;
 
 public class AppDatabaseRepository implements DatabaseOperations {
-	private CustomerDao customerDao;
-	private ProductDao productDao;
-	private OrderDao orderDao;
-	private OrderProductDao orderProductDao;
+  private CustomerDao customerDao;
+  private ProductDao productDao;
+  private OrderDao orderDao;
+  private OrderProductDao orderProductDao;
 
-	private AppDatabase db;
+  private AppDatabase db;
 
-	public AppDatabaseRepository(final Context context) {
-		db = AppDatabase.getInstance(context);
-		customerDao = db.customerDao();
-		productDao = db.productDao();
-		orderDao = db.orderDao();
-		orderProductDao = db.orderProductDao();
-	}
+  public AppDatabaseRepository(final Context context) {
+    db = AppDatabase.getInstance(context);
+    customerDao = db.customerDao();
+    productDao = db.productDao();
+    orderDao = db.orderDao();
+    orderProductDao = db.orderProductDao();
+  }
 
-	@Override
-	public void populateDatabase(
-	  final List<Customer> customers, final List<Product> products, final List<Order> orders,
-	  @Nullable final List<OrderProduct> orderProducts) {
-		for (final Customer customer : customers) {
-			addCustomer(customer);
-		}
-		for (final Product product : products) {
-			addProduct(product);
-		}
-		for (final Order order : orders) {
-			addOrder(order);
-		}
-		if (orderProducts != null) {
-			for (final OrderProduct orderProduct : orderProducts) {
-				insertOrderProduct(orderProduct);
-			}
-		}
-	}
+  @Override
+  public void populateDatabase(
+      final List<Customer> customers, final List<Product> products, final List<Order> orders,
+      @Nullable final List<OrderProduct> orderProducts) {
+    for (final Customer customer : customers) {
+      addCustomer(customer);
+    }
+    for (final Product product : products) {
+      addProduct(product);
+    }
+    for (final Order order : orders) {
+      addOrder(order);
+    }
+    if (orderProducts != null) {
+      for (final OrderProduct orderProduct : orderProducts) {
+        insertOrderProduct(orderProduct);
+      }
+    }
+  }
 
-	@Override
-	public void addCustomer(final Customer... customer) {
-		customerDao.insertCustomers(customer);
-	}
+  @Override
+  public void addCustomer(final Customer... customer) {
+    customerDao.insertCustomers(customer);
+  }
 
-	@Override
-	public void deleteCustomer(final Customer customer) {
-		customerDao.deleteCustomer(customer);
-	}
+  @Override
+  public void deleteCustomer(final Customer customer) {
+    customerDao.deleteCustomer(customer);
+  }
 
-	@Override
-	public void deleteCustomerWithName(final String customerName) {
-		customerDao.deleteCustomerWithAttribute(customerName);
-	}
+  @Override
+  public void deleteCustomerWithName(final String customerName) {
+    customerDao.deleteCustomerWithAttribute(customerName);
+  }
 
-	@Override
-	public void deleteCustomerWithId(final long customerID) {
-		customerDao.deleteCustomerWithAttribute(String.valueOf(customerID));
-	}
+  @Override
+  public void deleteCustomerWithId(final long customerID) {
+    customerDao.deleteCustomerWithAttribute(String.valueOf(customerID));
+  }
 
-	@Override
-	public int updateCustomer(final Customer customer) {
-		return customerDao.updateCustomer(customer);
-	}
+  @Override
+  public int updateCustomer(final Customer customer) {
+    return customerDao.updateCustomer(customer);
+  }
 
-	@Override
-	public List<Customer> getAllCustomers() {
-		return customerDao.getAllCustomers();
-	}
+  @Override
+  public List<Customer> getAllCustomers() {
+    return customerDao.getAllCustomers();
+  }
 
-	@Override
-	public void addProduct(final Product... product) {
-		productDao.insertProducts(product);
-	}
+  @Override
+  public void addProduct(final Product... product) {
+    productDao.insertProducts(product);
+  }
 
-	@Override
-	public void deleteProduct(final Product product) {
-		productDao.deleteProduct(product);
-	}
+  @Override
+  public void deleteProduct(final Product product) {
+    productDao.deleteProduct(product);
+  }
 
-	@Override
-	public void deleteProductWithName(final String productName) {
-		productDao.deleteProductWithAttribute(productName);
-	}
+  @Override
+  public void deleteProductWithName(final String productName) {
+    productDao.deleteProductWithAttribute(productName);
+  }
 
-	@Override
-	public void deleteProductWithId(final long productID) {
-		productDao.deleteProductWithAttribute(String.valueOf(productID));
-	}
+  @Override
+  public void deleteProductWithId(final long productID) {
+    productDao.deleteProductWithAttribute(String.valueOf(productID));
+  }
 
-	@Override
-	public int updateProduct(final Product product) {
-		return productDao.updateProduct(product);
-	}
+  @Override
+  public int updateProduct(final Product product) {
+    return productDao.updateProduct(product);
+  }
 
-	@Override
-	public List<Product> getAllProducts() {
-		return productDao.getAllProducts();
-	}
+  @Override
+  public List<Product> getAllProducts() {
+    return productDao.getAllProducts();
+  }
 
-	@Override
-	public void addOrder(final Order... order) {
-		orderDao.insertOrders(order);
-	}
+  @Override
+  public void addOrder(final Order... order) {
+    orderDao.insertOrders(order);
+  }
 
-	@Override
-	public void deleteOrder(final Order order) {
-		orderDao.deleteOrder(order);
-	}
+  @Override
+  public void deleteOrder(final Order order) {
+    orderDao.deleteOrder(order);
+  }
 
-	@Override
-	public void deleteOrderWithId(final long orderID) {
-		orderDao.deleteOrderWithAttribute(String.valueOf(orderID));
-	}
+  @Override
+  public void deleteOrderWithId(final long orderID) {
+    orderDao.deleteOrderWithAttribute(String.valueOf(orderID));
+  }
 
-	@Override
-	public List<Order> getAllOrders() {
-		return orderDao.getAllOrders();
-	}
+  @Override
+  public List<Order> getAllOrders() {
+    return orderDao.getAllOrders();
+  }
 
-	@Override
-	public void insertOrderProduct(final OrderProduct... orderProduct) {
-		orderProductDao.insertOrderProducts(orderProduct);
-	}
+  @Override
+  public void insertOrderProduct(final OrderProduct... orderProduct) {
+    orderProductDao.insertOrderProducts(orderProduct);
+  }
 
+  @Override
+  public void deleteAll() {
+    customerDao.deleteAllCustomers();
+    productDao.deleteAllProducts();
+    orderDao.deleteAllOrders();
+    orderProductDao.deleteAllOrderProducts();
+  }
 
+  public List<OrderProduct> getAllOrderProducts() {
+    return orderProductDao.getAllOrderProducts();
+  }
 
-	@Override
-	public void deleteAll() {
-		customerDao.deleteAllCustomers();
-		productDao.deleteAllProducts();
-		orderDao.deleteAllOrders();
-		orderProductDao.deleteAllOrderProducts();
-	}
-
-	public List<OrderProduct> getAllOrderProducts() {
-		return orderProductDao.getAllOrderProducts();
-	}
+  public List<Product> getProductsInOrder(final long orderID) {
+    return orderDao.getProductsInOrder(orderID);
+  }
 }
