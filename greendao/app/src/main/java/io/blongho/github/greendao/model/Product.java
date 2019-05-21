@@ -22,57 +22,55 @@
  * SOFTWARE.
  */
 
-package io.blongho.github.template.model;
-import java.util.List;
+package io.blongho.github.greendao.model;
 
 /**
- * A Customer object.<br>
- * A Customer object has customer details and the orders done by this customer
+ * The type Product<br>
+ * A product has a name and a description
  * @author  Bernard Che Longho
  * @since 2019-05-10
  * @version 1.0
  */
-public class Customer {
-	private Long customer_id;
+public class Product {
+	private long id;
 	private String name;
-	private Address address;
-	private List<Order> orders;
+	private String description;
 
 	/**
-	 * Instantiates a new Customer.
+	 * Instantiates a new Product.
 	 */
-	public Customer() {
+	public Product() {
 	}
 
 	/**
-	 * Instantiates a new Customer.
+	 * Instantiates a new Product.
 	 *
-	 * @param customer_id the customer id
+	 * @param product_id  the product id
 	 * @param name        the name
-	 * @param address     the address
+	 * @param description the description
 	 */
-	public Customer(final Long customer_id, final String name, final Address address) {
-		this.customer_id = customer_id;
+	public Product(final long product_id, final String name, final String description) {
+		this.id = product_id;
 		this.name = name;
-		this.address = address;
+		this.description = description;
 	}
 
 	/**
-	 * Gets customer id.
+	 * Gets product id.
 	 *
-	 * @return the customer id
+	 * @return the product id
 	 */
-	public Long getCustomer_id() {
-		return customer_id;
+	public long getId() {
+		return id;
 	}
 
 	/**
-	 * Sets customer id.
+	 * Sets product id.
 	 *
-	 * @param customer_id the customer id
+	 * @param id the product id
 	 */
-	public void setCustomer_id(final Long customer_id) {
-		this.customer_id = customer_id;
+	public void setId(final long id) {
+		this.id = id;
 	}
 
 	/**
@@ -94,47 +92,29 @@ public class Customer {
 	}
 
 	/**
-	 * Gets address.
+	 * Gets description.
 	 *
-	 * @return the address
+	 * @return the description
 	 */
-	public Address getAddress() {
-		return address;
+	public String getDescription() {
+		return description;
 	}
 
 	/**
-	 * Sets address.
+	 * Sets description.
 	 *
-	 * @param address the address
+	 * @param description the description
 	 */
-	public void setAddress(final Address address) {
-		this.address = address;
-	}
-
-	/**
-	 * Gets orders.
-	 *
-	 * @return the orders
-	 */
-	public List<Order> getOrders() {
-		return orders;
-	}
-
-	/**
-	 * Sets orders.
-	 *
-	 * @param orders the orders
-	 */
-	public void setOrders(final List<Order> orders) {
-		this.orders = orders;
+	public void setDescription(final String description) {
+		this.description = description;
 	}
 
 	@Override
 	public String toString() {
-		final StringBuffer sb = new StringBuffer("Customer{");
-		sb.append("customer_id=").append(customer_id);
+		final StringBuffer sb = new StringBuffer("Product{");
+		sb.append("id=").append(id);
 		sb.append(", name='").append(name).append('\'');
-		sb.append(", address=").append(address);
+		sb.append(", description='").append(description).append('\'');
 		sb.append('}');
 		return sb.toString();
 	}
