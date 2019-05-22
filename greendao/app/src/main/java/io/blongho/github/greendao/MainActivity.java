@@ -25,16 +25,23 @@
 package io.blongho.github.greendao;
 
 import android.os.Bundle;
+import android.os.Handler;
 import android.util.Log;
 import android.util.TimingLogger;
 import android.view.View;
 
+import com.github.javafaker.Faker;
 import com.google.android.material.snackbar.Snackbar;
 import com.google.gson.Gson;
 
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
+import java.util.concurrent.ExecutionException;
 
 import androidx.appcompat.app.AppCompatActivity;
+import io.blongho.github.greendao.asynctasks.AsyncReadFromDatabase;
+import io.blongho.github.greendao.asynctasks.AsyncWriteToDatabase;
 import io.blongho.github.greendao.database.DatabaseHelper;
 import io.blongho.github.greendao.model.Customer;
 import io.blongho.github.greendao.model.DaoMaster;
@@ -43,7 +50,6 @@ import io.blongho.github.greendao.model.Order;
 import io.blongho.github.greendao.model.OrderProduct;
 import io.blongho.github.greendao.model.Product;
 import io.blongho.github.greendao.util.AssetsReader;
-import io.blongho.github.greendao.util.MethodTimer;
 
 /**
  * The type Main activity.
@@ -108,6 +114,7 @@ public class MainActivity extends AppCompatActivity {
    */
   public void updateEntry(View view) {
     // TODO implement code for updating an entry or entries in the database
+    Handler handler = new Handler();
     showSnackBar(view, "updateEntry");
   }
 
@@ -119,18 +126,7 @@ public class MainActivity extends AppCompatActivity {
   public void readData(View view) {
     getDaoSession();
     // TODO implement logic for reading some data from the database
-    List<Customer> customers = daoSession.getCustomerDao().loadAll();
-    //showItems(customers);
 
-    List<Order> orders = daoSession.getOrderDao()._queryProduct_OrdersWithThisProduct(12);
-    Order order = orders.get(0);
-    Customer customer = order.getOrderCustomer();
-    showItems(customer);
-    List<Product> products = daoSession.getProductDao()._queryOrder_Products(10249);
-    showItems(products);
-
-    long key = daoSession.getCustomerDao().getKey(customers.get(43));
-    showItems(key);
     showSnackBar(view, "readData");
   }
 
@@ -157,36 +153,19 @@ public class MainActivity extends AppCompatActivity {
    */
   public void loadData(View view) {
     getDaoSession();
-    // TODO logic for loading the database with data
-    MethodTimer timer = new MethodTimer("LoadCustomers");
-
-    Customer[] customers = gson.fromJson(AssetsReader.readFromAssets(getApplicationContext(), R.raw.customer),
+    Customer[] customers = gson.fromJson(AssetsReader.readFromAssets(getApplicationContext(), R.raw.customers10000),
         Customer[].class);
-
-    //showItems(customers);
-    Product[] products = gson.fromJson(AssetsReader.readFromAssets(getApplicationContext(), R.raw.products),
+    Product[] products = gson.fromJson(AssetsReader.readFromAssets(getApplicationContext(), R.raw.products10000),
         Product[].class);
-    //showItems(products);
-
-    Order[] orders = gson.fromJson(AssetsReader.readFromAssets(getApplicationContext(), R.raw.orders), Order[].class);
-    //showItems(orders);
-
+    Order[] orders = gson.fromJson(AssetsReader.readFromAssets(getApplicationContext(), R.raw.orders10000),
+        Order[].class);
     OrderProduct[] orderProducts = gson.fromJson(AssetsReader.readFromAssets(getApplicationContext(),
-        R.raw.order_products), OrderProduct[].class);
+        R.raw.order_products10000), OrderProduct[].class);
 
-    final TimingLogger logger = new TimingLogger(TAG, "Performance of greenDao");
-    logger.addSplit("addCustomers");
-    daoSession.getCustomerDao().insertOrReplaceInTx(customers);
-    //showItems(orderProducts);
-    logger.addSplit("addProducts");
-    daoSession.getProductDao().insertOrReplaceInTx(products);
-
-    logger.addSplit("addOrders");
-    daoSession.getOrderDao().insertOrReplaceInTx(orders);
-
-    logger.addSplit("addOrderProducts");
-    daoSession.getOrderProductDao().insertOrReplaceInTx(orderProducts);
-    logger.dumpToLog();
+    new AsyncWriteToDatabase<Customer>(daoSession).execute(customers);
+    new AsyncWriteToDatabase<Product>(daoSession).execute(products);
+    new AsyncWriteToDatabase<Order>(daoSession).execute(orders);
+    new AsyncWriteToDatabase<OrderProduct>(daoSession).execute(orderProducts);
     showSnackBar(view, "loadData");
   }
 
@@ -201,5 +180,16 @@ public class MainActivity extends AppCompatActivity {
       }
     }
     return daoSession;
+  }
+
+  private Set<Customer> generateCustomers(long number) {
+    Faker faker = Faker.instance();
+    Set<Customer> customers = new HashSet<>();
+
+    for (long i = 0; i < number; i++) {
+      customers.add(new Customer(i, faker.name().fullName(), faker.address().city()));
+
+    }
+    return customers;
   }
 }

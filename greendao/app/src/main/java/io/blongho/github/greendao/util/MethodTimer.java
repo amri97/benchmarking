@@ -21,9 +21,9 @@ public class MethodTimer {
   }
 
   public final void results() {
-    final long results = stop - start;
+    final long results = stop  - start;
     final long milli = results / 1_000_000;
     final long sec = milli / 1_000;
-    Log.i(method, "took: " + results + " ns (" + milli + " ms, " + sec + " s)");
+    Log.i(method, "took " + results + " ns (" + milli + " ms, " + sec + " s)");
   }
 }

@@ -34,4 +34,6 @@ dependencies {
   implementation "com.google.android.material:material:1.1.0-alpha06"
   implementation 'com.google.code.gson:gson:2.8.5'
   implementation 'org.greenrobot:greendao:3.2.2' // add library
+  // Generate fake customers
+  implementation 'com.github.javafaker:javafaker:0.18'
 }
