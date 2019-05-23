@@ -26,20 +26,18 @@ package io.blongho.github.greendao;
 
 import android.os.Bundle;
 import android.util.Log;
-import android.util.TimingLogger;
 import android.view.View;
 
-import com.github.javafaker.Faker;
 import com.google.android.material.snackbar.Snackbar;
 import com.google.gson.Gson;
 
-import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
+import java.util.concurrent.ExecutionException;
 import java.util.concurrent.Executor;
 import java.util.concurrent.ExecutorCompletionService;
 import java.util.concurrent.Executors;
 
+import androidx.annotation.RawRes;
 import androidx.appcompat.app.AppCompatActivity;
 import io.blongho.github.greendao.asynctasks.AsyncDeleteAllFromDatabase;
 import io.blongho.github.greendao.asynctasks.AsyncReadFromDatabase;
@@ -51,7 +49,7 @@ import io.blongho.github.greendao.model.DaoSession;
 import io.blongho.github.greendao.model.Order;
 import io.blongho.github.greendao.model.OrderProduct;
 import io.blongho.github.greendao.model.Product;
-import io.blongho.github.greendao.util.AssetsReader;
+import io.blongho.github.greendao.util.MethodTimer;
 import io.blongho.github.greendao.util.ReadFromFile;
 
 /**
@@ -60,10 +58,15 @@ import io.blongho.github.greendao.util.ReadFromFile;
 public class MainActivity extends AppCompatActivity {
   private static final String TAG = "MainActivity";
   private final static Executor executor = Executors.newCachedThreadPool();
-  private static DaoSession daoSession;
+  private static DaoSession writableDaoSession;
+  private static DaoSession readableDaoSession;
   final String dbName = "customer_order_greendao";
-  final ExecutorCompletionService<String> custom = new ExecutorCompletionService<>(executor);
-  private final Object lock = new Object();
+  private final Object writeLock = new Object();
+  private final Object readLock = new Object();
+  private ExecutorCompletionService<String> customerService;
+  private ExecutorCompletionService<String> productService;
+  private ExecutorCompletionService<String> orderService;
+  private ExecutorCompletionService<String> orderProductService;
   private Gson gson;
 
   @Override
@@ -72,8 +75,18 @@ public class MainActivity extends AppCompatActivity {
     setContentView(R.layout.activity_main);
     gson = new Gson();
 
-    custom.submit(new ReadFromFile(getApplicationContext(), R.raw.customers10000));
+  }
 
+  private void initCompletionServices() {
+    customerService = new ExecutorCompletionService<>(executor);
+    productService = new ExecutorCompletionService<>(executor);
+    orderService = new ExecutorCompletionService<>(executor);
+    orderProductService = new ExecutorCompletionService<>(executor);
+  }
+
+  private void submitFileReadingRequest(ExecutorCompletionService<String> completionService,
+                                        @RawRes int fileResourceID) {
+    completionService.submit(new ReadFromFile(getApplicationContext(), fileResourceID));
   }
 
   /**
@@ -82,10 +95,12 @@ public class MainActivity extends AppCompatActivity {
    * @param view the view
    */
   public void createDb(View view) {
-    final TimingLogger logger = new TimingLogger(TAG, "Performance of greenDao");
-    logger.addSplit("Initialize database");
-    daoSession = getDaoSession();
-    logger.dumpToLog();
+    MethodTimer timer = new MethodTimer(TAG + "initializing database");
+    timer.start();
+    writableDaoSession = getWritableDaoSession();
+    readableDaoSession = getReadableDaoSession();
+    timer.stop();
+    timer.showResults();
     showSnackBar(view, "createDb");
 
   }
@@ -96,8 +111,8 @@ public class MainActivity extends AppCompatActivity {
    * @param view the view
    */
   public void clearDb(View view) {
-    getDaoSession();
-    new AsyncDeleteAllFromDatabase(daoSession).execute();
+    getWritableDaoSession();
+    new AsyncDeleteAllFromDatabase(writableDaoSession).execute();
     showSnackBar(view, "clearDb");
   }
 
@@ -127,13 +142,13 @@ public class MainActivity extends AppCompatActivity {
    * @param view the view
    */
   public void readData(View view) {
-    getDaoSession();
+    getReadableDaoSession();
     // TODO implement logic for reading some data from the database
 
-    new AsyncReadFromDatabase<>(daoSession, Customer.class).execute();
-    new AsyncReadFromDatabase<>(daoSession, Product.class).execute();
-    new AsyncReadFromDatabase<>(daoSession, Order.class).execute();
-    new AsyncReadFromDatabase<>(daoSession, OrderProduct.class).execute();
+    new AsyncReadFromDatabase<>(readableDaoSession, Customer.class).execute();
+    new AsyncReadFromDatabase<>(readableDaoSession, Product.class).execute();
+    new AsyncReadFromDatabase<>(readableDaoSession, Order.class).execute();
+    new AsyncReadFromDatabase<>(readableDaoSession, OrderProduct.class).execute();
 
     showSnackBar(view, "readData");
   }
@@ -160,20 +175,32 @@ public class MainActivity extends AppCompatActivity {
    * @param view the view
    */
   public void loadData(View view) {
-    getDaoSession();
-    Customer[] customers = gson.fromJson(AssetsReader.readFromAssets(getApplicationContext(), R.raw.customers10000),
-        Customer[].class);
-    Product[] products = gson.fromJson(AssetsReader.readFromAssets(getApplicationContext(), R.raw.products10000),
-        Product[].class);
-    Order[] orders = gson.fromJson(AssetsReader.readFromAssets(getApplicationContext(), R.raw.orders10000),
-        Order[].class);
-    OrderProduct[] orderProducts = gson.fromJson(AssetsReader.readFromAssets(getApplicationContext(),
-        R.raw.order_products10000), OrderProduct[].class);
+    initCompletionServices();
+    submitFileReadingRequest(productService, R.raw.products10000);
+    submitFileReadingRequest(customerService, R.raw.customers10000);
+    submitFileReadingRequest(orderService, R.raw.orders10000);
+    submitFileReadingRequest(orderProductService, R.raw.order_products10000);
 
-    new AsyncWriteToDatabase<Customer>(daoSession).execute(customers);
-    new AsyncWriteToDatabase<Product>(daoSession).execute(products);
-    new AsyncWriteToDatabase<Order>(daoSession).execute(orders);
-    new AsyncWriteToDatabase<OrderProduct>(daoSession).execute(orderProducts);
+    getWritableDaoSession();
+    try {
+      Customer[] customers = gson.fromJson(customerService.take().get(), Customer[].class);
+      new AsyncWriteToDatabase<Customer>(writableDaoSession).execute(customers);
+
+      Product[] products = gson.fromJson(productService.take().get(), Product[].class);
+      new AsyncWriteToDatabase<Product>(writableDaoSession).execute(products);
+
+      Order[] orders = gson.fromJson(orderService.take().get(), Order[].class);
+      new AsyncWriteToDatabase<Order>(writableDaoSession).execute(orders);
+
+      OrderProduct[] orderProducts = gson.fromJson(orderProductService.take().get(), OrderProduct[].class);
+      new AsyncWriteToDatabase<OrderProduct>(writableDaoSession).execute(orderProducts);
+
+    } catch (ExecutionException e) {
+      e.printStackTrace();
+    } catch (InterruptedException e) {
+      e.printStackTrace();
+    }
+
     showSnackBar(view, "loadData");
   }
 
@@ -181,23 +208,23 @@ public class MainActivity extends AppCompatActivity {
     Snackbar.make(view, method + " ==> Implement this method", Snackbar.LENGTH_SHORT).show();
   }
 
-  private DaoSession getDaoSession() {
-    synchronized (lock) {
-      if (daoSession == null) {
-        daoSession = new DaoMaster(new DatabaseHelper(getApplicationContext(), dbName).getWritableDb()).newSession();
+  private DaoSession getWritableDaoSession() {
+    synchronized (writeLock) {
+      if (writableDaoSession == null) {
+        writableDaoSession =
+            new DaoMaster(new DatabaseHelper(MainActivity.this, dbName).getWritableDb()).newSession();
       }
     }
-    return daoSession;
+    return writableDaoSession;
   }
 
-  private Set<Customer> generateCustomers(long number) {
-    Faker faker = Faker.instance();
-    Set<Customer> customers = new HashSet<>();
-
-    for (long i = 0; i < number; i++) {
-      customers.add(new Customer(i, faker.name().fullName(), faker.address().city()));
-
+  private DaoSession getReadableDaoSession() {
+    synchronized (readLock) {
+      if (readableDaoSession == null) {
+        readableDaoSession =
+            new DaoMaster(new DatabaseHelper(MainActivity.this, dbName).getWritableDb()).newSession();
+      }
     }
-    return customers;
+    return readableDaoSession;
   }
 }

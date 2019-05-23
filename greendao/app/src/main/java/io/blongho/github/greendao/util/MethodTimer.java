@@ -53,10 +53,12 @@ public class MethodTimer {
     long milli;
     long sec;
     for (String key : resultsMap.keySet()) {
-      results = resultsMap.get(key);
-      milli = results / 1_000_000;
-      sec = milli / 1_000;
-      Log.i(key, "took " + results + " ns (" + milli + " ms, " + sec + " s)");
+      {
+        results = resultsMap.get(key);
+        milli = results / 1_000_000;
+        sec = milli / 1_000;
+        Log.i(key, "took " + results + " ns (" + milli + " ms, " + sec + " s)");
+      }
     }
     resultsMap = new HashMap<>();
   }
