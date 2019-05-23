@@ -14,8 +14,9 @@ import io.blongho.github.greendao.model.ProductDao;
 import io.blongho.github.greendao.util.MethodTimer;
 
 public class AsyncWriteToDatabase<T> extends AsyncTask<T, Void, Void> {
+  private static final String TAG = "AsyncWriteToDatabase";
+  private static MethodTimer timer = new MethodTimer(TAG);
   private final DaoSession daosession;
-  private MethodTimer timer;
 
   public AsyncWriteToDatabase(DaoSession daosession) {
     this.daosession = daosession;
@@ -37,48 +38,47 @@ public class AsyncWriteToDatabase<T> extends AsyncTask<T, Void, Void> {
    */
   @Override
   protected Void doInBackground(T... items) {
-    if (items[0].getClass().isInstance(new Customer())) {
-      timer = new MethodTimer("Populating " + items.length + " customers");
-      timer.start();
-      final CustomerDao customerDao = daosession.getCustomerDao();
-      for (T t : items) {
-        customerDao.insertOrReplace((Customer) t);
-      }
-      timer.stop();
-      timer.results();
-      //customerDao.deleteAll();
-    } else if (items[0].getClass().isInstance(new Product())) {
-      timer = new MethodTimer("Populating " + items.length + " products");
-      timer.start();
-      final ProductDao productDao = daosession.getProductDao();
-      for (T item : items) {
-        productDao.insertOrReplace((Product) (item));
-      }
-      timer.stop();
-      timer.results();
-      productDao.detachAll();
+    if (items.length > 0) {
+      if (items[0].getClass().isInstance(new Customer())) {
+        timer.addTag("Populating " + items.length + " customers");
+        timer.start();
+        final CustomerDao customerDao = daosession.getCustomerDao();
+        for (T t : items) {
+          customerDao.insertOrReplace((Customer) t);
+        }
+        timer.stop();
+        //customerDao.deleteAll();
+      } else if (items[0].getClass().isInstance(new Product())) {
+        timer.addTag("Populating " + items.length + " products");
+        timer.start();
+        final ProductDao productDao = daosession.getProductDao();
+        for (T item : items) {
+          productDao.insertOrReplace((Product) (item));
+        }
+        timer.stop();
+        //productDao.detachAll();
 
-    } else if (items[0].getClass().isInstance(new Order())) {
-      timer = new MethodTimer("Populating " + items.length + " orders");
-      timer.start();
-      final OrderDao orderDao = daosession.getOrderDao();
-      for (T item : items) {
-        orderDao.insertOrReplace((Order) item);
-      }
-      timer.stop();
-      timer.results();
-      orderDao.detachAll();
+      } else if (items[0].getClass().isInstance(new Order())) {
+        timer.addTag("Populating " + items.length + " orders");
+        timer.start();
+        final OrderDao orderDao = daosession.getOrderDao();
+        for (T item : items) {
+          orderDao.insertOrReplace((Order) item);
+        }
+        timer.stop();
+        //orderDao.detachAll();
 
-    } else if (items[0].getClass().isInstance(new OrderProduct())) {
-      timer = new MethodTimer("Populating " + items.length + " orderProducts");
-      timer.start();
-      final OrderProductDao orderProductDao = daosession.getOrderProductDao();
-      for (T item : items) {
-        orderProductDao.insertOrReplace((OrderProduct) item);
+      } else if (items[0].getClass().isInstance(new OrderProduct())) {
+        timer = new MethodTimer("Populating " + items.length + " orderProducts");
+        timer.start();
+        final OrderProductDao orderProductDao = daosession.getOrderProductDao();
+        for (T item : items) {
+          orderProductDao.insertOrReplace((OrderProduct) item);
+        }
+        timer.stop();
+        //orderProductDao.deleteAll();
       }
-      timer.stop();
-      timer.results();
-      orderProductDao.deleteAll();
+      timer.showResults();
     }
     return null;
   }

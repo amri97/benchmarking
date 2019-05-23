@@ -1,21 +1,34 @@
 package io.blongho.github.greendao.asynctasks;
 
 import android.os.AsyncTask;
-import android.util.Log;
-
-import java.util.List;
 
 import io.blongho.github.greendao.model.Customer;
 import io.blongho.github.greendao.model.DaoSession;
+import io.blongho.github.greendao.model.Order;
+import io.blongho.github.greendao.model.OrderProduct;
+import io.blongho.github.greendao.model.Product;
+import io.blongho.github.greendao.util.MethodTimer;
 
-public class AsyncReadFromDatabase<T> extends AsyncTask<Void, Void, List<T>> {
+/**
+ * The type Async read from database.
+ *
+ * @param <T> the type parameter
+ */
+public class AsyncReadFromDatabase<T> extends AsyncTask<Void, Void, Void> {
   private static final String TAG = "AsyncReadFromDatabase";
+  private static MethodTimer timer = new MethodTimer(TAG);
   private final DaoSession daoSession;
-  private final String type;
+  private final Class<T> objectClass;
 
-  public AsyncReadFromDatabase(DaoSession daoSession, String type) {
+  /**
+   * Instantiates a new Async read from database.
+   *
+   * @param daoSession  the dao session
+   * @param objectClass the object class
+   */
+  public AsyncReadFromDatabase(DaoSession daoSession, Class<T> objectClass) {
     this.daoSession = daoSession;
-    this.type = type;
+    this.objectClass = objectClass;
   }
 
   /**
@@ -33,16 +46,29 @@ public class AsyncReadFromDatabase<T> extends AsyncTask<Void, Void, List<T>> {
    * @see #publishProgress
    */
   @Override
-  protected List<T> doInBackground(Void... voids) {
-
-    if (type.equalsIgnoreCase("customer")) {
-      Log.i(TAG, "doInBackground: a customer");
-      List<Customer> customers = daoSession.getCustomerDao().loadAll();
-      return (List<T>) customers;
-
+  protected Void doInBackground(Void... voids) {
+    if (objectClass.isInstance(new Customer())) {
+      timer.addTag("Reading all customers from database");
+      timer.start();
+      daoSession.getCustomerDao().loadAll();
+      timer.stop();
+    } else if (objectClass.isInstance(new Product())) {
+      timer.addTag("Reading all products form the database");
+      timer.start();
+      daoSession.getProductDao().loadAll();
+      timer.stop();
+    } else if (objectClass.isInstance(new Order())) {
+      timer.addTag("Reading all orders from the database");
+      timer.start();
+      daoSession.getOrderDao().loadAll();
+      timer.stop();
+    } else if (objectClass.isInstance(new OrderProduct())) {
+      timer.addTag("Reading all order products from database");
+      timer.start();
+      daoSession.getOrderProductDao().loadAll();
+      timer.stop();
     }
-
-    Log.i(TAG, "doInBackground: not a customer");
+    timer.showResults();
     return null;
   }
 }

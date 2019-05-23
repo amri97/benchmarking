@@ -25,7 +25,6 @@
 package io.blongho.github.greendao;
 
 import android.os.Bundle;
-import android.os.Handler;
 import android.util.Log;
 import android.util.TimingLogger;
 import android.view.View;
@@ -37,9 +36,12 @@ import com.google.gson.Gson;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
-import java.util.concurrent.ExecutionException;
+import java.util.concurrent.Executor;
+import java.util.concurrent.ExecutorCompletionService;
+import java.util.concurrent.Executors;
 
 import androidx.appcompat.app.AppCompatActivity;
+import io.blongho.github.greendao.asynctasks.AsyncDeleteAllFromDatabase;
 import io.blongho.github.greendao.asynctasks.AsyncReadFromDatabase;
 import io.blongho.github.greendao.asynctasks.AsyncWriteToDatabase;
 import io.blongho.github.greendao.database.DatabaseHelper;
@@ -50,14 +52,17 @@ import io.blongho.github.greendao.model.Order;
 import io.blongho.github.greendao.model.OrderProduct;
 import io.blongho.github.greendao.model.Product;
 import io.blongho.github.greendao.util.AssetsReader;
+import io.blongho.github.greendao.util.ReadFromFile;
 
 /**
  * The type Main activity.
  */
 public class MainActivity extends AppCompatActivity {
   private static final String TAG = "MainActivity";
+  private final static Executor executor = Executors.newCachedThreadPool();
   private static DaoSession daoSession;
   final String dbName = "customer_order_greendao";
+  final ExecutorCompletionService<String> custom = new ExecutorCompletionService<>(executor);
   private final Object lock = new Object();
   private Gson gson;
 
@@ -66,6 +71,8 @@ public class MainActivity extends AppCompatActivity {
     super.onCreate(savedInstanceState);
     setContentView(R.layout.activity_main);
     gson = new Gson();
+
+    custom.submit(new ReadFromFile(getApplicationContext(), R.raw.customers10000));
 
   }
 
@@ -90,10 +97,7 @@ public class MainActivity extends AppCompatActivity {
    */
   public void clearDb(View view) {
     getDaoSession();
-    daoSession.getCustomerDao().deleteAll();
-    daoSession.getProductDao().deleteAll();
-    daoSession.getOrderDao().deleteAll();
-    daoSession.getOrderProductDao().deleteAll();
+    new AsyncDeleteAllFromDatabase(daoSession).execute();
     showSnackBar(view, "clearDb");
   }
 
@@ -114,7 +118,6 @@ public class MainActivity extends AppCompatActivity {
    */
   public void updateEntry(View view) {
     // TODO implement code for updating an entry or entries in the database
-    Handler handler = new Handler();
     showSnackBar(view, "updateEntry");
   }
 
@@ -127,6 +130,11 @@ public class MainActivity extends AppCompatActivity {
     getDaoSession();
     // TODO implement logic for reading some data from the database
 
+    new AsyncReadFromDatabase<>(daoSession, Customer.class).execute();
+    new AsyncReadFromDatabase<>(daoSession, Product.class).execute();
+    new AsyncReadFromDatabase<>(daoSession, Order.class).execute();
+    new AsyncReadFromDatabase<>(daoSession, OrderProduct.class).execute();
+
     showSnackBar(view, "readData");
   }
 
@@ -136,7 +144,7 @@ public class MainActivity extends AppCompatActivity {
     }
   }
 
-  private <T> void showItems(T item) {
+  private <T> void showItem(T item) {
     Log.i(TAG, "showItems: " + item);
   }
 
