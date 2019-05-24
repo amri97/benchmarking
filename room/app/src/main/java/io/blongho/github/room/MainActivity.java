@@ -37,10 +37,7 @@ import java.util.List;
 import java.util.concurrent.ExecutionException;
 
 import androidx.appcompat.app.AppCompatActivity;
-import io.blongho.github.room.asynctasks.AsyncAddCustomer;
-import io.blongho.github.room.asynctasks.AsyncAddOrder;
-import io.blongho.github.room.asynctasks.AsyncAddOrderProduct;
-import io.blongho.github.room.asynctasks.AsyncAddProduct;
+import io.blongho.github.room.asynctasks.AsyncAdd;
 import io.blongho.github.room.asynctasks.AsyncDeleteAllEntries;
 import io.blongho.github.room.asynctasks.AsyncReadCustomer;
 import io.blongho.github.room.asynctasks.AsyncReadOrderProduct;
@@ -52,12 +49,17 @@ import io.blongho.github.room.model.Order;
 import io.blongho.github.room.model.OrderProduct;
 import io.blongho.github.room.model.Product;
 import io.blongho.github.room.util.AssetsReader;
+import io.blongho.github.room.util.MethodTimer;
 
 /**
  * The type Main activity.
  */
 public class MainActivity extends AppCompatActivity {
   private static final String TAG = "MainActivity";
+  private final static int CUSTOMER_10K = R.raw.customers10000;
+  private final static int PRODUCT_10K = R.raw.products10000;
+  private final static int ORDER_10K = R.raw.orders10000;
+  private final static int OP_10K = R.raw.order_products10000;
   private AppDatabaseRepository repository;
 
   @Override
@@ -80,10 +82,11 @@ public class MainActivity extends AppCompatActivity {
 
   private void initializeRepository() {
     if (repository == null) {
-      final TimingLogger logger = new TimingLogger(TAG, "Initializing the database");
-      logger.addSplit("create database");
+      final MethodTimer timer = new MethodTimer(TAG + ", Initializing the database");
+      timer.start();
       repository = new AppDatabaseRepository(getApplicationContext());
-      logger.dumpToLog();
+      timer.stop();
+      timer.showResults();
     }
   }
 
@@ -172,15 +175,20 @@ public class MainActivity extends AppCompatActivity {
   public void loadData(View view) {
     Gson gson = new Gson();
     Customer[] customers = gson
-        .fromJson(AssetsReader.readFromAssets(getApplicationContext(), R.raw.customer), Customer[].class);
+        .fromJson(AssetsReader.readFromAssets(getApplicationContext(), CUSTOMER_10K), Customer[].class);
     Product[] products = gson
-        .fromJson(AssetsReader.readFromAssets(getApplicationContext(), R.raw.products), Product[].class);
+        .fromJson(AssetsReader.readFromAssets(getApplicationContext(), PRODUCT_10K), Product[].class);
     Order[] orders = gson
-        .fromJson(AssetsReader.readFromAssets(getApplicationContext(), R.raw.orders), Order[].class);
+        .fromJson(AssetsReader.readFromAssets(getApplicationContext(), ORDER_10K), Order[].class);
     OrderProduct[] orderProducts = gson
-        .fromJson(AssetsReader.readFromAssets(getApplicationContext(), R.raw.order_products), OrderProduct[].class);
+        .fromJson(AssetsReader.readFromAssets(getApplicationContext(), OP_10K), OrderProduct[].class);
 
     initializeRepository();
+    new AsyncAdd<Customer>(repository, Customer.class).execute(customers);
+    new AsyncAdd<Product>(repository, Product.class).execute(products);
+    new AsyncAdd<Order>(repository, Order.class).execute(orders);
+    new AsyncAdd<OrderProduct>(repository, OrderProduct.class).execute(orderProducts);
+    /*
     final TimingLogger logger = new TimingLogger(TAG, "Populating the database");
     logger.addSplit("loadCustomers");
     new AsyncAddCustomer(repository).execute(customers);
@@ -191,5 +199,6 @@ public class MainActivity extends AppCompatActivity {
     logger.addSplit("loadOrderProducts");
     new AsyncAddOrderProduct(repository).execute(orderProducts);
     logger.dumpToLog();
+    */
   }
 }

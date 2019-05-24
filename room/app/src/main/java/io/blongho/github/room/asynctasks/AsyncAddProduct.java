@@ -40,7 +40,7 @@ public class AsyncAddProduct extends AsyncTask<Product, Void, Void> {
 
   @Override
   protected Void doInBackground(final Product... products) {
-    repository.addProduct(products);
+    repository.insertProduct(products);
     Log.i(TAG, "doInBackground: Products added: " + products.length);
     return null;
   }

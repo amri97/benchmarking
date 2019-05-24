@@ -52,7 +52,7 @@ interface DatabaseOperations {
 	 * @param customer the customer
 	 */
 // Customer operations
-	void addCustomer(final Customer... customer);
+	void insertCustomer(final Customer... customer);
 
 	/**
 	 * Delete customer long.
@@ -97,7 +97,7 @@ interface DatabaseOperations {
 	 * @param product the product
 	 */
 // Product operations
-	void addProduct(final Product... product);
+	void insertProduct(final Product... product);
 
 	/**
 	 * Delete product long.
@@ -142,7 +142,7 @@ interface DatabaseOperations {
 	 * @param order the order
 	 */
 // Order operations
-	void addOrder(final Order... order);
+	void insertOrder(final Order... order);
 
 	/**
 	 * Delete order long.

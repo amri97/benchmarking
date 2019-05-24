@@ -59,13 +59,13 @@ public class AppDatabaseRepository implements DatabaseOperations {
       final List<Customer> customers, final List<Product> products, final List<Order> orders,
       @Nullable final List<OrderProduct> orderProducts) {
     for (final Customer customer : customers) {
-      addCustomer(customer);
+      insertCustomer(customer);
     }
     for (final Product product : products) {
-      addProduct(product);
+      insertProduct(product);
     }
     for (final Order order : orders) {
-      addOrder(order);
+      insertOrder(order);
     }
     if (orderProducts != null) {
       for (final OrderProduct orderProduct : orderProducts) {
@@ -75,7 +75,7 @@ public class AppDatabaseRepository implements DatabaseOperations {
   }
 
   @Override
-  public void addCustomer(final Customer... customer) {
+  public void insertCustomer(final Customer... customer) {
     customerDao.insertCustomers(customer);
   }
 
@@ -105,7 +105,7 @@ public class AppDatabaseRepository implements DatabaseOperations {
   }
 
   @Override
-  public void addProduct(final Product... product) {
+  public void insertProduct(final Product... product) {
     productDao.insertProducts(product);
   }
 
@@ -135,7 +135,7 @@ public class AppDatabaseRepository implements DatabaseOperations {
   }
 
   @Override
-  public void addOrder(final Order... order) {
+  public void insertOrder(final Order... order) {
     orderDao.insertOrders(order);
   }
 

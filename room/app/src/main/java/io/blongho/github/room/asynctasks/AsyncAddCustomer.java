@@ -39,7 +39,7 @@ public class AsyncAddCustomer extends AsyncTask<Customer, Void, Void> {
 
 	@Override
 	protected Void doInBackground(final Customer... customers) {
-		repository.addCustomer(customers);
+		repository.insertCustomer(customers);
     Log.i(TAG, "doInBackground: Customers added: " + customers.length);
 		return null;
 	}

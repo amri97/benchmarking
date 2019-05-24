@@ -40,7 +40,7 @@ public class AsyncAddOrder extends AsyncTask<Order, Void, Void> {
 
 	@Override
 	protected Void doInBackground(final Order... orders) {
-		repository.addOrder(orders);
+		repository.insertOrder(orders);
     Log.i(TAG, "doInBackground: Others added: " + orders.length);
 		return null;
 	}
