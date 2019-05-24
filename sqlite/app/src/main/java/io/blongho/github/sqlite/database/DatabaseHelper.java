@@ -27,15 +27,35 @@ package io.blongho.github.sqlite.database;
 import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
+import android.util.Log;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import io.blongho.github.sqlite.constants.Column;
-import io.blongho.github.sqlite.constants.Table;
 
 public class DatabaseHelper extends SQLiteOpenHelper {
-  private static final String TAG = "DatabaseHelper";
   private final static String dbName = "customer_order_sqlite";
+  private static final String TAG = "DatabaseHelper";
+  private final static String CREATE_CUSTOMER_TABLE = "CREATE TABLE IF NOT EXISTS tb_customer (" +
+      "customer_id INTEGER PRIMARY KEY, " +
+      "customer_name TEXT NOT NULL, " +
+      "customer_addr TEXT);";
+  private final static String CREATE_PRODUCT_TABLE = "CREATE TABLE IF NOT EXISTS tb_product (" +
+      "product_id INTEGER PRIMARY KEY, " +
+      "product_name TEXT NOT NULL, " +
+      "product_desc TEXT);";
+  private final static String CREATE_ORDER_TABLE = "CREATE TABLE IF NOT EXISTS tb_order (" +
+      "order_id INTEGER PRIMARY KEY, " +
+      "order_customer INTEGER NOT NULL," +
+      "order_date DATETIME DEFAULT current_timestamp," +
+      "FOREIGN KEY(order_customer) " +
+      "REFERENCES tb_customer(customer_id)" +
+      "ON DELETE CASCADE ON UPDATE CASCADE);";
+  private final static String CREATE_ORDER_PRODUCT_TABLE = "CREATE TABLE IF NOT EXISTS tb_order_product (" +
+      "op_id INTEGER PRIMARY KEY, " +
+      "op_order INTEGER NOT NULL, " +
+      "op_product INTEGER NOT NULL, " +
+      "FOREIGN KEY(op_order) REFERENCES tb_order(order_id) ON DELETE CASCADE ON UPDATE CASCADE, " +
+      "FOREIGN KEY(op_product) REFERENCES tb_product(product_id) ON DELETE CASCADE ON UPDATE CASCADE);";
   private static int dbVersion = 1;
 
   /**
@@ -52,7 +72,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
    *                upgrade the database; if the database is newer, {@link #onDowngrade} will be used to downgrade
    *                the database
    */
-  public DatabaseHelper(
+  private DatabaseHelper(
       @Nullable final Context context, @Nullable final String name,
       @Nullable final SQLiteDatabase.CursorFactory factory, final int version) {
     super(context, name, factory, version);
@@ -78,28 +98,11 @@ public class DatabaseHelper extends SQLiteOpenHelper {
    */
   @Override
   public void onCreate(final SQLiteDatabase db) {
-    final String CREATE_CUSTOMER_TABLE = String.format(
-        "CREATE TABLE %s(%s INTEGER PRIMARY KEY, %s TEXT NOT NULL, %s TEXT);",
-        Table.CUSTOMER, Column.CUSTOMER_ID, Column.CUSTOMER_NAME, Column.CUSTOMER_ADDR);
-    final String CREATE_PRODUCT_TABLE = String.format(
-        "CREATE TABLE %s(%s INTEGER PRIMARY KEY, %s TEXT NOT NULL, %s TEXT);",
-        Table.PRODUCT, Column.PRODUCT_ID, Column.PRODUCT_NAME, Column.PRODUCT_DESC);
-    final String CREATE_ORDER_TABLE = String.format(
-        "CREATE TABLE %s(%s INTEGER PRIMARY KEY, %s INTEGER, %s datetime default current_timestamp," +
-            " FOREIGN KEY(%s) REFERENCES %s(%s) ON DELETE CASCADE ON UPDATE CASCADE);",
-        Table.ORDER, Column.ORDER_ID, Column.ORDER_CUSTOMER, Column.ORDER_DATE, Column.ORDER_CUSTOMER, Table.CUSTOMER
-        , Column.CUSTOMER_ID);
-    final String CREATE_ORDER_PRODUCT_TABLE = String.format(
-        "CREATE TABLE %s(%s INTEGER PRIMARY KEY, %s INTEGER, %s INTEGER, " +
-            "FOREIGN KEY(%s) REFERENCES %s(%s) ON DELETE CASCADE ON UPDATE CASCADE, " +
-            "FOREIGN KEY(%s) REFERENCES %s(%s) ON DELETE CASCADE ON UPDATE CASCADE);",
-        Table.ORDER_PRODUCT, Column.ORDER_PRODUCT_ID, Column.ORDER_ID, Column.PRODUCT_ID,
-        Column.ORDER_ID, Table.ORDER, Column.ORDER_ID, Column.PRODUCT_ID, Table.PRODUCT,
-        Column.PRODUCT_ID);
     db.execSQL(CREATE_CUSTOMER_TABLE);
     db.execSQL(CREATE_PRODUCT_TABLE);
     db.execSQL(CREATE_ORDER_TABLE);
     db.execSQL(CREATE_ORDER_PRODUCT_TABLE);
+    Log.d(TAG, "onCreate() called with: db = [" + db + "]");
   }
 
   /**
@@ -124,15 +127,21 @@ public class DatabaseHelper extends SQLiteOpenHelper {
    */
   @Override
   public void onUpgrade(final SQLiteDatabase db, final int oldVersion, final int newVersion) {
-    dropTables(db);
+    db.execSQL("DROP TABLE IF EXISTS tb_customer;");
+    db.execSQL("DROP TABLE IF EXISTS tb_product;");
+    db.execSQL("DROP TABLE IF EXISTS tb_order;");
+    db.execSQL("DROP TABLE IF EXISTS tb_order_product;");
+    // do any other upgrade stuff here, maybe adding table culums etc
     onCreate(db);
   }
 
-  public void dropTables(final SQLiteDatabase db) {
-    db.execSQL(String.format("DROP TABLE IF EXISTS %s;", Table.CUSTOMER));
-    db.execSQL(String.format("DROP TABLE IF EXISTS %s;", Table.ORDER));
-    db.execSQL(String.format("DROP TABLE IF EXISTS %s;", Table.PRODUCT));
-    db.execSQL(String.format("DROP TABLE IF EXISTS %s;", Table.ORDER_PRODUCT));
+  @Override
+  public void onDowngrade(SQLiteDatabase db, int oldVersion, int newVersion) {
+    onUpgrade(db, oldVersion, newVersion);
   }
 
+  @Override
+  public void onOpen(SQLiteDatabase db) {
+    super.onOpen(db);
+  }
 }

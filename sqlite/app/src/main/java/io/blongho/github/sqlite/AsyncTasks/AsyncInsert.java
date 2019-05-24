@@ -27,14 +27,13 @@ package io.blongho.github.sqlite.AsyncTasks;
 import android.os.AsyncTask;
 import android.util.Log;
 
-import java.util.concurrent.atomic.AtomicLong;
-
 import io.blongho.github.sqlite.database.DatabaseManager;
+import io.blongho.github.sqlite.util.MethodTimer;
 
-public class AsyncInsert<T> extends AsyncTask<T, Void, Integer> {
+public class AsyncInsert<T> extends AsyncTask<T, String, Void> {
   private static final String TAG = "AsyncInsert";
   private DatabaseManager databaseManager;
-  private AtomicLong atomicLong = new AtomicLong(0);
+  private String className;
 
   public AsyncInsert(final DatabaseManager db) {
     databaseManager = db;
@@ -54,28 +53,19 @@ public class AsyncInsert<T> extends AsyncTask<T, Void, Integer> {
    * @see #publishProgress
    */
   @Override
-  protected Integer doInBackground(final T... ts) {
-    for (final T t : ts) {
-      databaseManager.addItem(t);
+  protected Void doInBackground(final T... ts) {
+    if (ts.length > 0) {
+      className = ts.getClass().getSimpleName();
+      final MethodTimer timer = new MethodTimer(TAG + "Adding " + ts.length + " items from " + className);
+      timer.start();
+      for (T t : ts) {
+        databaseManager.addItem(t);
+      }
+      timer.stop();
+      timer.showResults();
+      publishProgress(className);
     }
+
     return null;
-  }
-
-  /**
-   * <p>Runs on the UI thread after {@link #doInBackground}. The
-   * specified result is the value returned by {@link #doInBackground}.</p>
-   *
-   * <p>This method won't be invoked if the task was cancelled.</p>
-   *
-   * @param integer The result of the operation computed by {@link #doInBackground}.
-   * @see #onPreExecute
-   * @see #doInBackground
-   * @see #onCancelled(Object)
-   */
-  @Override
-  protected void onPostExecute(final Integer integer) {
-    super.onPostExecute(integer);
-
-    Log.e(TAG, "onPostExecute: " + databaseManager.getAllCustomers().size());
   }
 }

@@ -31,173 +31,49 @@ import io.blongho.github.sqlite.model.Order;
 import io.blongho.github.sqlite.model.OrderProduct;
 import io.blongho.github.sqlite.model.Product;
 
-/**
- * Defines the operations done on the database
- */
 public interface DatabaseOperations {
-  /**
-   * Populate datbase.
-   *
-   * @param customers     the customers
-   * @param products      the products
-   * @param orders        the orders
-   * @param orderProducts the order products
-   */
-  void populateDatabase(List<Customer> customers, List<Product> products, List<Order> orders,
-                        List<OrderProduct> orderProducts);
+  // Customer operations
+  void addCustomer(final Customer... customer);
 
-  /**
-   * Add customer long.
-   *
-   * @param customer the customer
-   * @return the long
-   */
-// Customer operations
-  long addCustomer(final Customer customer);
+  void deleteCustomer(final Customer... customer);
 
-  /**
-   * Delete customer long.
-   *
-   * @param customer the customer
-   * @return the long
-   */
-  long deleteCustomer(final Customer customer);
+  void deleteCustomerWithName(final String customerName);
 
-  /**
-   * Delete customer with name long.
-   *
-   * @param customerName the customer name
-   * @return the long
-   */
-  long deleteCustomerWithName(final String customerName);
+  void deleteCustomerWithId(final long customerID);
 
-  /**
-   * Delete customer with id long.
-   *
-   * @param customerID the customer id
-   * @return the long
-   */
-  long deleteCustomerWithId(final long customerID);
+  void updateCustomer(final Customer... customer);
 
-  /**
-   * Update customer long.
-   *
-   * @param customerID the customer id
-   * @return the long
-   */
-  long updateCustomer(final Customer customer);
-
-  /**
-   * Gets all customers.
-   *
-   * @return the all customers
-   */
   List<Customer> getAllCustomers();
 
-  /**
-   * Add product long.
-   *
-   * @param product the product
-   * @return the long
-   */
-// Product operations
-  long addProduct(final Product product);
+  // Product operations
+  void addProduct(final Product... products);
 
-  /**
-   * Delete product long.
-   *
-   * @param product the product
-   * @return the long
-   */
-  long deleteProduct(final Product product);
+  void deleteProduct(final Product... products);
 
-  /**
-   * Delete product with name long.
-   *
-   * @param productName the product name
-   * @return the long
-   */
-  long deleteProductWithName(final String productName);
+  void deleteProductWithName(final String productName);
 
-  /**
-   * Delete product with id long.
-   *
-   * @param productID the product id
-   * @return the long
-   */
-  long deleteProductWithId(final long productID);
+  void deleteProductWithId(final long productID);
 
-  /**
-   * Update product long.
-   *
-   * @param productID the product id
-   * @return the long
-   */
-  long updateProduct(final Product product);
+  void updateProduct(final Product... products);
 
-  /**
-   * Gets all products.
-   *
-   * @return the all products
-   */
   List<Product> getAllProducts();
 
-  /**
-   * Add order long.
-   *
-   * @param order the order
-   * @return the long
-   */
-// Order operations
-  long addOrder(final Order order);
+  // Order operations
+  void addOrder(final Order... orders);
 
-  /**
-   * Delete order long.
-   *
-   * @param order the order
-   * @return the long
-   */
-  long deleteOrder(final Order order);
+  void deleteOrder(final Order... orders);
 
-  /**
-   * Delete order with id long.
-   *
-   * @param orderID the order id
-   * @return the long
-   */
-  long deleteOrderWithId(final long orderID);
+  void deleteOrderWithId(final long orderID);
 
-  /**
-   * Gets all orders.
-   *
-   * @return the list of orders in the system
-   */
   List<Order> getAllOrders();
 
   // update orderProduct table
 
-  /**
-   * Call this method whenever an order is made
-   *
-   * @param customerID the customer who made the order
-   * @param orderID    the id of the order
-   * @return the number of rows affected
-   */
-  long updateOrderProductTable(long customerID, long orderID);
+  void deleteAll(final String... tables);
 
-  /**
-   * Call this method whenever an order is made
-   *
-   * @param customerID the customer who made the order
-   * @param orderID    the id of the order
-   * @return the number of rows affected
-   */
-  long updateOrderProductTable(long orderProductID, long customerID, long orderID);
+  void deleteOrderProduct(final OrderProduct... orderProducts);
 
-  /**
-   * Delete all items from a particular table
-   *
-   * @param table the table
-   */
-  void deleteAll(final String table);
+  void addOrderProduct(final OrderProduct... orderProducts);
+
+  List<OrderProduct> getAllOrderProducts();
 }

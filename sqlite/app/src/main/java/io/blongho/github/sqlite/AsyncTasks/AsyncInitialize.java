@@ -29,14 +29,15 @@ import android.os.AsyncTask;
 import android.util.Log;
 
 import io.blongho.github.sqlite.database.DatabaseHelper;
+import io.blongho.github.sqlite.database.DatabaseManager;
+import io.blongho.github.sqlite.util.MethodTimer;
 
 public class AsyncInitialize extends AsyncTask<Void, Void, Void> {
   private static final String TAG = "AsyncInitialize";
-  private final Application application;
-  private DatabaseHelper helper;
+  private final DatabaseManager dbManager;
 
-  public AsyncInitialize(final Application app) {
-    application = app;
+  public AsyncInitialize(final DatabaseManager manager) {
+    dbManager = manager;
   }
 
   /**
@@ -55,7 +56,11 @@ public class AsyncInitialize extends AsyncTask<Void, Void, Void> {
    */
   @Override
   protected Void doInBackground(final Void... voids) {
-    helper = new DatabaseHelper(this.application.getApplicationContext());
+    final MethodTimer timer = new MethodTimer(TAG + "Initializing database");
+    timer.start();
+    dbManager.getWritableDatabase().setForeignKeyConstraintsEnabled(true);
+    timer.stop();
+    timer.showResults();
     return null;
   }
 
@@ -73,6 +78,7 @@ public class AsyncInitialize extends AsyncTask<Void, Void, Void> {
   @Override
   protected void onPostExecute(final Void aVoid) {
     super.onPostExecute(aVoid);
-    Log.d(TAG, "onPostExecute: " + helper.getDatabaseName() + " created");
+    Log.d(TAG, "onPostExecute: " + dbManager.getWritableDatabase().getPath() + " created");
+
   }
 }

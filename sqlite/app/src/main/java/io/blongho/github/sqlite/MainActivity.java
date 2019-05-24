@@ -33,9 +33,13 @@ import com.google.gson.Gson;
 
 import java.util.List;
 import java.util.concurrent.ExecutionException;
+import java.util.concurrent.Executor;
+import java.util.concurrent.ExecutorCompletionService;
+import java.util.concurrent.Executors;
 
+import androidx.annotation.RawRes;
 import androidx.appcompat.app.AppCompatActivity;
-import io.blongho.github.sqlite.AsyncTasks.AsyncDelete;
+import io.blongho.github.sqlite.AsyncTasks.AsyncDeleteAll;
 import io.blongho.github.sqlite.AsyncTasks.AsyncInitialize;
 import io.blongho.github.sqlite.AsyncTasks.AsyncInsert;
 import io.blongho.github.sqlite.database.DatabaseManager;
@@ -43,7 +47,8 @@ import io.blongho.github.sqlite.model.Customer;
 import io.blongho.github.sqlite.model.Order;
 import io.blongho.github.sqlite.model.OrderProduct;
 import io.blongho.github.sqlite.model.Product;
-import io.blongho.github.sqlite.util.AssetsReader;
+import io.blongho.github.sqlite.util.MethodTimer;
+import io.blongho.github.sqlite.util.ReadFromFile;
 
 /**
  * The type Main activity.
@@ -51,32 +56,48 @@ import io.blongho.github.sqlite.util.AssetsReader;
 public class MainActivity extends AppCompatActivity {
 
   private static final String TAG = "MainActivity";
-
-  @Override
-  protected void onCreate(final Bundle savedInstanceState) {
-    super.onCreate(savedInstanceState);
-    setContentView(R.layout.activity_main);
-  }
+  private final static Executor executor = Executors.newCachedThreadPool();
+  private static DatabaseManager dbManager;
+  private ExecutorCompletionService<String> customerService;
+  private ExecutorCompletionService<String> productService;
+  private ExecutorCompletionService<String> orderService;
+  private ExecutorCompletionService<String> orderProductService;
+  private Gson gson;
 
   /**
    * Clear db.
    *
    * @param view the view
    */
-  public void clearDb(final View view) {
-    // TODO implement code for clearing the database
-    try {
-      new AsyncDelete<Customer>(getApplication()).execute().get();
-    } catch (final ExecutionException e) {
-      e.printStackTrace();
-    } catch (final InterruptedException e) {
-      e.printStackTrace();
-    }
-    showSnackBar(view, "clearDb");
+  public static void clearDb(final View view) {
+    // TODO check why dropping entries does not work
+    new AsyncDeleteAll(dbManager).execute();
+    showSnackBar(view, "clearDb COMPLETED");
+
   }
 
-  private void showSnackBar(final View view, final String method) {
+  private static void showSnackBar(final View view, final String method) {
     Snackbar.make(view, method + " ==> Implement this method", Snackbar.LENGTH_SHORT).show();
+  }
+
+  @Override
+  protected void onCreate(final Bundle savedInstanceState) {
+    super.onCreate(savedInstanceState);
+    setContentView(R.layout.activity_main);
+    dbManager = new DatabaseManager(this.getApplicationContext());
+    gson = new Gson();
+  }
+
+  private void initCompletionServices() {
+    customerService = new ExecutorCompletionService<>(executor);
+    productService = new ExecutorCompletionService<>(executor);
+    orderService = new ExecutorCompletionService<>(executor);
+    orderProductService = new ExecutorCompletionService<>(executor);
+  }
+
+  private void submitFileReadingRequest(ExecutorCompletionService<String> completionService,
+                                        @RawRes int fileResourceID) {
+    completionService.submit(new ReadFromFile(getApplicationContext(), fileResourceID));
   }
 
   /**
@@ -85,10 +106,8 @@ public class MainActivity extends AppCompatActivity {
    * @param view the view
    */
   public void createDb(final View view) {
-    new AsyncInitialize(this.getApplication()).execute();
-    // TODO implement code for creating the database here
+    new AsyncInitialize(dbManager).execute();
     showSnackBar(view, "createDb ");
-
   }
 
   /**
@@ -108,21 +127,32 @@ public class MainActivity extends AppCompatActivity {
    * @param view the view
    */
   public void loadData(final View view) {
-    final Gson gson = new Gson();
-    final String cust = AssetsReader.readFromAssets(this.getApplicationContext(), R.raw.customer);
-    final Customer[] customers = gson.fromJson(cust, Customer[].class);
-    final Product[] products = gson.fromJson(AssetsReader.readFromAssets(getApplicationContext(), R.raw.products),
-        Product[].class);
-    final Order[] orders = gson.fromJson(AssetsReader.readFromAssets(getApplicationContext(), R.raw.orders),
-        Order[].class);
-    final OrderProduct[] orderProducts = gson.fromJson(AssetsReader.readFromAssets(getApplicationContext(),
-        R.raw.order_products), OrderProduct[].class);
+    initCompletionServices();
+    submitFileReadingRequest(productService, R.raw.products10000);
+    submitFileReadingRequest(customerService, R.raw.customers10000);
+    submitFileReadingRequest(orderService, R.raw.orders10000);
+    submitFileReadingRequest(orderProductService, R.raw.order_products10000);
 
-    new AsyncInsert<Customer>(new DatabaseManager(getApplicationContext())).execute(customers);
-    new AsyncInsert<Product>(new DatabaseManager(getApplicationContext())).execute(products);
-    new AsyncInsert<Order>(new DatabaseManager(getApplicationContext())).execute(orders);
-    new AsyncInsert<OrderProduct>(new DatabaseManager(getApplicationContext())).execute(orderProducts);
-    showSnackBar(view, "loadData");
+    try {
+      Customer[] customers = gson.fromJson(customerService.take().get(), Customer[].class);
+      new AsyncInsert<Customer>(dbManager).execute(customers);
+
+      Product[] products = gson.fromJson(productService.take().get(), Product[].class);
+      new AsyncInsert<Product>(dbManager).execute(products);
+
+      Order[] orders = gson.fromJson(orderService.take().get(), Order[].class);
+      new AsyncInsert<Order>(dbManager).execute(orders);
+
+      OrderProduct[] orderProducts = gson.fromJson(orderProductService.take().get(), OrderProduct[].class);
+      new AsyncInsert<OrderProduct>(dbManager).execute(orderProducts);
+
+      showSnackBar(view, "loadData");
+    } catch (ExecutionException e) {
+      e.printStackTrace();
+    } catch (InterruptedException e) {
+      e.printStackTrace();
+    }
+
   }
 
   /**
@@ -131,26 +161,22 @@ public class MainActivity extends AppCompatActivity {
    * @param view the view
    */
   public void readData(final View view) {
-
-    final DatabaseManager manager = new DatabaseManager(getApplicationContext());
-
-    final List<Product> products = manager.getAllProducts();
-    for (final Product product : products) {
-      Log.d(TAG, "run: " + product);
+    // TODO check why reading asynchronously does not work
+    MethodTimer timer = new MethodTimer(TAG + "::reading from db");
+    timer.start();
+    List<Customer> customers =  dbManager.getAllCustomers();
+    for (Customer customer : customers) {
+      Log.d(TAG, "readData() called with: view = [" + customer+ "]");
     }
+    timer.stop();
+    timer.showResults();
 
-    final List<Customer> customers = manager.getAllCustomers();
-    for (final Customer customer : customers) {
-      Log.d(TAG, "readData: " + customer);
-    }
-
-    final List<Order> orders = manager.getAllOrders();
-    for (final Order order : orders) {
-      Log.d(TAG, "readData: " + order);
-    }
-
-    final Long deleteCustomer = manager.deleteCustomer(customers.get(23));
-    Log.e(TAG, "readData: " + deleteCustomer);
+    /*
+    new AsyncRead<>(dbManager, Customer.class).execute();
+    new AsyncRead<Product>(dbManager, Product.class).execute();
+    new AsyncRead<Order>(dbManager, Order.class).execute();
+    new AsyncRead<OrderProduct>(dbManager, OrderProduct.class).execute();
+*/
     showSnackBar(view, "readData");
   }
 

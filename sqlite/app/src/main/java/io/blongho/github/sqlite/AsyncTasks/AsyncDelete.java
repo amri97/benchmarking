@@ -24,16 +24,16 @@
 
 package io.blongho.github.sqlite.AsyncTasks;
 
-import android.app.Application;
 import android.os.AsyncTask;
-import android.widget.Toast;
 
-public class AsyncDelete<T> extends AsyncTask<T, Void, Integer> {
+import io.blongho.github.sqlite.database.DatabaseManager;
 
-  private Application context;
+public class AsyncDelete<T> extends AsyncTask<T, Void, Void> {
 
-  public AsyncDelete(final Application context) {
-    this.context = context;
+  private final DatabaseManager manager;
+
+  public AsyncDelete(DatabaseManager manager) {
+    this.manager = manager;
   }
 
   /**
@@ -50,25 +50,9 @@ public class AsyncDelete<T> extends AsyncTask<T, Void, Integer> {
    * @see #publishProgress
    */
   @Override
-  protected Integer doInBackground(final T... ts) {
-    // TODO complete this do in background for async delete task
+  protected Void doInBackground(final T... ts) {
+    manager.deleteItems(ts);
     return null;
   }
 
-  /**
-   * <p>Runs on the UI thread after {@link #doInBackground}. The
-   * specified result is the value returned by {@link #doInBackground}.</p>
-   *
-   * <p>This method won't be invoked if the task was cancelled.</p>
-   *
-   * @param integer The result of the operation computed by {@link #doInBackground}.
-   * @see #onPreExecute
-   * @see #doInBackground
-   * @see #onCancelled(Object)
-   */
-  @Override
-  protected void onPostExecute(final Integer integer) {
-    super.onPostExecute(integer);
-    Toast.makeText(context.getApplicationContext(), "Yeahhhh", Toast.LENGTH_SHORT).show();
-  }
 }
