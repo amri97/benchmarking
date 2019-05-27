@@ -66,7 +66,7 @@ public class Test implements TestSuiteInterface {
   @Override
   public void init() {
     new ExecutorCompletionService<Void>(executor).submit(() -> {
-      MethodTimer.FILE_NAME = "sql_1_000.json";
+      MethodTimer.FILE_NAME = "sql_12_000.json";
       final MethodTimer timer = new MethodTimer("Initializing the database");
       timer.start();
       dbManager = new DatabaseManager(context);
@@ -162,10 +162,10 @@ public class Test implements TestSuiteInterface {
    */
   private void getData() {
     initCompletionServices();
-    submitFileReadingRequest(productService, R.raw.products1000);
-    submitFileReadingRequest(customerService, R.raw.customers1000);
-    submitFileReadingRequest(orderService, R.raw.order1000);
-    submitFileReadingRequest(orderProductService, R.raw.order_products1000);
+    submitFileReadingRequest(productService, R.raw.products12000);
+    submitFileReadingRequest(customerService, R.raw.customers12000);
+    submitFileReadingRequest(orderService, R.raw.order12000);
+    submitFileReadingRequest(orderProductService, R.raw.order_products12000);
     final Gson gson = new Gson();
     try {
       customers = gson.fromJson(customerService.take().get(), Customer[].class);

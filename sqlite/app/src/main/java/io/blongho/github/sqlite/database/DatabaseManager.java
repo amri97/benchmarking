@@ -73,7 +73,7 @@ public class DatabaseManager implements DatabaseOperations {
   }
 
   /**
-   * Open writeableDatabase in a thread-safe way
+   * Open writableDatabase in a thread-safe way
    *
    * @return dbWriter
    */
