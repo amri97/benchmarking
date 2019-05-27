@@ -36,24 +36,28 @@ import com.google.android.material.snackbar.Snackbar;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
-import io.blongho.github.greendao.util.Test;
+import io.blongho.github.greendao.test.Test;
 
 /**
  * The type Main activity.
  */
 public class MainActivity extends AppCompatActivity {
   private static final String TAG = "MainActivity";
-  private final static int RUN_TIMES = 5;
+  private static boolean permissionGranted = false;
   private Test test;
 
   @Override
   protected void onCreate(Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
     setContentView(R.layout.activity_main);
-    test = new Test(MainActivity.this);
-    ActivityCompat.requestPermissions(MainActivity.this,
-        new String[]{Manifest.permission.READ_EXTERNAL_STORAGE},
-        1);
+    if (!permissionGranted) {
+      askPermission();
+    }
+  }
+
+  @Override
+  protected void onDestroy() {
+    super.onDestroy();
   }
 
   /**
@@ -72,7 +76,6 @@ public class MainActivity extends AppCompatActivity {
    */
   public void clearDb(View view) {
     test.deleteAll();
-    showSnackBar(view, "clearDb");
   }
 
   /**
@@ -81,8 +84,7 @@ public class MainActivity extends AppCompatActivity {
    * @param view the view
    */
   public void deleteFromDb(View view) {
-    // TODO delete item from database
-    showSnackBar(view, "deleteFromDb");
+    test.delete();
   }
 
   /**
@@ -91,8 +93,7 @@ public class MainActivity extends AppCompatActivity {
    * @param view the view
    */
   public void updateEntry(View view) {
-    // TODO implement code for updating an entry or entries in the database
-    showSnackBar(view, "updateEntry");
+    test.update();
   }
 
   /**
@@ -102,25 +103,7 @@ public class MainActivity extends AppCompatActivity {
    */
   public void readData(View view) {
     test.read();
-    showSnackBar(view, "readData");
-
   }
-/*
-  private <T> void showItems(List<T> customers) {
-    for (Object customer : customers) {
-      Log.i(TAG, "showItems: " + customer);
-    }
-  }
-
-  private <T> void showItem(T item) {
-    Log.i(TAG, "showItems: " + item);
-  }
-
-  private <T> void showItems(T[] items) {
-    for (Object item : items) {
-      Log.i(TAG, "showItems: " + item);
-    }
-  }*/
 
   /**
    * Load data.
@@ -136,6 +119,12 @@ public class MainActivity extends AppCompatActivity {
     Snackbar.make(view, method + " ==> Implement this method", Snackbar.LENGTH_SHORT).show();
   }
 
+  private void askPermission() {
+    ActivityCompat.requestPermissions(MainActivity.this,
+        new String[]{Manifest.permission.READ_EXTERNAL_STORAGE},
+        1);
+  }
+
   @Override
   public void onRequestPermissionsResult(int requestCode,
                                          String permissions[], int[] grantResults) {
@@ -145,6 +134,8 @@ public class MainActivity extends AppCompatActivity {
         // If request is cancelled, the result arrays are empty.
         if (grantResults.length > 0
             && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+          permissionGranted = true;
+          test = new Test(MainActivity.this);
 
           // permission was granted, yay! Do the
           // contacts-related task you need to do.

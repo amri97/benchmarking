@@ -24,15 +24,13 @@
  *
  */
 
-package io.blongho.github.greendao.util;
+package io.blongho.github.greendao.test;
 
 import android.content.Context;
-import android.os.AsyncTask;
-import android.util.Log;
 
 import com.google.gson.Gson;
 
-import java.util.List;
+import java.util.Random;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.Executor;
 import java.util.concurrent.ExecutorCompletionService;
@@ -52,11 +50,16 @@ import io.blongho.github.greendao.model.DaoSession;
 import io.blongho.github.greendao.model.Order;
 import io.blongho.github.greendao.model.OrderProduct;
 import io.blongho.github.greendao.model.Product;
+import io.blongho.github.greendao.util.MethodTimer;
+import io.blongho.github.greendao.util.ReadFromFile;
 
+/**
+ * The type Test.
+ */
 public class Test implements TestSuiteInterface {
   private static final String TAG = "Test";
   private static Executor executor = Executors.newCachedThreadPool();
-  private static DaoSession writableDaoSession;
+  private static DaoSession daoSession;
   private final Context context;
 
   private ExecutorCompletionService<String> customerService;
@@ -68,34 +71,54 @@ public class Test implements TestSuiteInterface {
   private Order[] orders;
   private OrderProduct[] orderProducts;
 
+  /**
+   * Instantiates a new Test.
+   *
+   * @param context the context
+   */
   public Test(Context context) {
     this.context = context;
     getData();
+    init();
+  }
+
+  /**
+   * Generate a random number in the range min and max
+   *
+   * @param min the minimum number
+   * @param max the upper bound
+   * @return a random integer
+   */
+  private static int getRandomNumberInRange(int min, int max) {
+    if (min >= max) {
+      throw new IllegalArgumentException("max must be greater than min");
+    }
+    Random r = new Random();
+    return r.nextInt((max - min) + 1) + min;
   }
 
   @Override
   public void init() {
-    new ExecutorCompletionService<Void>(executor).submit(() -> {
-      final MethodTimer timer = new MethodTimer("Initializing the database");
-      timer.start();
-      getWritableDaoSession();
-      timer.stop();
-      timer.showResults();
-      return null;
-    });
+    MethodTimer.FILE_NAME = "1_000.json";
+    final MethodTimer timer = new MethodTimer("Initializing the database");
+    timer.start();
+    getWritableDaoSession();
+    timer.stop();
+    timer.showResults();
+
   }
 
   @Override
   public void create(Customer[] customers, Product[] products, Order[] orders, OrderProduct[] orderProducts) {
     if (isTestReady()) {
-      final ExecutorCompletionService<Void> createCompletion = new ExecutorCompletionService<>(executor);
-      createCompletion.submit(() -> {
-        new WriteCustomers(writableDaoSession, new MethodTimer("Create customers", context), customers);
-        new WriteProducts(writableDaoSession, new MethodTimer("Create product", context), products);
-        new WriteOrders(writableDaoSession, new MethodTimer("Create orders", context), orders);
-        new WriteOrderProducts(writableDaoSession, new MethodTimer("Create OrderProducts", context), orderProducts);
+      new ExecutorCompletionService<Void>(executor).submit(() -> {
+        new WriteCustomers(daoSession, new MethodTimer("Create customers", context), customers);
+        new WriteProducts(daoSession, new MethodTimer("Create product", context), products);
+        new WriteOrders(daoSession, new MethodTimer("Create orders", context), orders);
+        new WriteOrderProducts(daoSession, new MethodTimer("Create OrderProducts", context), orderProducts);
       }, null);
     }
+
   }
 
   @Override
@@ -105,31 +128,44 @@ public class Test implements TestSuiteInterface {
 
   @Override
   public void read() {
-    final List<Order> orders = writableDaoSession.getOrderDao()._queryCustomer_Orders(9001);
-    for (Order order : orders) {
-      Log.d(TAG, "read() returned: " + order);
-    }
-
-    new AsyncReadFromDatabase<>(writableDaoSession, Customer.class).executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
-    new AsyncReadFromDatabase<>(writableDaoSession, Product.class).executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
-    new AsyncReadFromDatabase<>(writableDaoSession, Order.class).executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
-    new AsyncReadFromDatabase<>(writableDaoSession, OrderProduct.class).executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
+    new AsyncReadFromDatabase<>(daoSession, Customer.class).execute();
+    new AsyncReadFromDatabase<>(daoSession, Product.class).execute();
+    new AsyncReadFromDatabase<>(daoSession, Order.class).execute();
+    new AsyncReadFromDatabase<>(daoSession, OrderProduct.class).execute();
   }
 
   @Override
   public void update() {
-    throw new UnsupportedOperationException("Method is not yet implemented");
+    // Update 5 random customers
+    final int numberOfCustomers = (int) daoSession.getCustomerDao().count();
+    for (int i = 1; i <= 5; i++) {
+      final long randomCustomer = getRandomNumberInRange(i, numberOfCustomers);
+
+      final Customer bernard = new Customer(randomCustomer, "Bernard Longho", "City");
+      final MethodTimer timer = new MethodTimer("Update customer number " + randomCustomer);
+      timer.start();
+      daoSession.getCustomerDao().update(bernard);
+      timer.stop();
+      timer.showResults();
+    }
   }
 
   @Override
   public void delete() {
-    throw new UnsupportedOperationException("Delete Method is not yet implemented");
+    final int numberOfCustomers = (int) daoSession.getCustomerDao().count();
+    for (int i = 1; i <= 5; i++) {
+      final int randomCustomer = getRandomNumberInRange(1, numberOfCustomers);
+      final MethodTimer timer = new MethodTimer("Deleting customer number " + randomCustomer);
+      timer.start();
+      daoSession.getCustomerDao().deleteByKey((long) randomCustomer);
+      timer.stop();
+      timer.showResults();
+    }
   }
 
   @Override
   public void deleteAll() {
-    Void avoid = null;
-    new AsyncDeleteAllFromDatabase(writableDaoSession).executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, avoid);
+    new AsyncDeleteAllFromDatabase(daoSession).execute();
   }
 
   private void initCompletionServices() {
@@ -148,7 +184,7 @@ public class Test implements TestSuiteInterface {
    * Get a single instance of the DaoSession
    */
   private void getWritableDaoSession() {
-    writableDaoSession = DaoSessionInstance.getInstance(context);
+    daoSession = DaoSessionInstance.getInstance(context);
   }
 
   /**
@@ -157,10 +193,10 @@ public class Test implements TestSuiteInterface {
    */
   private void getData() {
     initCompletionServices();
-    submitFileReadingRequest(productService, R.raw.products10000);
-    submitFileReadingRequest(customerService, R.raw.customers10000);
-    submitFileReadingRequest(orderService, R.raw.orders10000);
-    submitFileReadingRequest(orderProductService, R.raw.order_products10000);
+    submitFileReadingRequest(productService, R.raw.products1000);
+    submitFileReadingRequest(customerService, R.raw.customers1000);
+    submitFileReadingRequest(orderService, R.raw.order1000);
+    submitFileReadingRequest(orderProductService, R.raw.order_products1000);
     final Gson gson = new Gson();
     try {
       customers = gson.fromJson(customerService.take().get(), Customer[].class);
@@ -177,4 +213,5 @@ public class Test implements TestSuiteInterface {
   private boolean isTestReady() {
     return (customers.length > 0 && products.length > 0 && orders.length > 0 && orderProducts.length > 0);
   }
+
 }

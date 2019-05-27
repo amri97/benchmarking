@@ -56,19 +56,19 @@ public class AsyncDeleteAllFromDatabase extends AsyncTask<Void, Void, Void> {
    */
   @Override
   protected Void doInBackground(Void... voids) {
-    timer.setTag("Dropping all customers");
+    timer.setTag("Dropping all " + daoSession.getCustomerDao().count() + " customers");
     timer.start();
     daoSession.getCustomerDao().deleteAll();
     timer.stop();
-    timer.setTag("Dropping all products");
+    timer.setTag("Dropping all " + daoSession.getProductDao().count() + " products");
     timer.start();
     daoSession.getProductDao().deleteAll();
     timer.stop();
-    timer.setTag("Dropping all orders");
+    timer.setTag("Dropping all " + daoSession.getOrderDao().count() + " orders");
     timer.start();
     daoSession.getOrderDao().deleteAll();
     timer.stop();
-    timer.setTag("Dropping all order products");
+    timer.setTag("Dropping all " + daoSession.getOrderProductDao().count() + " orderProducts");
     timer.start();
     daoSession.getOrderProductDao().deleteAll();
     timer.stop();

@@ -24,7 +24,7 @@
  *
  */
 
-package io.blongho.github.greendao.util;
+package io.blongho.github.greendao.test;
 
 import io.blongho.github.greendao.model.Customer;
 import io.blongho.github.greendao.model.Order;

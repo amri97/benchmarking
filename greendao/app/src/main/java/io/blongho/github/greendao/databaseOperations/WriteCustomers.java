@@ -34,7 +34,6 @@ import io.blongho.github.greendao.util.MethodTimer;
  * Populates customers to the database
  */
 public final class WriteCustomers extends DatabaseOperationAbstraction<Customer> {
-
   public WriteCustomers(DaoSession daosession, MethodTimer timer, Customer[] items) {
     super(daosession, timer, items);
     doWork();
@@ -47,50 +46,6 @@ public final class WriteCustomers extends DatabaseOperationAbstraction<Customer>
     daosession.getCustomerDao().insertOrReplaceInTx(items);
     timer.stop();
     timer.showResults();
-
-    daosession.getCustomerDao().count();
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
   }
-
 
 }

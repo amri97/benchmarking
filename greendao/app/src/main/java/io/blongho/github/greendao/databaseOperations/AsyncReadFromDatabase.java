@@ -27,6 +27,7 @@
 package io.blongho.github.greendao.databaseOperations;
 
 import android.os.AsyncTask;
+import android.util.Log;
 
 import io.blongho.github.greendao.model.Customer;
 import io.blongho.github.greendao.model.CustomerDao;
@@ -74,22 +75,31 @@ public class AsyncReadFromDatabase<T> extends AsyncTask<Void, Void, Void> {
    * @see #onPostExecute
    * @see #publishProgress
    */
+  // If there are no entries in the database, do not call entityDao.loadAll()
   @Override
   protected Void doInBackground(Void... voids) {
     if (objectClass.isInstance(new Customer())) {
       final MethodTimer timer = new MethodTimer(TAG);
       final CustomerDao customerDao = daoSession.getCustomerDao();
       long customersInSystem = customerDao.count();
+      if (customersInSystem == 0) {
+        Log.e(TAG, "doInBackground() called with: Customers = [" + customersInSystem + "]");
+        return null;
+      }
       timer.setTag("Reading " + customersInSystem + " Customers from database");
       timer.start();
-      customerDao.loadAll();
+      daoSession.getCustomerDao().loadAll();
       timer.stop();
       timer.showResults();
     } else if (objectClass.isInstance(new Product())) {
       final MethodTimer timer = new MethodTimer(TAG);
       final ProductDao productDao = daoSession.getProductDao();
       long products = productDao.count();
-      timer.setTag("Reading " + products + "  Products form the database");
+      if (products == 0) {
+        Log.e(TAG, "doInBackground() called with: products = [" + products + "]");
+        return null;
+      }
+      timer.setTag("Reading " + products + " Products form the database");
       timer.start();
       productDao.loadAll();
       timer.stop();
@@ -98,18 +108,26 @@ public class AsyncReadFromDatabase<T> extends AsyncTask<Void, Void, Void> {
       final MethodTimer timer = new MethodTimer(TAG);
       final OrderDao orderDao = daoSession.getOrderDao();
       long orders = orderDao.count();
+      if (orders == 0) {
+        Log.e(TAG, "doInBackground() called with: Orders = [" + orders + "]");
+        return null;
+      }
       timer.setTag("Reading " + orders + " Orders from the database");
       timer.start();
-      orderDao.loadAll();
+      daoSession.getOrderDao().loadAll();
       timer.stop();
       timer.showResults();
     } else if (objectClass.isInstance(new OrderProduct())) {
       final MethodTimer timer = new MethodTimer(TAG);
       final OrderProductDao opdao = daoSession.getOrderProductDao();
       long odp = opdao.count();
-      timer.setTag("Reading " + odp + " orderProducts from database");
+      if (odp == 0) {
+        Log.e(TAG, "doInBackground() called with: OrderProducts = [" + odp + "]");
+        return null;
+      }
+      timer.setTag("Reading " + odp + " OrderProducts from database");
       timer.start();
-      opdao.loadAll();
+      daoSession.getOrderProductDao().loadAll();
       timer.stop();
       timer.showResults();
     }
