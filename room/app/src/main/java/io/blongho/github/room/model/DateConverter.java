@@ -22,31 +22,20 @@
  * SOFTWARE.
  */
 
-package io.blongho.github.sqlite;
+package io.blongho.github.room.model;
 
-import android.content.Context;
+import androidx.room.TypeConverter;
 
-import org.junit.Test;
-import org.junit.runner.RunWith;
+import java.util.Date;
 
-import androidx.test.InstrumentationRegistry;
-import androidx.test.runner.AndroidJUnit4;
+public class DateConverter {
+	@TypeConverter
+	public static Date toDate(Long timestamp) {
+		return timestamp == null ? null : new Date(timestamp);
+	}
 
-import static org.junit.Assert.assertEquals;
-
-/**
- * Instrumented test, which will execute on an Android device.
- *
- * @see <a href="http://d.android.com/tools/testing">Testing documentation</a>
- */
-@RunWith(AndroidJUnit4.class)
-public class ExampleInstrumentedTest {
-
-    @Test
-    public void useAppContext() {
-        // Context of the app under test.
-        Context appContext = InstrumentationRegistry.getTargetContext();
-
-        assertEquals("io.blongho.github.dt133g", appContext.getPackageName());
-    }
+	@TypeConverter
+	public static Long toTimestamp(Date date) {
+		return date == null ? null : date.getTime();
+	}
 }
