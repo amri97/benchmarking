@@ -54,7 +54,7 @@ public interface CustomerDao {
    * @param customers the customers
    */
   @Insert(onConflict = OnConflictStrategy.REPLACE)
-  void insertCustomers(Customer... customers);
+  void insertCustomer(Customer... customers);
 
   /**
    * Update customer.
@@ -63,20 +63,20 @@ public interface CustomerDao {
    * @return the affected row
    */
   @Update(onConflict = OnConflictStrategy.REPLACE)
-  int updateCustomer(Customer customer);
+  int updateCustomer(Customer... customer);
 
   /**
    * Delete customer.
    *
-   * @param customer the customer
+   * @param customers the customer
    */
   @Delete
-  void deleteCustomer(Customer customer);
+  void deleteCustomer(Customer... customers);
 
   /**
    * Delete all customers long.
    */
-  @Query("DELETE FROM TB_CUSTOMER")
+  @Query("DELETE FROM tb_customer")
   void deleteAllCustomers();
 
   /**
@@ -102,4 +102,11 @@ public interface CustomerDao {
       "SELECT * FROM TB_CUSTOMER WHERE customer_name =:attribute OR customer_addr =:attribute OR customer_id " +
           "=:attribute")
   Customer findCustomerWithAttribute(final String attribute);
+
+  @Query("SELECT COUNT(*) FROM TB_CUSTOMER")
+  long customerCount();
+
+  @Query("SELECT * FROM TB_ORDER o " +
+      "WHERE o.customer_id=:customerID")
+  List<Order> ordersByCustomer(final long customerID);
 }

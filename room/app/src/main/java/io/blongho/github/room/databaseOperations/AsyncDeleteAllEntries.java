@@ -22,12 +22,12 @@
  * SOFTWARE.
  */
 
-package io.blongho.github.room.asynctasks;
+package io.blongho.github.room.databaseOperations;
 
 import android.os.AsyncTask;
-import android.util.Log;
 
 import io.blongho.github.room.database.AppDatabaseRepository;
+import io.blongho.github.room.util.MethodTimer;
 
 public class AsyncDeleteAllEntries extends AsyncTask<Void, Void, Void> {
   private static final String TAG = "AsyncDeleteAllEntries";
@@ -39,13 +39,27 @@ public class AsyncDeleteAllEntries extends AsyncTask<Void, Void, Void> {
 
   @Override
   protected Void doInBackground(Void... voids) {
-    repository.deleteAll();
+    final MethodTimer timer = new MethodTimer("Deleting all " + repository.customerCount() + " Customers");
+    timer.start();
+    repository.deleteAllCustomers();
+    timer.stop();
+    timer.showResults();
+    final MethodTimer productTimer = new MethodTimer("Deleting all " + repository.productCount() + " Products");
+    productTimer.start();
+    repository.deleteAllProducts();
+    productTimer.stop();
+    productTimer.showResults();
+    final MethodTimer orderTimer = new MethodTimer("Deleting all " + repository.orderCount() + " Orders");
+    orderTimer.start();
+    repository.deleteAllOrders();
+    orderTimer.stop();
+    orderTimer.showResults();
+    final MethodTimer opdtTimer = new MethodTimer("Deleting all " + repository.orderProductCount() + " OrderProducts");
+    opdtTimer.start();
+    repository.deleteAllOrderProducts();
+    opdtTimer.stop();
+    opdtTimer.showResults();
     return null;
   }
 
-  @Override
-  protected void onPostExecute(Void aVoid) {
-    super.onPostExecute(aVoid);
-    Log.i(TAG, "onPostExecute: DROPPED ALL ENTRIES");
-  }
 }

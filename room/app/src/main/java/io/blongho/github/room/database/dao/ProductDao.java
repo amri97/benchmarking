@@ -64,7 +64,7 @@ public interface ProductDao {
 	 * @return the affected row.
 	 */
 	@Update(onConflict = OnConflictStrategy.REPLACE)
-	int updateProduct(Product product);
+	int updateProduct(Product... product);
 
 	/**
 	 * Delete product.
@@ -72,7 +72,7 @@ public interface ProductDao {
 	 * @param product the product
 	 */
 	@Delete
-	void deleteProduct(Product product);
+	void deleteProduct(Product... product);
 
 	/**
 	 * Delete all products.
@@ -90,4 +90,7 @@ public interface ProductDao {
 	@Query ("DELETE FROM TB_PRODUCT WHERE product_id =:attribute OR product_name=:attribute OR " +
 	        "product_desc=:attribute")
 	void deleteProductWithAttribute(final String attribute);
+
+	@Query("SELECT COUNT(*) FROM TB_PRODUCT")
+	long productCount();
 }

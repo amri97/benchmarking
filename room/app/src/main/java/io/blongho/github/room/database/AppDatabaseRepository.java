@@ -28,7 +28,6 @@ import android.content.Context;
 
 import java.util.List;
 
-import androidx.annotation.Nullable;
 import io.blongho.github.room.database.dao.CustomerDao;
 import io.blongho.github.room.database.dao.OrderDao;
 import io.blongho.github.room.database.dao.OrderProductDao;
@@ -38,49 +37,51 @@ import io.blongho.github.room.model.Order;
 import io.blongho.github.room.model.OrderProduct;
 import io.blongho.github.room.model.Product;
 
+/**
+ * The type App database repository.
+ */
 public class AppDatabaseRepository implements DatabaseOperations {
   private CustomerDao customerDao;
   private ProductDao productDao;
   private OrderDao orderDao;
   private OrderProductDao orderProductDao;
 
-  private AppDatabase db;
-
+  /**
+   * Instantiates a new App database repository.
+   *
+   * @param context the context
+   */
   public AppDatabaseRepository(final Context context) {
-    db = AppDatabase.getInstance(context);
+    final AppDatabase db = AppDatabase.getInstance(context);
     customerDao = db.customerDao();
     productDao = db.productDao();
     orderDao = db.orderDao();
     orderProductDao = db.orderProductDao();
   }
 
+  /**
+   * Populate datbase.
+   *
+   * @param customers     the customers
+   * @param products      the products
+   * @param orders        the orders
+   * @param orderProducts the order products
+   */
   @Override
-  public void populateDatabase(
-      final List<Customer> customers, final List<Product> products, final List<Order> orders,
-      @Nullable final List<OrderProduct> orderProducts) {
-    for (final Customer customer : customers) {
-      insertCustomer(customer);
-    }
-    for (final Product product : products) {
-      insertProduct(product);
-    }
-    for (final Order order : orders) {
-      insertOrder(order);
-    }
-    if (orderProducts != null) {
-      for (final OrderProduct orderProduct : orderProducts) {
-        insertOrderProduct(orderProduct);
-      }
-    }
+  public void populateDatabase(Customer[] customers, Product[] products, Order[] orders, OrderProduct[] orderProducts) {
+    customerDao.insertCustomer(customers);
+    productDao.insertProducts(products);
+    orderDao.insertOrder(orders);
+    orderProductDao.insertOrderProduct(orderProducts);
   }
 
   @Override
   public void insertCustomer(final Customer... customer) {
-    customerDao.insertCustomers(customer);
+    customerDao.insertCustomer(customer);
   }
 
   @Override
-  public void deleteCustomer(final Customer customer) {
+  public void deleteCustomer(final Customer... customer) {
     customerDao.deleteCustomer(customer);
   }
 
@@ -95,7 +96,7 @@ public class AppDatabaseRepository implements DatabaseOperations {
   }
 
   @Override
-  public int updateCustomer(final Customer customer) {
+  public int updateCustomer(final Customer... customer) {
     return customerDao.updateCustomer(customer);
   }
 
@@ -110,7 +111,7 @@ public class AppDatabaseRepository implements DatabaseOperations {
   }
 
   @Override
-  public void deleteProduct(final Product product) {
+  public void deleteProduct(final Product... product) {
     productDao.deleteProduct(product);
   }
 
@@ -125,7 +126,7 @@ public class AppDatabaseRepository implements DatabaseOperations {
   }
 
   @Override
-  public int updateProduct(final Product product) {
+  public int updateProduct(final Product... product) {
     return productDao.updateProduct(product);
   }
 
@@ -136,11 +137,11 @@ public class AppDatabaseRepository implements DatabaseOperations {
 
   @Override
   public void insertOrder(final Order... order) {
-    orderDao.insertOrders(order);
+    orderDao.insertOrder(order);
   }
 
   @Override
-  public void deleteOrder(final Order order) {
+  public void deleteOrder(final Order... order) {
     orderDao.deleteOrder(order);
   }
 
@@ -156,7 +157,7 @@ public class AppDatabaseRepository implements DatabaseOperations {
 
   @Override
   public void insertOrderProduct(final OrderProduct... orderProduct) {
-    orderProductDao.insertOrderProducts(orderProduct);
+    orderProductDao.insertOrderProduct(orderProduct);
   }
 
   @Override
@@ -167,11 +168,70 @@ public class AppDatabaseRepository implements DatabaseOperations {
     orderProductDao.deleteAllOrderProducts();
   }
 
+  @Override
+  public long customerCount() {
+    return customerDao.customerCount();
+  }
+
+  @Override
   public List<OrderProduct> getAllOrderProducts() {
     return orderProductDao.getAllOrderProducts();
   }
 
+  @Override
   public List<Product> getProductsInOrder(final long orderID) {
     return orderDao.getProductsInOrder(orderID);
+  }
+
+  @Override
+  public List<Order> ordersByCustomer(long customerID) {
+    return customerDao.ordersByCustomer(customerID);
+  }
+
+  @Override
+  public long orderProductCount() {
+    return orderProductDao.orderProductCount();
+  }
+
+  @Override
+  public long orderCount() {
+    return orderDao.orderCount();
+  }
+
+  @Override
+  public long productCount() {
+    return productDao.productCount();
+  }
+
+  /**
+   * Delete all customers.
+   */
+  @Override
+  public void deleteAllCustomers() {
+    customerDao.deleteAllCustomers();
+  }
+
+  /**
+   * Delete all products.
+   */
+  @Override
+  public void deleteAllProducts() {
+    productDao.deleteAllProducts();
+  }
+
+  /**
+   * Delete all orders.
+   */
+  @Override
+  public void deleteAllOrders() {
+    orderDao.deleteAllOrders();
+  }
+
+  /**
+   * Delete all order products.
+   */
+  @Override
+  public void deleteAllOrderProducts() {
+    orderProductDao.deleteAllOrderProducts();
   }
 }

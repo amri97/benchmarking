@@ -54,7 +54,7 @@ public interface OrderDao {
    * @param orders the orders
    */
   @Insert(onConflict = OnConflictStrategy.REPLACE)
-  void insertOrders(Order... orders);
+  void insertOrder(Order... orders);
 
   /**
    * Update order.
@@ -63,15 +63,15 @@ public interface OrderDao {
    * @return the affected row
    */
   @Update(onConflict = OnConflictStrategy.REPLACE)
-  int updateOrder(Order orders);
+  int updateOrder(Order... orders);
 
   /**
    * Delete order.
    *
-   * @param order the order
+   * @param orders the order
    */
   @Delete
-  void deleteOrder(Order order);
+  void deleteOrder(Order... orders);
 
   /**
    * Delete all orders.
@@ -86,10 +86,10 @@ public interface OrderDao {
    * @return the products in order
    */
 
-  @Query("SELECT * FROM TB_PRODUCT " +
-      "INNER JOIN TB_ORDER_PRODUCT " +
-      "ON TB_PRODUCT.product_id=TB_ORDER_PRODUCT.op_product_id " +
-      "WHERE TB_ORDER_PRODUCT.op_order_id=:orderID")
+  @Query("SELECT * FROM TB_PRODUCT p " +
+      "WHERE p.product_id " +
+      "IN (SELECT o.op_product_id FROM tb_order_product o " +
+      "WHERE o.op_order_id=:orderID)")
   List<Product> getProductsInOrder(final long orderID);
 
   /**
@@ -99,4 +99,7 @@ public interface OrderDao {
    */
   @Query("DELETE FROM TB_ORDER WHERE order_id=:attribute OR customer_id=:attribute OR order_date=:attribute")
   void deleteOrderWithAttribute(final String attribute);
+
+  @Query("SELECT COUNT(*) FROM tb_order")
+  long orderCount();
 }

@@ -53,7 +53,7 @@ public interface OrderProductDao {
    * @param orderProducts the order products
    */
   @Insert(onConflict = OnConflictStrategy.REPLACE)
-  void insertOrderProducts(OrderProduct... orderProducts);
+  void insertOrderProduct(OrderProduct... orderProducts);
 
   /**
    * Update order product.
@@ -70,7 +70,7 @@ public interface OrderProductDao {
    * @param orderProduct the order product
    */
   @Delete
-  void deleteOrderProduct(OrderProduct orderProduct);
+  void deleteOrderProduct(OrderProduct... orderProduct);
 
   /**
    * Delete all order products long.
@@ -78,10 +78,11 @@ public interface OrderProductDao {
   @Query("DELETE FROM TB_ORDER_PRODUCT")
   void deleteAllOrderProducts();
 
-  /*
-  @Query("SELECT * FROM TB_PRODUCT " +
-      "INNER JOIN TB_ORDER_PRODUCT " +
-      "ON TB_PRODUCT.product_id=TB_ORDER_PRODUCT.op_product_id " +
-      "WHERE TB_ORDER_PRODUCT.op_order_id=:orderID")
-  List<Product> getProductForOrder(final long orderID);*/
+  /**
+   * Number of OrderProducts in the system
+   *
+   * @return the number of OrderProducts in the system
+   */
+  @Query("SELECT COUNT(*) FROM tb_order_product")
+  long orderProductCount();
 }

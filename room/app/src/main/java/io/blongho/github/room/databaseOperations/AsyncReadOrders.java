@@ -22,26 +22,35 @@
  * SOFTWARE.
  */
 
-package io.blongho.github.room.asynctasks;
+package io.blongho.github.room.databaseOperations;
 
 import android.os.AsyncTask;
 import android.util.Log;
 
 import io.blongho.github.room.database.AppDatabaseRepository;
-import io.blongho.github.room.model.Product;
+import io.blongho.github.room.util.MethodTimer;
 
-public class AsyncAddProduct extends AsyncTask<Product, Void, Void> {
-  private static final String TAG = "AsyncAddProduct";
+public class AsyncReadOrders extends AsyncTask<Void, Void, Void> {
+  private static final String TAG = "AsyncReadOrders";
   private final AppDatabaseRepository repository;
 
-  public AsyncAddProduct(final AppDatabaseRepository repository) {
+  public AsyncReadOrders(final AppDatabaseRepository repository) {
     this.repository = repository;
   }
 
   @Override
-  protected Void doInBackground(final Product... products) {
-    repository.insertProduct(products);
-    Log.i(TAG, "doInBackground: Products added: " + products.length);
+  protected Void doInBackground(final Void... voids) {
+    final long orders = repository.orderCount();
+    if (orders == 0) {
+      Log.d(TAG, "doInBackground() called with: Orders = [" + orders + "]");
+      return null;
+    }
+    final MethodTimer timer = new MethodTimer("Reading " + orders + " Orders");
+    timer.start();
+    repository.getAllOrders();
+    timer.stop();
+    timer.showResults();
+
     return null;
   }
 }

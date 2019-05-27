@@ -24,49 +24,33 @@
 
 package io.blongho.github.room;
 
+import android.Manifest;
+import android.content.pm.PackageManager;
 import android.os.Bundle;
-import android.util.Log;
-import android.util.TimingLogger;
 import android.view.View;
+import android.widget.Toast;
 
 import com.google.android.material.snackbar.Snackbar;
-import com.google.gson.Gson;
-
-import java.util.ArrayList;
-import java.util.List;
-import java.util.concurrent.ExecutionException;
 
 import androidx.appcompat.app.AppCompatActivity;
-import io.blongho.github.room.asynctasks.AsyncAdd;
-import io.blongho.github.room.asynctasks.AsyncDeleteAllEntries;
-import io.blongho.github.room.asynctasks.AsyncReadCustomer;
-import io.blongho.github.room.asynctasks.AsyncReadOrderProduct;
-import io.blongho.github.room.asynctasks.AsyncReadOrders;
-import io.blongho.github.room.asynctasks.AsyncReadProduct;
-import io.blongho.github.room.database.AppDatabaseRepository;
-import io.blongho.github.room.model.Customer;
-import io.blongho.github.room.model.Order;
-import io.blongho.github.room.model.OrderProduct;
-import io.blongho.github.room.model.Product;
-import io.blongho.github.room.util.AssetsReader;
-import io.blongho.github.room.util.MethodTimer;
+import androidx.core.app.ActivityCompat;
+import io.blongho.github.room.test.Test;
 
 /**
  * The type Main activity.
  */
 public class MainActivity extends AppCompatActivity {
   private static final String TAG = "MainActivity";
-  private final static int CUSTOMER_10K = R.raw.customers10000;
-  private final static int PRODUCT_10K = R.raw.products10000;
-  private final static int ORDER_10K = R.raw.orders10000;
-  private final static int OP_10K = R.raw.order_products10000;
-  private AppDatabaseRepository repository;
+  private static boolean permissionGranted = false;
+  private Test test;
 
   @Override
   protected void onCreate(Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
     setContentView(R.layout.activity_main);
-
+    if (!permissionGranted) {
+      askPermission();
+    }
   }
 
   /**
@@ -75,23 +59,8 @@ public class MainActivity extends AppCompatActivity {
    * @param view the view
    */
   public void createDb(View view) {
-    initializeRepository();
-    showSnackBar(view, "createDb");
+    test.init();
 
-  }
-
-  private void initializeRepository() {
-    if (repository == null) {
-      final MethodTimer timer = new MethodTimer(TAG + ", Initializing the database");
-      timer.start();
-      repository = new AppDatabaseRepository(getApplicationContext());
-      timer.stop();
-      timer.showResults();
-    }
-  }
-
-  private void showSnackBar(View view, final String method) {
-    Snackbar.make(view, method + " ==> Implement this method", Snackbar.LENGTH_SHORT).show();
   }
 
   /**
@@ -100,12 +69,7 @@ public class MainActivity extends AppCompatActivity {
    * @param view the view
    */
   public void clearDb(View view) {
-    initializeRepository();
-    final TimingLogger logger = new TimingLogger(TAG, "Clearing database entries");
-    logger.addSplit("Drop entries");
-    new AsyncDeleteAllEntries(repository).execute();
-    logger.dumpToLog();
-    showSnackBar(view, "clearDb");
+    test.deleteAll();
   }
 
   /**
@@ -114,8 +78,7 @@ public class MainActivity extends AppCompatActivity {
    * @param view the view
    */
   public void deleteFromDb(View view) {
-    // TODO implement code for deleting an item or items from the database
-    showSnackBar(view, "deleteFromDb");
+    test.delete();
   }
 
   /**
@@ -124,8 +87,7 @@ public class MainActivity extends AppCompatActivity {
    * @param view the view
    */
   public void updateEntry(View view) {
-    // TODO implement code for updating an entry or entries in the database
-    showSnackBar(view, "updateEntry");
+    test.update();
   }
 
   /**
@@ -134,37 +96,7 @@ public class MainActivity extends AppCompatActivity {
    * @param view the view
    */
   public void readData(View view) {
-    List<Customer> customers = new ArrayList<>();
-    List<Product> products = new ArrayList<>();
-    List<Order> orders = new ArrayList<>();
-    List<OrderProduct> orderProducts = new ArrayList<>();
-    initializeRepository();
-    try {
-      final TimingLogger logger = new TimingLogger(TAG, "Read from database");
-      logger.addSplit("readCustomers");
-      customers = new AsyncReadCustomer(repository).execute().get();
-      logger.addSplit("readProducts");
-      products = new AsyncReadProduct(repository).execute().get();
-      logger.addSplit("readOrders");
-      orders = new AsyncReadOrders(repository).execute().get();
-      logger.addSplit("readOrderProducts");
-      orderProducts = new AsyncReadOrderProduct(repository).execute().get();
-      logger.dumpToLog();
-    } catch (ExecutionException e) {
-      e.printStackTrace();
-    } catch (InterruptedException e) {
-      e.printStackTrace();
-    }
-    showSnackBar(view, "readData");
-  }
-
-  private <T> void showItems(List<T> items) {
-    if (items.isEmpty()) {
-      Log.i(TAG, "showItems: Nothting to show for " + items.getClass().getName());
-    }
-    for (final T item : items) {
-      Log.i(TAG, "showItems: " + item);
-    }
+    test.read();
   }
 
   /**
@@ -173,32 +105,39 @@ public class MainActivity extends AppCompatActivity {
    * @param view the view
    */
   public void loadData(View view) {
-    Gson gson = new Gson();
-    Customer[] customers = gson
-        .fromJson(AssetsReader.readFromAssets(getApplicationContext(), CUSTOMER_10K), Customer[].class);
-    Product[] products = gson
-        .fromJson(AssetsReader.readFromAssets(getApplicationContext(), PRODUCT_10K), Product[].class);
-    Order[] orders = gson
-        .fromJson(AssetsReader.readFromAssets(getApplicationContext(), ORDER_10K), Order[].class);
-    OrderProduct[] orderProducts = gson
-        .fromJson(AssetsReader.readFromAssets(getApplicationContext(), OP_10K), OrderProduct[].class);
+    test.create();
+  }
 
-    initializeRepository();
-    new AsyncAdd<Customer>(repository, Customer.class).execute(customers);
-    new AsyncAdd<Product>(repository, Product.class).execute(products);
-    new AsyncAdd<Order>(repository, Order.class).execute(orders);
-    new AsyncAdd<OrderProduct>(repository, OrderProduct.class).execute(orderProducts);
-    /*
-    final TimingLogger logger = new TimingLogger(TAG, "Populating the database");
-    logger.addSplit("loadCustomers");
-    new AsyncAddCustomer(repository).execute(customers);
-    logger.addSplit("loadProducts");
-    new AsyncAddProduct(repository).execute(products);
-    logger.addSplit("loadOrders");
-    new AsyncAddOrder(repository).execute(orders);
-    logger.addSplit("loadOrderProducts");
-    new AsyncAddOrderProduct(repository).execute(orderProducts);
-    logger.dumpToLog();
-    */
+  private void askPermission() {
+    ActivityCompat.requestPermissions(MainActivity.this,
+        new String[]{Manifest.permission.READ_EXTERNAL_STORAGE},
+        1);
+  }
+
+  @Override
+  public void onRequestPermissionsResult(int requestCode, String permissions[], int[] grantResults) {
+    switch (requestCode) {
+      case 1: {
+
+        // If request is cancelled, the result arrays are empty.
+        if (grantResults.length > 0
+            && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+          permissionGranted = true;
+          test = new Test(MainActivity.this);
+
+          // permission was granted, yay! Do the
+          // contacts-related task you need to do.
+        } else {
+
+          // permission denied, boo! Disable the
+          // functionality that depends on this permission.
+          Toast.makeText(MainActivity.this, "Permission denied to read your External storage", Toast.LENGTH_SHORT).show();
+        }
+        return;
+      }
+
+      // other 'case' lines to check for other
+      // permissions this app might request
+    }
   }
 }

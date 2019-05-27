@@ -1,5 +1,6 @@
 package io.blongho.github.room.util;
 
+import android.content.Context;
 import android.util.Log;
 
 import java.util.HashMap;
@@ -9,11 +10,13 @@ import java.util.Map;
  * The type Method timer.
  */
 public class MethodTimer {
+  public static String FILE_NAME = "test.json";
+  private final Context context;
   private String method;
   private long start;
   private long stop;
-
   private Map<String, Long> resultsMap;
+  private Results fileWriter;
 
   /**
    * Instantiates a new Method timer.
@@ -21,9 +24,15 @@ public class MethodTimer {
    * @param method the method
    */
   public MethodTimer(String method) {
+    this(method, null);
+  }
+
+  public MethodTimer(final String method, final Context context) {
     this.method = method;
     start = stop = 0;
     resultsMap = new HashMap<>();
+    this.context = null;
+    fileWriter = new Results(FILE_NAME);
   }
 
   /**
@@ -57,8 +66,9 @@ public class MethodTimer {
         results = resultsMap.get(key);
         milli = results / 1_000_000;
         sec = milli / 1_000;
-        Log.i(key, "took " + results + " ns (" + milli + " ms, " + sec + " s)");
+        Log.i(key, "" + results + " ns (" + milli + " ms, " + sec + " s)");
       }
+      fileWriter.writeStringAsFile(new Results(key, results, milli, sec));
     }
     resultsMap = new HashMap<>();
   }
@@ -69,8 +79,7 @@ public class MethodTimer {
    *
    * @param tag the tag
    */
-  public final void addTag(String tag) {
-    final String current = method.split(":")[0];
+  public final void setTag(String tag) {
     method = tag;
   }
 }
