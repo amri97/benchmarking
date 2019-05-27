@@ -1,12 +1,42 @@
+/*
+ *
+ *  * MIT License
+ *  *
+ *  * Copyright (c) 2019 Bernard Che Longho
+ *  *
+ *  * Permission is hereby granted, free of charge, to any person obtaining a copy
+ *  * of this software and associated documentation files (the "Software"), to deal
+ *  * in the Software without restriction, including without limitation the rights
+ *  * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+ *  * copies of the Software, and to permit persons to whom the Software is
+ *  * furnished to do so, subject to the following conditions:
+ *  *
+ *  * The above copyright notice and this permission notice shall be included in all
+ *  * copies or substantial portions of the Software.
+ *  *
+ *  * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+ *  * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+ *  * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+ *  * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+ *  * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ *  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+ *  * SOFTWARE.
+ *
+ */
+
 package io.blongho.github.greendao.databaseOperations;
 
 import android.os.AsyncTask;
 
 import io.blongho.github.greendao.model.Customer;
+import io.blongho.github.greendao.model.CustomerDao;
 import io.blongho.github.greendao.model.DaoSession;
 import io.blongho.github.greendao.model.Order;
+import io.blongho.github.greendao.model.OrderDao;
 import io.blongho.github.greendao.model.OrderProduct;
+import io.blongho.github.greendao.model.OrderProductDao;
 import io.blongho.github.greendao.model.Product;
+import io.blongho.github.greendao.model.ProductDao;
 import io.blongho.github.greendao.util.MethodTimer;
 
 /**
@@ -48,30 +78,38 @@ public class AsyncReadFromDatabase<T> extends AsyncTask<Void, Void, Void> {
   protected Void doInBackground(Void... voids) {
     if (objectClass.isInstance(new Customer())) {
       final MethodTimer timer = new MethodTimer(TAG);
-      timer.setTag("Reading all Customers from database");
+      final CustomerDao customerDao = daoSession.getCustomerDao();
+      long customersInSystem = customerDao.count();
+      timer.setTag("Reading " + customersInSystem + " Customers from database");
       timer.start();
-      daoSession.getCustomerDao().loadAll();
+      customerDao.loadAll();
       timer.stop();
       timer.showResults();
     } else if (objectClass.isInstance(new Product())) {
       final MethodTimer timer = new MethodTimer(TAG);
-      timer.setTag("Reading all Products form the database");
+      final ProductDao productDao = daoSession.getProductDao();
+      long products = productDao.count();
+      timer.setTag("Reading " + products + "  Products form the database");
       timer.start();
-      daoSession.getProductDao().loadAll();
+      productDao.loadAll();
       timer.stop();
       timer.showResults();
     } else if (objectClass.isInstance(new Order())) {
       final MethodTimer timer = new MethodTimer(TAG);
-      timer.setTag("Reading all Orders from the database");
+      final OrderDao orderDao = daoSession.getOrderDao();
+      long orders = orderDao.count();
+      timer.setTag("Reading " + orders + " Orders from the database");
       timer.start();
-      daoSession.getOrderDao().loadAll();
+      orderDao.loadAll();
       timer.stop();
       timer.showResults();
     } else if (objectClass.isInstance(new OrderProduct())) {
       final MethodTimer timer = new MethodTimer(TAG);
-      timer.setTag("Reading all orderProducts from database");
+      final OrderProductDao opdao = daoSession.getOrderProductDao();
+      long odp = opdao.count();
+      timer.setTag("Reading " + odp + " orderProducts from database");
       timer.start();
-      daoSession.getOrderProductDao().loadAll();
+      opdao.loadAll();
       timer.stop();
       timer.showResults();
     }

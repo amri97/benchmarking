@@ -1,3 +1,29 @@
+/*
+ *
+ *  * MIT License
+ *  *
+ *  * Copyright (c) 2019 Bernard Che Longho
+ *  *
+ *  * Permission is hereby granted, free of charge, to any person obtaining a copy
+ *  * of this software and associated documentation files (the "Software"), to deal
+ *  * in the Software without restriction, including without limitation the rights
+ *  * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+ *  * copies of the Software, and to permit persons to whom the Software is
+ *  * furnished to do so, subject to the following conditions:
+ *  *
+ *  * The above copyright notice and this permission notice shall be included in all
+ *  * copies or substantial portions of the Software.
+ *  *
+ *  * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+ *  * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+ *  * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+ *  * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+ *  * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ *  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+ *  * SOFTWARE.
+ *
+ */
+
 package io.blongho.github.greendao.util;
 
 import android.content.Context;
@@ -7,7 +33,6 @@ import android.util.Log;
 import com.google.gson.Gson;
 
 import java.util.List;
-import java.util.concurrent.Callable;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.Executor;
 import java.util.concurrent.ExecutorCompletionService;
@@ -15,7 +40,7 @@ import java.util.concurrent.Executors;
 
 import androidx.annotation.RawRes;
 import io.blongho.github.greendao.R;
-import io.blongho.github.greendao.database.DatabaseHelper;
+import io.blongho.github.greendao.database.DaoSessionInstance;
 import io.blongho.github.greendao.databaseOperations.AsyncDeleteAllFromDatabase;
 import io.blongho.github.greendao.databaseOperations.AsyncReadFromDatabase;
 import io.blongho.github.greendao.databaseOperations.WriteCustomers;
@@ -23,7 +48,6 @@ import io.blongho.github.greendao.databaseOperations.WriteOrderProducts;
 import io.blongho.github.greendao.databaseOperations.WriteOrders;
 import io.blongho.github.greendao.databaseOperations.WriteProducts;
 import io.blongho.github.greendao.model.Customer;
-import io.blongho.github.greendao.model.DaoMaster;
 import io.blongho.github.greendao.model.DaoSession;
 import io.blongho.github.greendao.model.Order;
 import io.blongho.github.greendao.model.OrderProduct;
@@ -34,7 +58,7 @@ public class Test implements TestSuiteInterface {
   private static Executor executor = Executors.newCachedThreadPool();
   private static DaoSession writableDaoSession;
   private final Context context;
-  private final Object writeLock = new Object();
+
   private ExecutorCompletionService<String> customerService;
   private ExecutorCompletionService<String> productService;
   private ExecutorCompletionService<String> orderService;
@@ -122,18 +146,9 @@ public class Test implements TestSuiteInterface {
 
   /**
    * Get a single instance of the DaoSession
-   *
-   * @return {#@writableDaoSession}
    */
-  private DaoSession getWritableDaoSession() {
-    synchronized (writeLock) {
-      if (writableDaoSession == null) {
-        final String dbName = "customer_order_greendao";
-        writableDaoSession =
-            new DaoMaster(new DatabaseHelper(context, dbName).getWritableDb()).newSession();
-      }
-    }
-    return writableDaoSession;
+  private void getWritableDaoSession() {
+    writableDaoSession = DaoSessionInstance.getInstance(context);
   }
 
   /**

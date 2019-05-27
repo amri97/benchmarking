@@ -1,5 +1,4 @@
-apply plugin: 'com.android.application'
-apply plugin: 'org.greenrobot.greendao' /*
+/*
  *
  *  * MIT License
  *  *
@@ -23,42 +22,38 @@ apply plugin: 'org.greenrobot.greendao' /*
  *  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  *  * SOFTWARE.
  *
- */ // apply plugin for greendao
+ */
 
-android {
-  compileSdkVersion 28
-  defaultConfig {
-    applicationId "io.blongho.github.greendao"
-    minSdkVersion 21
-    targetSdkVersion 28
-    versionCode 1
-    versionName "1.0"
-    testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
+package io.blongho.github.greendao.database;
+
+import android.content.Context;
+
+import io.blongho.github.greendao.model.DaoMaster;
+import io.blongho.github.greendao.model.DaoSession;
+
+/**
+ * The type Dao session instance.
+ */
+public class DaoSessionInstance {
+  private final static Object dbLock = new Object();
+  private static DaoSession instance = null;
+
+  private DaoSessionInstance() {
   }
-  buildTypes {
-    release {
-      minifyEnabled false
-      proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+
+  /**
+   * Creates the database and get an instance of it
+   *
+   * @param context The application context
+   * @return A DaoSession
+   */
+  public static DaoSession getInstance(final Context context) {
+    synchronized (dbLock) {
+      if (instance == null) {
+        final String dbName = "customer_order_greendao";
+        instance = new DaoMaster(new DatabaseHelper(context, dbName).getWritableDb()).newSession();
+      }
     }
+    return instance;
   }
-  compileOptions {
-    sourceCompatibility = '1.8'
-    targetCompatibility = '1.8'
-  }
-}
-
-greendao {
-  schemaVersion 1
-}
-
-dependencies {
-  implementation fileTree(dir: 'libs', include: ['*.jar'])
-  implementation 'androidx.appcompat:appcompat:1.0.2'
-  implementation 'androidx.constraintlayout:constraintlayout:1.1.3'
-  testImplementation 'junit:junit:4.12'
-  androidTestImplementation 'androidx.test:runner:1.1.1'
-  androidTestImplementation 'androidx.test.espresso:espresso-core:3.1.1'
-  implementation "com.google.android.material:material:1.1.0-alpha06"
-  implementation 'com.google.code.gson:gson:2.8.5'
-  implementation 'org.greenrobot:greendao:3.2.2' // add library
 }
