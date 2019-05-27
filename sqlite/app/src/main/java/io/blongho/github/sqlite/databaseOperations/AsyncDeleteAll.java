@@ -1,4 +1,4 @@
-package io.blongho.github.sqlite.AsyncTasks;
+package io.blongho.github.sqlite.databaseOperations;
 
 import android.os.AsyncTask;
 
@@ -28,11 +28,29 @@ public class AsyncDeleteAll extends AsyncTask<Void, Void, Void> {
    */
   @Override
   protected Void doInBackground(Void... voids) {
-    final MethodTimer timer = new MethodTimer("Deleting all data from the db");
+    final MethodTimer timer = new MethodTimer("Deleting all " + manager.customerCount() + " Customers");
     timer.start();
-    manager.deleteAll(DatabaseManager.TB_CUSTOMER, DatabaseManager.TB_PRODUCT, DatabaseManager.TB_ORDER, DatabaseManager.TB_ORDER_PRODUCT);
+    manager.deleteAllCustomers();
     timer.stop();
     timer.showResults();
+
+    final MethodTimer productTimer = new MethodTimer("Deleting all " + manager.productCount() + " Products");
+    productTimer.start();
+    manager.deleteAllProducts();
+    productTimer.stop();
+    productTimer.showResults();
+
+    final MethodTimer orderTimer = new MethodTimer("Deleting all " + manager.orderCount() + " Orders");
+    orderTimer.start();
+    manager.deleteAllOrders();
+    orderTimer.stop();
+    orderTimer.showResults();
+
+    final MethodTimer opTimer = new MethodTimer("Deleting all " + manager.orderProductCount() + " OrderProducts");
+    opTimer.start();
+    manager.deleteAllOrderProducts();
+    opTimer.stop();
+    opTimer.showResults();
     return null;
   }
 }

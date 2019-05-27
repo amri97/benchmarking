@@ -22,50 +22,42 @@
  * SOFTWARE.
  */
 
-package io.blongho.github.sqlite.AsyncTasks;
+package io.blongho.github.sqlite.databaseOperations;
 
 import android.os.AsyncTask;
-import android.util.Log;
 
 import io.blongho.github.sqlite.database.DatabaseManager;
 import io.blongho.github.sqlite.util.MethodTimer;
 
-public class AsyncInsert<T> extends AsyncTask<T, String, Void> {
-  private static final String TAG = "AsyncInsert";
-  private DatabaseManager databaseManager;
-  private String className;
+public class AsyncInitialize extends AsyncTask<Void, Void, Void> {
+  private static final String TAG = "AsyncInitialize";
+  private final DatabaseManager dbManager;
 
-  public AsyncInsert(final DatabaseManager db) {
-    databaseManager = db;
+  public AsyncInitialize(final DatabaseManager manager) {
+    dbManager = manager;
   }
 
   /**
-   * Override this method to perform a computation on a background thread. The specified parameters are the
-   * parameters
-   * passed to {@link #execute} by the caller of this task.
+   * Override this method to perform a computation on a background thread. The
+   * specified parameters are the parameters passed to {@link #execute}
+   * by the caller of this task.
    * <p>
-   * This method can call {@link #publishProgress} to publish updates on the UI thread.
+   * This method can call {@link #publishProgress} to publish updates
+   * on the UI thread.
    *
-   * @param ts The parameters of the task.
+   * @param voids The parameters of the task.
    * @return A result, defined by the subclass of this task.
    * @see #onPreExecute()
    * @see #onPostExecute
    * @see #publishProgress
    */
   @Override
-  protected Void doInBackground(final T... ts) {
-    if (ts.length > 0) {
-      className = ts.getClass().getSimpleName();
-      final MethodTimer timer = new MethodTimer(TAG + "Adding " + ts.length + " items from " + className);
-      timer.start();
-      for (T t : ts) {
-        databaseManager.addItem(t);
-      }
-      timer.stop();
-      timer.showResults();
-      publishProgress(className);
-    }
-
+  protected Void doInBackground(final Void... voids) {
+    final MethodTimer timer = new MethodTimer("Initializing database");
+    timer.start();
+    dbManager.getWritableDatabase().setForeignKeyConstraintsEnabled(true);
+    timer.stop();
+    timer.showResults();
     return null;
   }
 }

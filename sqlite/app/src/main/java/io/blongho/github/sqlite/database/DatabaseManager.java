@@ -27,6 +27,7 @@ package io.blongho.github.sqlite.database;
 import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
+import android.database.DatabaseUtils;
 import android.database.sqlite.SQLiteDatabase;
 
 import java.util.ArrayList;
@@ -46,37 +47,51 @@ public class DatabaseManager implements DatabaseOperations {
   public static final String TB_ORDER_PRODUCT = "tb_order_product";
   // COLUMNS
   // Customer columns
-  final public static String COL_CUSTOMER_ID = "customer_id";
-  final public static String COL_CUSTOMER_NAME = "customer_name";
-  final public static String COL_CUSTOMER_ADDR = "customer_addr";
+  private final static String COL_CUSTOMER_ID = "customer_id";
+  private final static String COL_CUSTOMER_NAME = "customer_name";
+  private final static String COL_CUSTOMER_ADDR = "customer_addr";
   // Order columns
-  final public static String COL_ORDER_ID = "order_id";
-  final public static String COL_ORDER_DATE = "order_date";
-  public static final String COL_ORDER_CUSTOMER = "order_customer";
+  private final static String COL_ORDER_ID = "order_id";
+  private final static String COL_ORDER_DATE = "order_date";
+  private static final String COL_ORDER_CUSTOMER = "order_customer";
   // Product columns
-  final public static String COL_PRODUCT_ID = "product_id";
-  final public static String COL_PRODUCT_NAME = "product_name";
-  final public static String COL_PRODUCT_DESC = "product_desc";
+  private final static String COL_PRODUCT_ID = "product_id";
+  private final static String COL_PRODUCT_NAME = "product_name";
+  private final static String COL_PRODUCT_DESC = "product_desc";
   // OrderProduct columns
-  final public static String COL_OP_ID = "op_id";
-  public static final String COL_OP_ORDER = "op_order";
-  public static final String COL_OP_PRODUCT = "op_product";
+  private final static String COL_OP_ID = "op_id";
+  private static final String COL_OP_ORDER = "op_order";
+  private static final String COL_OP_PRODUCT = "op_product";
 
   private static final String TAG = "DatabaseManager";
-
+  private static final Object writeLock = new Object();
   private static SQLiteDatabase dbWriter = null;
-  private final Object writeLock = new Object();
-
-  private DatabaseHelper dbHelper;
+  private static DatabaseHelper dbHelper;
 
   public DatabaseManager(final Context context) {
     dbHelper = new DatabaseHelper(context);
   }
 
+  /**
+   * Open writeableDatabase in a thread-safe way
+   *
+   * @return dbWriter
+   */
+  public static SQLiteDatabase getWritableDatabase() {
+    if (dbWriter == null) {
+      synchronized (writeLock) {
+        if (dbWriter == null) {
+          dbWriter = dbHelper.getWritableDatabase();
+        }
+      }
+    }
+    return dbWriter;
+  }
+
   @Override
   public void addCustomer(final Customer... customers) {
     final ContentValues contentValues = new ContentValues();
-    getWritableDatabase();
+    dbWriter.beginTransaction();
     for (Customer customer : customers) {
       contentValues.put(COL_CUSTOMER_ID, customer.getId());
       contentValues.put(COL_CUSTOMER_NAME, customer.getName());
@@ -84,32 +99,34 @@ public class DatabaseManager implements DatabaseOperations {
       dbWriter.insertWithOnConflict(TB_CUSTOMER, null, contentValues, SQLiteDatabase.CONFLICT_REPLACE);
       contentValues.clear();
     }
+    dbWriter.setTransactionSuccessful();
+    dbWriter.endTransaction();
   }
 
   @Override
   public void deleteCustomer(final Customer... customers) {
-    getWritableDatabase();
+    dbWriter.beginTransaction();
     for (Customer customer : customers) {
       dbWriter.delete(TB_CUSTOMER, COL_CUSTOMER_ID + "=?", new String[]{String.valueOf(customer.getId())});
     }
+    dbWriter.setTransactionSuccessful();
+    dbWriter.endTransaction();
   }
 
   @Override
   public void deleteCustomerWithName(final String customerName) {
-    getWritableDatabase();
     dbWriter.delete(TB_CUSTOMER, COL_CUSTOMER_NAME + "=?", new String[]{customerName});
   }
 
   @Override
   public void deleteCustomerWithId(final long customerID) {
-    getWritableDatabase();
     dbWriter.delete(TB_CUSTOMER, COL_CUSTOMER_ID + "=?", new String[]{String.valueOf(customerID)});
   }
 
   @Override
   public void updateCustomer(final Customer... customers) {
     final ContentValues contentValues = new ContentValues();
-    getWritableDatabase();
+    dbWriter.beginTransaction();
     for (Customer customer : customers) {
       contentValues.put(COL_CUSTOMER_ID, customer.getId());
       contentValues.put(COL_CUSTOMER_NAME, customer.getName());
@@ -118,11 +135,13 @@ public class DatabaseManager implements DatabaseOperations {
           new String[]{String.valueOf(customer.getId())}, SQLiteDatabase.CONFLICT_REPLACE);
       contentValues.clear();
     }
+    dbWriter.setTransactionSuccessful();
+    dbWriter.endTransaction();
   }
 
   @Override
   public List<Customer> getAllCustomers() {
-    getWritableDatabase();
+    dbWriter.beginTransaction();
     final Cursor cursor = dbWriter.rawQuery("SELECT * FROM " + TB_CUSTOMER, null);
     final List<Customer> customers = new ArrayList<>();
     if (cursor.moveToFirst()) {
@@ -136,13 +155,15 @@ public class DatabaseManager implements DatabaseOperations {
       }
     }
     cursor.close();
+    dbWriter.setTransactionSuccessful();
+    dbWriter.endTransaction();
     return customers;
   }
 
   @Override
   public void addProduct(final Product... products) {
     final ContentValues contentValues = new ContentValues();
-    getWritableDatabase();
+    dbWriter.beginTransaction();
     for (Product product : products) {
       contentValues.put(COL_PRODUCT_ID, product.getId());
       contentValues.put(COL_PRODUCT_NAME, product.getName());
@@ -150,32 +171,34 @@ public class DatabaseManager implements DatabaseOperations {
       dbWriter.insertWithOnConflict(TB_PRODUCT, null, contentValues, SQLiteDatabase.CONFLICT_REPLACE);
       contentValues.clear();
     }
+    dbWriter.setTransactionSuccessful();
+    dbWriter.endTransaction();
   }
 
   @Override
   public void deleteProduct(final Product... products) {
-    getWritableDatabase();
+    dbWriter.beginTransaction();
     for (Product product : products) {
       dbWriter.delete(TB_PRODUCT, COL_PRODUCT_ID + "=?", new String[]{String.valueOf(product.getId())});
     }
+    dbWriter.setTransactionSuccessful();
+    dbWriter.endTransaction();
   }
 
   @Override
   public void deleteProductWithName(final String productName) {
-    getWritableDatabase();
     dbWriter.delete(TB_PRODUCT, COL_PRODUCT_NAME + "=?", new String[]{productName});
   }
 
   @Override
   public void deleteProductWithId(final long productID) {
-    getWritableDatabase();
     dbWriter.delete(TB_PRODUCT, COL_PRODUCT_ID + "=?", new String[]{String.valueOf(productID)});
   }
 
   @Override
   public void updateProduct(final Product... products) {
     final ContentValues contentValues = new ContentValues();
-    getWritableDatabase();
+    dbWriter.beginTransaction();
     for (Product product : products) {
       contentValues.put(COL_PRODUCT_ID, product.getId());
       contentValues.put(COL_PRODUCT_NAME, product.getName());
@@ -184,11 +207,13 @@ public class DatabaseManager implements DatabaseOperations {
           null, SQLiteDatabase.CONFLICT_REPLACE);
       contentValues.clear();
     }
+    dbWriter.setTransactionSuccessful();
+    dbWriter.endTransaction();
   }
 
   @Override
   public List<Product> getAllProducts() {
-    getWritableDatabase();
+    dbWriter.beginTransaction();
     final Cursor cursor = dbWriter.rawQuery("SELECT * FROM " + TB_PRODUCT, null);
     final List<Product> products = new ArrayList<>();
     if (cursor.moveToFirst()) {
@@ -202,11 +227,14 @@ public class DatabaseManager implements DatabaseOperations {
       }
     }
     cursor.close();
+    dbWriter.setTransactionSuccessful();
+    dbWriter.endTransaction();
     return products;
   }
 
   @Override
   public void addOrder(final Order... orders) {
+    dbWriter.beginTransaction();
     final ContentValues contentValues = new ContentValues();
     getWritableDatabase();
     for (Order order : orders) {
@@ -216,26 +244,29 @@ public class DatabaseManager implements DatabaseOperations {
       dbWriter.insertWithOnConflict(TB_ORDER, null, contentValues, SQLiteDatabase.CONFLICT_REPLACE);
       contentValues.clear();
     }
+    dbWriter.setTransactionSuccessful();
+    dbWriter.endTransaction();
   }
 
   @Override
   public void deleteOrder(final Order... orders) {
-    getWritableDatabase();
+    dbWriter.beginTransaction();
     for (Order order : orders) {
       dbWriter.delete(TB_ORDER, COL_ORDER_ID + "=?", new String[]{String.valueOf(order.getId())});
     }
+    dbWriter.setTransactionSuccessful();
+    dbWriter.endTransaction();
   }
 
   @Override
   public void deleteOrderWithId(final long orderID) {
-    getWritableDatabase();
     dbWriter.delete(TB_ORDER, COL_ORDER_ID + "=?", new String[]{String.valueOf(orderID)});
 
   }
 
   @Override
   public List<Order> getAllOrders() {
-    getWritableDatabase();
+    dbWriter.beginTransaction();
     final Cursor cursor = dbWriter.rawQuery("SELECT * FROM " + TB_ORDER, null);
     final List<Order> orders = new ArrayList<>();
     long id, customer;
@@ -250,30 +281,35 @@ public class DatabaseManager implements DatabaseOperations {
       }
     }
     cursor.close();
+    dbWriter.setTransactionSuccessful();
+    dbWriter.endTransaction();
     return orders;
   }
 
   @Override
   public void deleteAll(final String... tables) {
-    getWritableDatabase();
-
+    dbWriter.beginTransaction();
     for (String table : tables) {
       dbWriter.delete(table, null, null);
     }
+    dbWriter.setTransactionSuccessful();
+    dbWriter.endTransaction();
   }
 
   @Override
   public void deleteOrderProduct(OrderProduct... orderProduct) {
-    getWritableDatabase();
+    dbWriter.beginTransaction();
     for (OrderProduct product : orderProduct) {
       dbWriter.delete(TB_ORDER_PRODUCT, COL_OP_ID + "=?", new String[]{String.valueOf(product.getId())});
     }
+    dbWriter.setTransactionSuccessful();
+    dbWriter.endTransaction();
   }
 
   @Override
   public void addOrderProduct(OrderProduct... orderProducts) {
     final ContentValues contentValues = new ContentValues();
-    getWritableDatabase();
+    dbWriter.beginTransaction();
     for (OrderProduct orderProduct : orderProducts) {
       contentValues.put(COL_OP_ID, orderProduct.getId());
       contentValues.put(COL_OP_ORDER, orderProduct.getOrder());
@@ -281,11 +317,13 @@ public class DatabaseManager implements DatabaseOperations {
       dbWriter.insertWithOnConflict(TB_ORDER_PRODUCT, null, contentValues, SQLiteDatabase.CONFLICT_REPLACE);
       contentValues.clear();
     }
+    dbWriter.setTransactionSuccessful();
+    dbWriter.endTransaction();
   }
 
   @Override
   public List<OrderProduct> getAllOrderProducts() {
-    getWritableDatabase();
+    dbWriter.beginTransaction();
     final Cursor cursor = dbWriter.rawQuery("SELECT * FROM " + TB_ORDER_PRODUCT, null);
     List<OrderProduct> orderProducts = new ArrayList<>();
     long id, order, product;
@@ -300,86 +338,52 @@ public class DatabaseManager implements DatabaseOperations {
       }
     }
     cursor.close();
+    dbWriter.setTransactionSuccessful();
+    dbWriter.endTransaction();
     return orderProducts;
   }
 
-  /**
-   * Add item long.
-   *
-   * @param <T>  the type parameter
-   * @param item the item
-   * @return the long
-   */
-  public <T> Long addItem(final T item) {
-    if (item.getClass().isInstance(new Customer())) {
-      //Log.e(TAG, "addItem: " + item);
-      addCustomer((Customer) item);
-    } else if (item.getClass().isInstance(new Order())) {
-      //Log.e(TAG, "addItem: " + item);
-      addOrder((Order) item);
-    } else if (item.getClass().isInstance(new Product())) {
-      //Log.e(TAG, "addItem: " + item);
-      addProduct((Product) item);
-    } else if (item.getClass().isInstance(new OrderProduct())) {
-      //Log.e(TAG, "addItem: " + item);
-      addOrderProduct((OrderProduct) item);
-    }
-    return null;
+  @Override
+  public long customerCount() {
+    return DatabaseUtils.queryNumEntries(dbWriter, TB_CUSTOMER);
   }
 
-  /**
-   * Delete item.
-   *
-   * @param <T>  the type parameter
-   * @param item the item
-   */
-  public <T> void deleteItem(T item) {
-    if (item.getClass().isInstance(new Customer())) {
-      deleteCustomer((Customer) item);
-    } else if (item.getClass().isInstance(new Order())) {
-      deleteOrder((Order) item);
-    } else if (item.getClass().isInstance(new Product())) {
-      deleteProduct((Product) item);
-    } else if (item.getClass().isInstance(new OrderProduct())) {
-      deleteOrderProduct((OrderProduct) item);
-    }
+  @Override
+  public long productCount() {
+    return DatabaseUtils.queryNumEntries(dbWriter, TB_PRODUCT);
   }
 
-  /**
-   * Delete items.
-   *
-   * @param <T>   the type parameter
-   * @param items the items
-   */
-  public <T> void deleteItems(T[] items) {
-    if (items.length > 0) {
-      if (items[0].getClass().isInstance(new Customer())) {
-        deleteCustomer((Customer[]) items);
-      } else if (items[0].getClass().isInstance(new Order())) {
-        deleteOrder((Order[]) items);
-      } else if (items[0].getClass().isInstance(new Product())) {
-        deleteProduct((Product[]) items);
-      } else if (items[0].getClass().isInstance(new OrderProduct())) {
-        deleteOrderProduct((OrderProduct[]) items);
-      }
-    }
+  @Override
+  public long orderCount() {
+    return DatabaseUtils.queryNumEntries(dbWriter, TB_ORDER);
+  }
+
+  @Override
+  public long orderProductCount() {
+    return DatabaseUtils.queryNumEntries(dbWriter, TB_ORDER_PRODUCT);
+  }
+
+  @Override
+  public void deleteAllCustomers() {
+    dbWriter.delete(TB_CUSTOMER, null, null);
 
   }
 
-  /**
-   * Open writeableDatabase in a thread-safe way
-   *
-   * @return dbWriter
-   */
-  public SQLiteDatabase getWritableDatabase() {
-    if (dbWriter == null) {
-      synchronized (writeLock) {
-        if (dbWriter == null) {
-          dbWriter = dbHelper.getWritableDatabase();
-        }
-      }
-    }
-    return dbWriter;
+  @Override
+  public void deleteAllProducts() {
+    dbWriter.delete(TB_PRODUCT, null, null);
+  }
+
+  @Override
+  public void deleteAllOrders() {
+    dbWriter.delete(TB_ORDER, null, null);
+
+  }
+
+  @Override
+  public void deleteAllOrderProducts() {
+    dbWriter.delete(TB_ORDER_PRODUCT, null, null);
+
   }
 
   /**

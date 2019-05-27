@@ -34,6 +34,7 @@ import java.io.InputStreamReader;
 import java.nio.charset.Charset;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.RawRes;
 
 public class AssetsReader {
   private static final String TAG = "AssetsReader";
@@ -47,7 +48,7 @@ public class AssetsReader {
    * <p>
    * NB: Call this method in a separate thread if calling from the main thread
    **/
-  public static String readFromAssets(@NonNull final Context context, final int resourceID) {
+  public static String readFromAssets(@NonNull final Context context, @RawRes final int resourceID) {
     BufferedReader bufferedReader = null;
     try {
       final InputStream is = context.getResources().openRawResource(resourceID);
