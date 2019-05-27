@@ -1,11 +1,10 @@
 apply plugin: 'com.android.application'
-apply plugin: 'com.android.application'
-apply plugin: 'org.greenrobot.greendao' // apply plugin
+apply plugin: 'org.greenrobot.greendao' // apply plugin for greendao
 
 android {
   compileSdkVersion 28
   defaultConfig {
-    applicationId "io.blongho.github.greedao"
+    applicationId "io.blongho.github.greendao"
     minSdkVersion 21
     targetSdkVersion 28
     versionCode 1
@@ -38,6 +37,4 @@ dependencies {
   implementation "com.google.android.material:material:1.1.0-alpha06"
   implementation 'com.google.code.gson:gson:2.8.5'
   implementation 'org.greenrobot:greendao:3.2.2' // add library
-  // Generate fake customers
-  implementation 'com.github.javafaker:javafaker:0.18'
 }

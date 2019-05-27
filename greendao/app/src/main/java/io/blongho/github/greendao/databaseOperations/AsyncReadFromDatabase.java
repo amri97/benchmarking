@@ -1,4 +1,4 @@
-package io.blongho.github.greendao.asynctasks;
+package io.blongho.github.greendao.databaseOperations;
 
 import android.os.AsyncTask;
 
@@ -16,7 +16,6 @@ import io.blongho.github.greendao.util.MethodTimer;
  */
 public class AsyncReadFromDatabase<T> extends AsyncTask<Void, Void, Void> {
   private static final String TAG = "AsyncReadFromDatabase";
-  private static MethodTimer timer = new MethodTimer(TAG);
   private final DaoSession daoSession;
   private final Class<T> objectClass;
 
@@ -48,27 +47,35 @@ public class AsyncReadFromDatabase<T> extends AsyncTask<Void, Void, Void> {
   @Override
   protected Void doInBackground(Void... voids) {
     if (objectClass.isInstance(new Customer())) {
-      timer.addTag("Reading all customers from database");
+      final MethodTimer timer = new MethodTimer(TAG);
+      timer.setTag("Reading all Customers from database");
       timer.start();
       daoSession.getCustomerDao().loadAll();
       timer.stop();
+      timer.showResults();
     } else if (objectClass.isInstance(new Product())) {
-      timer.addTag("Reading all products form the database");
+      final MethodTimer timer = new MethodTimer(TAG);
+      timer.setTag("Reading all Products form the database");
       timer.start();
       daoSession.getProductDao().loadAll();
       timer.stop();
+      timer.showResults();
     } else if (objectClass.isInstance(new Order())) {
-      timer.addTag("Reading all orders from the database");
+      final MethodTimer timer = new MethodTimer(TAG);
+      timer.setTag("Reading all Orders from the database");
       timer.start();
       daoSession.getOrderDao().loadAll();
       timer.stop();
+      timer.showResults();
     } else if (objectClass.isInstance(new OrderProduct())) {
-      timer.addTag("Reading all order products from database");
+      final MethodTimer timer = new MethodTimer(TAG);
+      timer.setTag("Reading all orderProducts from database");
       timer.start();
       daoSession.getOrderProductDao().loadAll();
       timer.stop();
+      timer.showResults();
     }
-    timer.showResults();
+
     return null;
   }
 }

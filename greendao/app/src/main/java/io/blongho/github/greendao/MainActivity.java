@@ -24,69 +24,34 @@
 
 package io.blongho.github.greendao;
 
+import android.Manifest;
+import android.content.pm.PackageManager;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
+import android.widget.Toast;
 
 import com.google.android.material.snackbar.Snackbar;
-import com.google.gson.Gson;
 
-import java.util.List;
-import java.util.concurrent.ExecutionException;
-import java.util.concurrent.Executor;
-import java.util.concurrent.ExecutorCompletionService;
-import java.util.concurrent.Executors;
-
-import androidx.annotation.RawRes;
 import androidx.appcompat.app.AppCompatActivity;
-import io.blongho.github.greendao.asynctasks.AsyncDeleteAllFromDatabase;
-import io.blongho.github.greendao.asynctasks.AsyncReadFromDatabase;
-import io.blongho.github.greendao.asynctasks.AsyncWriteToDatabase;
-import io.blongho.github.greendao.database.DatabaseHelper;
-import io.blongho.github.greendao.model.Customer;
-import io.blongho.github.greendao.model.DaoMaster;
-import io.blongho.github.greendao.model.DaoSession;
-import io.blongho.github.greendao.model.Order;
-import io.blongho.github.greendao.model.OrderProduct;
-import io.blongho.github.greendao.model.Product;
-import io.blongho.github.greendao.util.MethodTimer;
-import io.blongho.github.greendao.util.ReadFromFile;
+import androidx.core.app.ActivityCompat;
+import io.blongho.github.greendao.util.Test;
 
 /**
  * The type Main activity.
  */
 public class MainActivity extends AppCompatActivity {
   private static final String TAG = "MainActivity";
-  private final static Executor executor = Executors.newCachedThreadPool();
-  private static DaoSession writableDaoSession;
-  private static DaoSession readableDaoSession;
-  final String dbName = "customer_order_greendao";
-  private final Object writeLock = new Object();
-  private final Object readLock = new Object();
-  private ExecutorCompletionService<String> customerService;
-  private ExecutorCompletionService<String> productService;
-  private ExecutorCompletionService<String> orderService;
-  private ExecutorCompletionService<String> orderProductService;
-  private Gson gson;
+  private final static int RUN_TIMES = 5;
+  private Test test;
 
   @Override
   protected void onCreate(Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
     setContentView(R.layout.activity_main);
-    gson = new Gson();
-
-  }
-
-  private void initCompletionServices() {
-    customerService = new ExecutorCompletionService<>(executor);
-    productService = new ExecutorCompletionService<>(executor);
-    orderService = new ExecutorCompletionService<>(executor);
-    orderProductService = new ExecutorCompletionService<>(executor);
-  }
-
-  private void submitFileReadingRequest(ExecutorCompletionService<String> completionService,
-                                        @RawRes int fileResourceID) {
-    completionService.submit(new ReadFromFile(getApplicationContext(), fileResourceID));
+    test = new Test(MainActivity.this);
+    ActivityCompat.requestPermissions(MainActivity.this,
+        new String[]{Manifest.permission.READ_EXTERNAL_STORAGE},
+        1);
   }
 
   /**
@@ -95,14 +60,7 @@ public class MainActivity extends AppCompatActivity {
    * @param view the view
    */
   public void createDb(View view) {
-    MethodTimer timer = new MethodTimer(TAG + "initializing database");
-    timer.start();
-    writableDaoSession = getWritableDaoSession();
-    readableDaoSession = getReadableDaoSession();
-    timer.stop();
-    timer.showResults();
-    showSnackBar(view, "createDb");
-
+    test.init();
   }
 
   /**
@@ -111,8 +69,7 @@ public class MainActivity extends AppCompatActivity {
    * @param view the view
    */
   public void clearDb(View view) {
-    getWritableDaoSession();
-    new AsyncDeleteAllFromDatabase(writableDaoSession).execute();
+    test.deleteAll();
     showSnackBar(view, "clearDb");
   }
 
@@ -122,7 +79,7 @@ public class MainActivity extends AppCompatActivity {
    * @param view the view
    */
   public void deleteFromDb(View view) {
-    // TODO implement code for deleting an item or items from the database
+    // TODO delete item from database
     showSnackBar(view, "deleteFromDb");
   }
 
@@ -142,17 +99,11 @@ public class MainActivity extends AppCompatActivity {
    * @param view the view
    */
   public void readData(View view) {
-    getReadableDaoSession();
-    // TODO implement logic for reading some data from the database
-
-    new AsyncReadFromDatabase<>(readableDaoSession, Customer.class).execute();
-    new AsyncReadFromDatabase<>(readableDaoSession, Product.class).execute();
-    new AsyncReadFromDatabase<>(readableDaoSession, Order.class).execute();
-    new AsyncReadFromDatabase<>(readableDaoSession, OrderProduct.class).execute();
-
+    test.read();
     showSnackBar(view, "readData");
-  }
 
+  }
+/*
   private <T> void showItems(List<T> customers) {
     for (Object customer : customers) {
       Log.i(TAG, "showItems: " + customer);
@@ -167,7 +118,7 @@ public class MainActivity extends AppCompatActivity {
     for (Object item : items) {
       Log.i(TAG, "showItems: " + item);
     }
-  }
+  }*/
 
   /**
    * Load data.
@@ -175,32 +126,7 @@ public class MainActivity extends AppCompatActivity {
    * @param view the view
    */
   public void loadData(View view) {
-    initCompletionServices();
-    submitFileReadingRequest(productService, R.raw.products10000);
-    submitFileReadingRequest(customerService, R.raw.customers10000);
-    submitFileReadingRequest(orderService, R.raw.orders10000);
-    submitFileReadingRequest(orderProductService, R.raw.order_products10000);
-
-    getWritableDaoSession();
-    try {
-      Customer[] customers = gson.fromJson(customerService.take().get(), Customer[].class);
-      new AsyncWriteToDatabase<Customer>(writableDaoSession).execute(customers);
-
-      Product[] products = gson.fromJson(productService.take().get(), Product[].class);
-      new AsyncWriteToDatabase<Product>(writableDaoSession).execute(products);
-
-      Order[] orders = gson.fromJson(orderService.take().get(), Order[].class);
-      new AsyncWriteToDatabase<Order>(writableDaoSession).execute(orders);
-
-      OrderProduct[] orderProducts = gson.fromJson(orderProductService.take().get(), OrderProduct[].class);
-      new AsyncWriteToDatabase<OrderProduct>(writableDaoSession).execute(orderProducts);
-
-    } catch (ExecutionException e) {
-      e.printStackTrace();
-    } catch (InterruptedException e) {
-      e.printStackTrace();
-    }
-
+    test.create();
     showSnackBar(view, "loadData");
   }
 
@@ -208,23 +134,29 @@ public class MainActivity extends AppCompatActivity {
     Snackbar.make(view, method + " ==> Implement this method", Snackbar.LENGTH_SHORT).show();
   }
 
-  private DaoSession getWritableDaoSession() {
-    synchronized (writeLock) {
-      if (writableDaoSession == null) {
-        writableDaoSession =
-            new DaoMaster(new DatabaseHelper(MainActivity.this, dbName).getWritableDb()).newSession();
-      }
-    }
-    return writableDaoSession;
-  }
+  @Override
+  public void onRequestPermissionsResult(int requestCode,
+                                         String permissions[], int[] grantResults) {
+    switch (requestCode) {
+      case 1: {
 
-  private DaoSession getReadableDaoSession() {
-    synchronized (readLock) {
-      if (readableDaoSession == null) {
-        readableDaoSession =
-            new DaoMaster(new DatabaseHelper(MainActivity.this, dbName).getWritableDb()).newSession();
+        // If request is cancelled, the result arrays are empty.
+        if (grantResults.length > 0
+            && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+
+          // permission was granted, yay! Do the
+          // contacts-related task you need to do.
+        } else {
+
+          // permission denied, boo! Disable the
+          // functionality that depends on this permission.
+          Toast.makeText(MainActivity.this, "Permission denied to read your External storage", Toast.LENGTH_SHORT).show();
+        }
+        return;
       }
+
+      // other 'case' lines to check for other
+      // permissions this app might request
     }
-    return readableDaoSession;
   }
 }
