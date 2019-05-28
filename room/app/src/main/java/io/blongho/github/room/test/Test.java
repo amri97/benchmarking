@@ -70,7 +70,7 @@ public class Test implements TestSuiteInterface {
   public void init() {
     new ExecutorCompletionService<Void>(executor).submit(() -> {
       if (repository == null) {
-        MethodTimer.FILE_NAME = "room_12_000.json";
+        MethodTimer.FILE_NAME = "room_10_000.json";
         final MethodTimer timer = new MethodTimer("Initializing the database");
         timer.start();
         repository = new AppDatabaseRepository(context);
@@ -169,10 +169,10 @@ public class Test implements TestSuiteInterface {
    */
   private void getData() {
     initCompletionServices();
-    submitFileReadingRequest(productService, R.raw.products12000);
-    submitFileReadingRequest(customerService, R.raw.customers12000);
-    submitFileReadingRequest(orderService, R.raw.order12000);
-    submitFileReadingRequest(orderProductService, R.raw.order_products12000);
+    submitFileReadingRequest(productService, R.raw.products10000);
+    submitFileReadingRequest(customerService, R.raw.customers10000);
+    submitFileReadingRequest(orderService, R.raw.order10000);
+    submitFileReadingRequest(orderProductService, R.raw.order_products10000);
     final Gson gson = new Gson();
     try {
       customers = gson.fromJson(customerService.take().get(), Customer[].class);
