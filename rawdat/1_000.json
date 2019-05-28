@@ -1,0 +1,716 @@
+[
+  {
+    "method": "Initializing the database",
+    "milliTime": 34,
+    "nanoTime": 34915700,
+    "secTime": 0
+  },
+  {
+    "method": "Loading the database with 1000 customers",
+    "milliTime": 138,
+    "nanoTime": 138512500,
+    "secTime": 0
+  },
+  {
+    "method": "Loading the database with 1000 products",
+    "milliTime": 127,
+    "nanoTime": 127085600,
+    "secTime": 0
+  },
+  {
+    "method": "Loading the database with 1000 orders",
+    "milliTime": 110,
+    "nanoTime": 110361900,
+    "secTime": 0
+  },
+  {
+    "method": "Loading the database with 1000 OrderProducts",
+    "milliTime": 98,
+    "nanoTime": 98059800,
+    "secTime": 0
+  },
+  {
+    "method": "Loading the database with 1000 customers",
+    "milliTime": 137,
+    "nanoTime": 137068500,
+    "secTime": 0
+  },
+  {
+    "method": "Loading the database with 1000 products",
+    "milliTime": 116,
+    "nanoTime": 116698900,
+    "secTime": 0
+  },
+  {
+    "method": "Loading the database with 1000 orders",
+    "milliTime": 117,
+    "nanoTime": 117416100,
+    "secTime": 0
+  },
+  {
+    "method": "Loading the database with 1000 OrderProducts",
+    "milliTime": 105,
+    "nanoTime": 105101700,
+    "secTime": 0
+  },
+  {
+    "method": "Loading the database with 1000 customers",
+    "milliTime": 131,
+    "nanoTime": 131669300,
+    "secTime": 0
+  },
+  {
+    "method": "Loading the database with 1000 products",
+    "milliTime": 117,
+    "nanoTime": 117361100,
+    "secTime": 0
+  },
+  {
+    "method": "Loading the database with 1000 orders",
+    "milliTime": 98,
+    "nanoTime": 98344700,
+    "secTime": 0
+  },
+  {
+    "method": "Loading the database with 1000 OrderProducts",
+    "milliTime": 98,
+    "nanoTime": 98090700,
+    "secTime": 0
+  },
+  {
+    "method": "Loading the database with 1000 customers",
+    "milliTime": 129,
+    "nanoTime": 129519000,
+    "secTime": 0
+  },
+  {
+    "method": "Loading the database with 1000 products",
+    "milliTime": 116,
+    "nanoTime": 116240400,
+    "secTime": 0
+  },
+  {
+    "method": "Loading the database with 1000 orders",
+    "milliTime": 100,
+    "nanoTime": 100266400,
+    "secTime": 0
+  },
+  {
+    "method": "Loading the database with 1000 OrderProducts",
+    "milliTime": 105,
+    "nanoTime": 105590700,
+    "secTime": 0
+  },
+  {
+    "method": "Loading the database with 1000 customers",
+    "milliTime": 116,
+    "nanoTime": 116901700,
+    "secTime": 0
+  },
+  {
+    "method": "Loading the database with 1000 products",
+    "milliTime": 107,
+    "nanoTime": 107996200,
+    "secTime": 0
+  },
+  {
+    "method": "Loading the database with 1000 orders",
+    "milliTime": 101,
+    "nanoTime": 101225200,
+    "secTime": 0
+  },
+  {
+    "method": "Loading the database with 1000 OrderProducts",
+    "milliTime": 94,
+    "nanoTime": 94867400,
+    "secTime": 0
+  },
+  {
+    "method": "Reading 1000 Customers from database",
+    "milliTime": 23,
+    "nanoTime": 23891200,
+    "secTime": 0
+  },
+  {
+    "method": "Reading 1000 Products form the database",
+    "milliTime": 5,
+    "nanoTime": 5396600,
+    "secTime": 0
+  },
+  {
+    "method": "Reading 1000 Orders from the database",
+    "milliTime": 2,
+    "nanoTime": 2726300,
+    "secTime": 0
+  },
+  {
+    "method": "Reading 1000 OrderProducts from database",
+    "milliTime": 8,
+    "nanoTime": 8260100,
+    "secTime": 0
+  },
+  {
+    "method": "Reading 1000 Customers from database",
+    "milliTime": 2,
+    "nanoTime": 2629500,
+    "secTime": 0
+  },
+  {
+    "method": "Reading 1000 Products form the database",
+    "milliTime": 2,
+    "nanoTime": 2456400,
+    "secTime": 0
+  },
+  {
+    "method": "Reading 1000 Orders from the database",
+    "milliTime": 2,
+    "nanoTime": 2908700,
+    "secTime": 0
+  },
+  {
+    "method": "Reading 1000 OrderProducts from database",
+    "milliTime": 3,
+    "nanoTime": 3112700,
+    "secTime": 0
+  },
+  {
+    "method": "Reading 1000 Customers from database",
+    "milliTime": 3,
+    "nanoTime": 3050600,
+    "secTime": 0
+  },
+  {
+    "method": "Reading 1000 Products form the database",
+    "milliTime": 2,
+    "nanoTime": 2350500,
+    "secTime": 0
+  },
+  {
+    "method": "Reading 1000 Orders from the database",
+    "milliTime": 2,
+    "nanoTime": 2336400,
+    "secTime": 0
+  },
+  {
+    "method": "Reading 1000 OrderProducts from database",
+    "milliTime": 3,
+    "nanoTime": 3922800,
+    "secTime": 0
+  },
+  {
+    "method": "Reading 1000 Customers from database",
+    "milliTime": 8,
+    "nanoTime": 8034100,
+    "secTime": 0
+  },
+  {
+    "method": "Reading 1000 Products form the database",
+    "milliTime": 10,
+    "nanoTime": 10376800,
+    "secTime": 0
+  },
+  {
+    "method": "Reading 1000 Orders from the database",
+    "milliTime": 3,
+    "nanoTime": 3676200,
+    "secTime": 0
+  },
+  {
+    "method": "Reading 1000 OrderProducts from database",
+    "milliTime": 5,
+    "nanoTime": 5173400,
+    "secTime": 0
+  },
+  {
+    "method": "Reading 1000 Customers from database",
+    "milliTime": 2,
+    "nanoTime": 2438000,
+    "secTime": 0
+  },
+  {
+    "method": "Reading 1000 Products form the database",
+    "milliTime": 2,
+    "nanoTime": 2476600,
+    "secTime": 0
+  },
+  {
+    "method": "Reading 1000 Orders from the database",
+    "milliTime": 2,
+    "nanoTime": 2079300,
+    "secTime": 0
+  },
+  {
+    "method": "Reading 1000 OrderProducts from database",
+    "milliTime": 2,
+    "nanoTime": 2558700,
+    "secTime": 0
+  },
+  {
+    "method": "Initializing the database",
+    "milliTime": 3,
+    "nanoTime": 3917500,
+    "secTime": 0
+  },
+  {
+    "method": "Loading the database with 1000 customers",
+    "milliTime": 134,
+    "nanoTime": 134724000,
+    "secTime": 0
+  },
+  {
+    "method": "Loading the database with 1000 products",
+    "milliTime": 130,
+    "nanoTime": 130861000,
+    "secTime": 0
+  },
+  {
+    "method": "Loading the database with 1000 orders",
+    "milliTime": 119,
+    "nanoTime": 119975700,
+    "secTime": 0
+  },
+  {
+    "method": "Loading the database with 1000 OrderProducts",
+    "milliTime": 114,
+    "nanoTime": 114006100,
+    "secTime": 0
+  },
+  {
+    "method": "Update customer number 666",
+    "milliTime": 6,
+    "nanoTime": 6925700,
+    "secTime": 0
+  },
+  {
+    "method": "Update customer number 859",
+    "milliTime": 6,
+    "nanoTime": 6349700,
+    "secTime": 0
+  },
+  {
+    "method": "Update customer number 250",
+    "milliTime": 7,
+    "nanoTime": 7262800,
+    "secTime": 0
+  },
+  {
+    "method": "Update customer number 905",
+    "milliTime": 6,
+    "nanoTime": 6746000,
+    "secTime": 0
+  },
+  {
+    "method": "Update customer number 155",
+    "milliTime": 6,
+    "nanoTime": 6838700,
+    "secTime": 0
+  },
+  {
+    "method": "Deleting customer number 155",
+    "milliTime": 9,
+    "nanoTime": 9759500,
+    "secTime": 0
+  },
+  {
+    "method": "Deleting customer number 678",
+    "milliTime": 7,
+    "nanoTime": 7136300,
+    "secTime": 0
+  },
+  {
+    "method": "Deleting customer number 16",
+    "milliTime": 8,
+    "nanoTime": 8154800,
+    "secTime": 0
+  },
+  {
+    "method": "Deleting customer number 383",
+    "milliTime": 5,
+    "nanoTime": 5475900,
+    "secTime": 0
+  },
+  {
+    "method": "Deleting customer number 53",
+    "milliTime": 5,
+    "nanoTime": 5509600,
+    "secTime": 0
+  },
+  {
+    "method": "Update customer number 551",
+    "milliTime": 9,
+    "nanoTime": 9753700,
+    "secTime": 0
+  },
+  {
+    "method": "Update customer number 193",
+    "milliTime": 8,
+    "nanoTime": 8329700,
+    "secTime": 0
+  },
+  {
+    "method": "Update customer number 837",
+    "milliTime": 6,
+    "nanoTime": 6472300,
+    "secTime": 0
+  },
+  {
+    "method": "Update customer number 399",
+    "milliTime": 7,
+    "nanoTime": 7833000,
+    "secTime": 0
+  },
+  {
+    "method": "Update customer number 246",
+    "milliTime": 6,
+    "nanoTime": 6974600,
+    "secTime": 0
+  },
+  {
+    "method": "Update customer number 869",
+    "milliTime": 7,
+    "nanoTime": 7860900,
+    "secTime": 0
+  },
+  {
+    "method": "Update customer number 936",
+    "milliTime": 6,
+    "nanoTime": 6521700,
+    "secTime": 0
+  },
+  {
+    "method": "Update customer number 428",
+    "milliTime": 5,
+    "nanoTime": 5838200,
+    "secTime": 0
+  },
+  {
+    "method": "Update customer number 474",
+    "milliTime": 6,
+    "nanoTime": 6347900,
+    "secTime": 0
+  },
+  {
+    "method": "Update customer number 712",
+    "milliTime": 7,
+    "nanoTime": 7496400,
+    "secTime": 0
+  },
+  {
+    "method": "Update customer number 27",
+    "milliTime": 6,
+    "nanoTime": 6869300,
+    "secTime": 0
+  },
+  {
+    "method": "Update customer number 366",
+    "milliTime": 7,
+    "nanoTime": 7148800,
+    "secTime": 0
+  },
+  {
+    "method": "Update customer number 319",
+    "milliTime": 5,
+    "nanoTime": 5574000,
+    "secTime": 0
+  },
+  {
+    "method": "Update customer number 942",
+    "milliTime": 5,
+    "nanoTime": 5569200,
+    "secTime": 0
+  },
+  {
+    "method": "Update customer number 425",
+    "milliTime": 5,
+    "nanoTime": 5890400,
+    "secTime": 0
+  },
+  {
+    "method": "Deleting customer number 35",
+    "milliTime": 6,
+    "nanoTime": 6105200,
+    "secTime": 0
+  },
+  {
+    "method": "Deleting customer number 956",
+    "milliTime": 7,
+    "nanoTime": 7237500,
+    "secTime": 0
+  },
+  {
+    "method": "Deleting customer number 751",
+    "milliTime": 6,
+    "nanoTime": 6027000,
+    "secTime": 0
+  },
+  {
+    "method": "Deleting customer number 204",
+    "milliTime": 7,
+    "nanoTime": 7095900,
+    "secTime": 0
+  },
+  {
+    "method": "Deleting customer number 648",
+    "milliTime": 7,
+    "nanoTime": 7483000,
+    "secTime": 0
+  },
+  {
+    "method": "Deleting customer number 68",
+    "milliTime": 6,
+    "nanoTime": 6517100,
+    "secTime": 0
+  },
+  {
+    "method": "Deleting customer number 798",
+    "milliTime": 6,
+    "nanoTime": 6913400,
+    "secTime": 0
+  },
+  {
+    "method": "Deleting customer number 354",
+    "milliTime": 6,
+    "nanoTime": 6326100,
+    "secTime": 0
+  },
+  {
+    "method": "Deleting customer number 934",
+    "milliTime": 6,
+    "nanoTime": 6846900,
+    "secTime": 0
+  },
+  {
+    "method": "Deleting customer number 235",
+    "milliTime": 7,
+    "nanoTime": 7838100,
+    "secTime": 0
+  },
+  {
+    "method": "Deleting customer number 450",
+    "milliTime": 7,
+    "nanoTime": 7135400,
+    "secTime": 0
+  },
+  {
+    "method": "Deleting customer number 653",
+    "milliTime": 7,
+    "nanoTime": 7191500,
+    "secTime": 0
+  },
+  {
+    "method": "Deleting customer number 535",
+    "milliTime": 6,
+    "nanoTime": 6690600,
+    "secTime": 0
+  },
+  {
+    "method": "Deleting customer number 910",
+    "milliTime": 6,
+    "nanoTime": 6817400,
+    "secTime": 0
+  },
+  {
+    "method": "Deleting customer number 551",
+    "milliTime": 7,
+    "nanoTime": 7443400,
+    "secTime": 0
+  },
+  {
+    "method": "Dropping all 1000 orders",
+    "milliTime": 7,
+    "nanoTime": 7605800,
+    "secTime": 0
+  },
+  {
+    "method": "Dropping all 1000 orderProducts",
+    "milliTime": 7,
+    "nanoTime": 7929700,
+    "secTime": 0
+  },
+  {
+    "method": "Dropping all 980 customers",
+    "milliTime": 8,
+    "nanoTime": 8621700,
+    "secTime": 0
+  },
+  {
+    "method": "Dropping all 1000 products",
+    "milliTime": 9,
+    "nanoTime": 9110500,
+    "secTime": 0
+  },
+  {
+    "method": "Loading the database with 1000 customers",
+    "milliTime": 120,
+    "nanoTime": 120455700,
+    "secTime": 0
+  },
+  {
+    "method": "Loading the database with 1000 products",
+    "milliTime": 118,
+    "nanoTime": 118873900,
+    "secTime": 0
+  },
+  {
+    "method": "Loading the database with 1000 orders",
+    "milliTime": 111,
+    "nanoTime": 111685500,
+    "secTime": 0
+  },
+  {
+    "method": "Loading the database with 1000 OrderProducts",
+    "milliTime": 97,
+    "nanoTime": 97450200,
+    "secTime": 0
+  },
+  {
+    "method": "Dropping all 1000 orders",
+    "milliTime": 9,
+    "nanoTime": 9209700,
+    "secTime": 0
+  },
+  {
+    "method": "Dropping all 1000 orderProducts",
+    "milliTime": 10,
+    "nanoTime": 10212900,
+    "secTime": 0
+  },
+  {
+    "method": "Dropping all 1000 customers",
+    "milliTime": 25,
+    "nanoTime": 25474300,
+    "secTime": 0
+  },
+  {
+    "method": "Dropping all 1000 products",
+    "milliTime": 19,
+    "nanoTime": 19495400,
+    "secTime": 0
+  },
+  {
+    "method": "Loading the database with 1000 customers",
+    "milliTime": 127,
+    "nanoTime": 127886500,
+    "secTime": 0
+  },
+  {
+    "method": "Loading the database with 1000 products",
+    "milliTime": 115,
+    "nanoTime": 115361100,
+    "secTime": 0
+  },
+  {
+    "method": "Loading the database with 1000 orders",
+    "milliTime": 97,
+    "nanoTime": 97710400,
+    "secTime": 0
+  },
+  {
+    "method": "Loading the database with 1000 OrderProducts",
+    "milliTime": 91,
+    "nanoTime": 91522000,
+    "secTime": 0
+  },
+  {
+    "method": "Dropping all 1000 orders",
+    "milliTime": 9,
+    "nanoTime": 9261400,
+    "secTime": 0
+  },
+  {
+    "method": "Dropping all 1000 orderProducts",
+    "milliTime": 6,
+    "nanoTime": 6843300,
+    "secTime": 0
+  },
+  {
+    "method": "Dropping all 1000 customers",
+    "milliTime": 13,
+    "nanoTime": 13868600,
+    "secTime": 0
+  },
+  {
+    "method": "Dropping all 1000 products",
+    "milliTime": 11,
+    "nanoTime": 11387800,
+    "secTime": 0
+  },
+  {
+    "method": "Dropping all 0 products",
+    "milliTime": 18,
+    "nanoTime": 18863200,
+    "secTime": 0
+  },
+  {
+    "method": "Dropping all 0 customers",
+    "milliTime": 18,
+    "nanoTime": 18668400,
+    "secTime": 0
+  },
+  {
+    "method": "Dropping all 0 orderProducts",
+    "milliTime": 10,
+    "nanoTime": 10932600,
+    "secTime": 0
+  },
+  {
+    "method": "Dropping all 0 orders",
+    "milliTime": 9,
+    "nanoTime": 9832700,
+    "secTime": 0
+  },
+  {
+    "method": "Dropping all 0 products",
+    "milliTime": 13,
+    "nanoTime": 13004100,
+    "secTime": 0
+  },
+  {
+    "method": "Dropping all 0 customers",
+    "milliTime": 23,
+    "nanoTime": 23887300,
+    "secTime": 0
+  },
+  {
+    "method": "Dropping all 0 orderProducts",
+    "milliTime": 11,
+    "nanoTime": 11527600,
+    "secTime": 0
+  },
+  {
+    "method": "Dropping all 0 orders",
+    "milliTime": 9,
+    "nanoTime": 9583700,
+    "secTime": 0
+  },
+  {
+    "method": "Initializing the database",
+    "milliTime": 3,
+    "nanoTime": 3715600,
+    "secTime": 0
+  },
+  {
+    "method": "Initializing the database",
+    "milliTime": 5,
+    "nanoTime": 5016500,
+    "secTime": 0
+  },
+  {
+    "method": "Initializing the database",
+    "milliTime": 4,
+    "nanoTime": 4924300,
+    "secTime": 0
+  },
+  {
+    "method": "Initializing the database",
+    "milliTime": 5,
+    "nanoTime": 5072300,
+    "secTime": 0
+  },
+  {
+    "method": "Initializing the database",
+    "milliTime": 0,
+    "nanoTime": 58800,
+    "secTime": 0
+  }
+]

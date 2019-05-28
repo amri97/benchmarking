@@ -1,0 +1,133 @@
+[
+{"method":"Initializing the database","milliTime":50,"nanoTime":50038200,"secTime":0}
+,{"method":"Inserting 12000 Customers","milliTime":2057,"nanoTime":2057102000,"secTime":2}
+,{"method":"Inserting 12000 Products","milliTime":2034,"nanoTime":2034505300,"secTime":2}
+,{"method":"Inserting 12000 Orders","milliTime":2194,"nanoTime":2194744800,"secTime":2}
+,{"method":"Inserting 12000 OrderProducts","milliTime":1955,"nanoTime":1955601300,"secTime":1}
+,{"method":"Inserting 12000 Customers","milliTime":1969,"nanoTime":1969996100,"secTime":1}
+,{"method":"Inserting 12000 Products","milliTime":1907,"nanoTime":1907416500,"secTime":1}
+,{"method":"Inserting 12000 Orders","milliTime":2028,"nanoTime":2028074200,"secTime":2}
+,{"method":"Inserting 12000 OrderProducts","milliTime":1838,"nanoTime":1838397100,"secTime":1}
+,{"method":"Inserting 12000 Customers","milliTime":1937,"nanoTime":1937134800,"secTime":1}
+,{"method":"Inserting 12000 Products","milliTime":1936,"nanoTime":1936228900,"secTime":1}
+,{"method":"Inserting 12000 Orders","milliTime":1999,"nanoTime":1999986200,"secTime":1}
+,{"method":"Inserting 12000 OrderProducts","milliTime":1834,"nanoTime":1834858100,"secTime":1}
+,{"method":"Inserting 12000 Customers","milliTime":1945,"nanoTime":1945988000,"secTime":1}
+,{"method":"Inserting 12000 Products","milliTime":1962,"nanoTime":1962319600,"secTime":1}
+,{"method":"Inserting 12000 Orders","milliTime":1994,"nanoTime":1994887900,"secTime":1}
+,{"method":"Inserting 12000 OrderProducts","milliTime":1832,"nanoTime":1832861400,"secTime":1}
+,{"method":"Inserting 12000 Customers","milliTime":1980,"nanoTime":1980809200,"secTime":1}
+,{"method":"Inserting 12000 Products","milliTime":2064,"nanoTime":2064945700,"secTime":2}
+,{"method":"Inserting 12000 Orders","milliTime":2040,"nanoTime":2040684000,"secTime":2}
+,{"method":"Inserting 12000 OrderProducts","milliTime":1869,"nanoTime":1869897000,"secTime":1}
+,{"method":"Reading 12000 Customers","milliTime":150,"nanoTime":150415900,"secTime":0}
+,{"method":"Reading 12000 Products","milliTime":129,"nanoTime":129346800,"secTime":0}
+,{"method":"Reading 12000 Products","milliTime":1039,"nanoTime":1039989800,"secTime":1}
+,{"method":"Reading 12000 OrderProducts","milliTime":22,"nanoTime":22436300,"secTime":0}
+,{"method":"Reading 12000 Customers","milliTime":131,"nanoTime":131329900,"secTime":0}
+,{"method":"Reading 12000 Products","milliTime":98,"nanoTime":98991900,"secTime":0}
+,{"method":"Reading 12000 Products","milliTime":989,"nanoTime":989612900,"secTime":0}
+,{"method":"Reading 12000 OrderProducts","milliTime":21,"nanoTime":21864700,"secTime":0}
+,{"method":"Reading 12000 Customers","milliTime":139,"nanoTime":139766900,"secTime":0}
+,{"method":"Reading 12000 Products","milliTime":108,"nanoTime":108327600,"secTime":0}
+,{"method":"Reading 12000 Products","milliTime":975,"nanoTime":975908200,"secTime":0}
+,{"method":"Reading 12000 OrderProducts","milliTime":17,"nanoTime":17871600,"secTime":0}
+,{"method":"Reading 12000 Customers","milliTime":122,"nanoTime":122657200,"secTime":0}
+,{"method":"Reading 12000 Products","milliTime":99,"nanoTime":99104200,"secTime":0}
+,{"method":"Reading 12000 Products","milliTime":953,"nanoTime":953635500,"secTime":0}
+,{"method":"Reading 12000 OrderProducts","milliTime":17,"nanoTime":17894600,"secTime":0}
+,{"method":"Reading 12000 Customers","milliTime":108,"nanoTime":108868800,"secTime":0}
+,{"method":"Reading 12000 Products","milliTime":118,"nanoTime":118871300,"secTime":0}
+,{"method":"Reading 12000 Products","milliTime":947,"nanoTime":947815700,"secTime":0}
+,{"method":"Reading 12000 OrderProducts","milliTime":17,"nanoTime":17643200,"secTime":0}
+,{"method":"Reading 12000 Customers","milliTime":122,"nanoTime":122008200,"secTime":0}
+,{"method":"Reading 12000 Products","milliTime":125,"nanoTime":125056100,"secTime":0}
+,{"method":"Reading 12000 Products","milliTime":1406,"nanoTime":1406712200,"secTime":1}
+,{"method":"Reading 12000 OrderProducts","milliTime":18,"nanoTime":18402700,"secTime":0}
+,{"method":"Update customer number 4618","milliTime":19,"nanoTime":19415800,"secTime":0}
+,{"method":"Update customer number 7911","milliTime":9,"nanoTime":9792800,"secTime":0}
+,{"method":"Update customer number 8998","milliTime":11,"nanoTime":11512500,"secTime":0}
+,{"method":"Update customer number 7732","milliTime":8,"nanoTime":8117400,"secTime":0}
+,{"method":"Update customer number 11170","milliTime":7,"nanoTime":7698100,"secTime":0}
+,{"method":"Update customer number 1103","milliTime":16,"nanoTime":16561000,"secTime":0}
+,{"method":"Update customer number 5402","milliTime":9,"nanoTime":9827300,"secTime":0}
+,{"method":"Update customer number 6158","milliTime":11,"nanoTime":11109200,"secTime":0}
+,{"method":"Update customer number 4222","milliTime":12,"nanoTime":12427900,"secTime":0}
+,{"method":"Update customer number 7454","milliTime":12,"nanoTime":12888700,"secTime":0}
+,{"method":"Update customer number 8850","milliTime":21,"nanoTime":21745100,"secTime":0}
+,{"method":"Update customer number 10381","milliTime":13,"nanoTime":13883700,"secTime":0}
+,{"method":"Update customer number 6811","milliTime":8,"nanoTime":8582200,"secTime":0}
+,{"method":"Update customer number 186","milliTime":7,"nanoTime":7234700,"secTime":0}
+,{"method":"Update customer number 1345","milliTime":8,"nanoTime":8972500,"secTime":0}
+,{"method":"Update customer number 4739","milliTime":6,"nanoTime":6505600,"secTime":0}
+,{"method":"Update customer number 2717","milliTime":6,"nanoTime":6442300,"secTime":0}
+,{"method":"Update customer number 9017","milliTime":7,"nanoTime":7136000,"secTime":0}
+,{"method":"Update customer number 8529","milliTime":5,"nanoTime":5627600,"secTime":0}
+,{"method":"Update customer number 834","milliTime":7,"nanoTime":7577200,"secTime":0}
+,{"method":"Update customer number 10850","milliTime":19,"nanoTime":19271800,"secTime":0}
+,{"method":"Update customer number 10147","milliTime":18,"nanoTime":18077800,"secTime":0}
+,{"method":"Update customer number 6832","milliTime":8,"nanoTime":8815000,"secTime":0}
+,{"method":"Update customer number 7634","milliTime":9,"nanoTime":9864600,"secTime":0}
+,{"method":"Update customer number 10633","milliTime":10,"nanoTime":10266100,"secTime":0}
+,{"method":"Deleting customer number 11419","milliTime":14,"nanoTime":14830300,"secTime":0}
+,{"method":"Deleting customer number 4257","milliTime":17,"nanoTime":17405500,"secTime":0}
+,{"method":"Deleting customer number 3019","milliTime":17,"nanoTime":17148600,"secTime":0}
+,{"method":"Deleting customer number 3021","milliTime":12,"nanoTime":12907800,"secTime":0}
+,{"method":"Deleting customer number 464","milliTime":7,"nanoTime":7321900,"secTime":0}
+,{"method":"Deleting customer number 2743","milliTime":15,"nanoTime":15955800,"secTime":0}
+,{"method":"Deleting customer number 9801","milliTime":21,"nanoTime":21123500,"secTime":0}
+,{"method":"Deleting customer number 2798","milliTime":12,"nanoTime":12676100,"secTime":0}
+,{"method":"Deleting customer number 7234","milliTime":9,"nanoTime":9473400,"secTime":0}
+,{"method":"Deleting customer number 9174","milliTime":8,"nanoTime":8280600,"secTime":0}
+,{"method":"Deleting customer number 4545","milliTime":17,"nanoTime":17353400,"secTime":0}
+,{"method":"Deleting customer number 3121","milliTime":16,"nanoTime":16543100,"secTime":0}
+,{"method":"Deleting customer number 9795","milliTime":9,"nanoTime":9427600,"secTime":0}
+,{"method":"Deleting customer number 7042","milliTime":9,"nanoTime":9408800,"secTime":0}
+,{"method":"Deleting customer number 707","milliTime":9,"nanoTime":9144500,"secTime":0}
+,{"method":"Deleting customer number 2880","milliTime":12,"nanoTime":12482900,"secTime":0}
+,{"method":"Deleting customer number 866","milliTime":10,"nanoTime":10634400,"secTime":0}
+,{"method":"Deleting customer number 5623","milliTime":12,"nanoTime":12240600,"secTime":0}
+,{"method":"Deleting customer number 11814","milliTime":14,"nanoTime":14045500,"secTime":0}
+,{"method":"Deleting customer number 98","milliTime":7,"nanoTime":7470500,"secTime":0}
+,{"method":"Deleting customer number 5426","milliTime":11,"nanoTime":11182000,"secTime":0}
+,{"method":"Deleting customer number 4284","milliTime":12,"nanoTime":12007800,"secTime":0}
+,{"method":"Deleting customer number 3428","milliTime":9,"nanoTime":9926000,"secTime":0}
+,{"method":"Deleting customer number 67","milliTime":6,"nanoTime":6778000,"secTime":0}
+,{"method":"Deleting customer number 8086","milliTime":8,"nanoTime":8442800,"secTime":0}
+,{"method":"Deleting all 11975 Customers","milliTime":31,"nanoTime":31668200,"secTime":0}
+,{"method":"Deleting all 12000 Products","milliTime":24,"nanoTime":24408200,"secTime":0}
+,{"method":"Deleting all 12000 Orders","milliTime":15,"nanoTime":15852200,"secTime":0}
+,{"method":"Deleting all 12000 OrderProducts","milliTime":9,"nanoTime":9860500,"secTime":0}
+,{"method":"Deleting all 0 Customers","milliTime":14,"nanoTime":14592200,"secTime":0}
+,{"method":"Deleting all 0 Products","milliTime":14,"nanoTime":14887300,"secTime":0}
+,{"method":"Deleting all 0 Orders","milliTime":14,"nanoTime":14626600,"secTime":0}
+,{"method":"Deleting all 0 OrderProducts","milliTime":12,"nanoTime":12799700,"secTime":0}
+,{"method":"Inserting 12000 Customers","milliTime":2196,"nanoTime":2196753900,"secTime":2}
+,{"method":"Inserting 12000 Products","milliTime":1963,"nanoTime":1963125500,"secTime":1}
+,{"method":"Inserting 12000 Orders","milliTime":2104,"nanoTime":2104171600,"secTime":2}
+,{"method":"Inserting 12000 OrderProducts","milliTime":1977,"nanoTime":1977492700,"secTime":1}
+,{"method":"Deleting all 12000 Customers","milliTime":20,"nanoTime":20923800,"secTime":0}
+,{"method":"Deleting all 12000 Products","milliTime":19,"nanoTime":19303500,"secTime":0}
+,{"method":"Deleting all 12000 Orders","milliTime":10,"nanoTime":10437500,"secTime":0}
+,{"method":"Deleting all 12000 OrderProducts","milliTime":5,"nanoTime":5926400,"secTime":0}
+,{"method":"Inserting 12000 Customers","milliTime":2003,"nanoTime":2003634000,"secTime":2}
+,{"method":"Inserting 12000 Products","milliTime":1957,"nanoTime":1957636200,"secTime":1}
+,{"method":"Inserting 12000 Orders","milliTime":2021,"nanoTime":2021263600,"secTime":2}
+,{"method":"Inserting 12000 OrderProducts","milliTime":1835,"nanoTime":1835229400,"secTime":1}
+,{"method":"Deleting all 12000 Customers","milliTime":22,"nanoTime":22850700,"secTime":0}
+,{"method":"Deleting all 12000 Products","milliTime":17,"nanoTime":17874400,"secTime":0}
+,{"method":"Deleting all 12000 Orders","milliTime":13,"nanoTime":13701000,"secTime":0}
+,{"method":"Deleting all 12000 OrderProducts","milliTime":9,"nanoTime":9141900,"secTime":0}
+,{"method":"Deleting all 0 Customers","milliTime":21,"nanoTime":21771900,"secTime":0}
+,{"method":"Deleting all 0 Products","milliTime":13,"nanoTime":13246900,"secTime":0}
+,{"method":"Deleting all 0 Orders","milliTime":7,"nanoTime":7785900,"secTime":0}
+,{"method":"Deleting all 0 OrderProducts","milliTime":8,"nanoTime":8265600,"secTime":0}
+,{"method":"Inserting 12000 Customers","milliTime":1949,"nanoTime":1949219100,"secTime":1}
+,{"method":"Inserting 12000 Products","milliTime":1912,"nanoTime":1912621700,"secTime":1}
+,{"method":"Inserting 12000 Orders","milliTime":2012,"nanoTime":2012677000,"secTime":2}
+,{"method":"Inserting 12000 OrderProducts","milliTime":1872,"nanoTime":1872200600,"secTime":1}
+,{"method":"Deleting all 12000 Customers","milliTime":22,"nanoTime":22033700,"secTime":0}
+,{"method":"Deleting all 12000 Products","milliTime":21,"nanoTime":21544800,"secTime":0}
+,{"method":"Deleting all 12000 Orders","milliTime":15,"nanoTime":15794000,"secTime":0}
+,{"method":"Deleting all 12000 OrderProducts","milliTime":9,"nanoTime":9855800,"secTime":0}
+,
