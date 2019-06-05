@@ -106,4 +106,3 @@
 ,{"method":"Inserting 12000 Orders","milliTime":1152,"nanoTime":1152903900,"secTime":1}
 ,{"method":"Inserting 12000 OrderProducts","milliTime":1154,"nanoTime":1154544700,"secTime":1}
 ,{"method":"Initializing the database","milliTime":7,"nanoTime":7233300,"secTime":0}
-,

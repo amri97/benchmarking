@@ -99,13 +99,36 @@ public class Test implements TestSuiteInterface {
 
   @Override
   public void init() {
-    MethodTimer.FILE_NAME = "1_000.json";
+    MethodTimer.FILE_NAME = "greenDaoInsert_12_000.json";
     final MethodTimer timer = new MethodTimer("Initializing the database");
     timer.start();
     getWritableDaoSession();
     timer.stop();
     timer.showResults();
 
+  }
+
+  /**
+   * Read all the data from file
+   * <p>Call this method before running Create()</p>
+   */
+  private void getData() {
+    initCompletionServices();
+    submitFileReadingRequest(productService, R.raw.products12000);
+    submitFileReadingRequest(customerService, R.raw.customers12000);
+    submitFileReadingRequest(orderService, R.raw.order12000);
+    submitFileReadingRequest(orderProductService, R.raw.order_products12000);
+    final Gson gson = new Gson();
+    try {
+      customers = gson.fromJson(customerService.take().get(), Customer[].class);
+      products = gson.fromJson(productService.take().get(), Product[].class);
+      orders = gson.fromJson(orderService.take().get(), Order[].class);
+      orderProducts = gson.fromJson(orderProductService.take().get(), OrderProduct[].class);
+    } catch (ExecutionException e) {
+      e.printStackTrace();
+    } catch (InterruptedException e) {
+      e.printStackTrace();
+    }
   }
 
   @Override
@@ -136,7 +159,7 @@ public class Test implements TestSuiteInterface {
 
   @Override
   public void update() {
-    // Update 5 random customers
+   /* // Update 5 random customers
     final int numberOfCustomers = (int) daoSession.getCustomerDao().count();
     for (int i = 1; i <= 5; i++) {
       final long randomCustomer = getRandomNumberInRange(i, numberOfCustomers);
@@ -147,7 +170,18 @@ public class Test implements TestSuiteInterface {
       daoSession.getCustomerDao().update(bernard);
       timer.stop();
       timer.showResults();
-    }
+    }*/
+    new ExecutorCompletionService<Void>(executor).submit(()->{
+      final long customerCount = daoSession.getCustomerDao().count();
+      final MethodTimer timer = new MethodTimer("Updating " + customerCount + " Customers");
+      timer.start();
+      daoSession.getCustomerDao().updateInTx(customers);
+      timer.stop();
+      timer.showResults();
+      return null;
+    });
+
+
   }
 
   @Override
@@ -185,29 +219,6 @@ public class Test implements TestSuiteInterface {
    */
   private void getWritableDaoSession() {
     daoSession = DaoSessionInstance.getInstance(context);
-  }
-
-  /**
-   * Read all the data from file
-   * <p>Call this method before running Create()</p>
-   */
-  private void getData() {
-    initCompletionServices();
-    submitFileReadingRequest(productService, R.raw.products1000);
-    submitFileReadingRequest(customerService, R.raw.customers1000);
-    submitFileReadingRequest(orderService, R.raw.order1000);
-    submitFileReadingRequest(orderProductService, R.raw.order_products1000);
-    final Gson gson = new Gson();
-    try {
-      customers = gson.fromJson(customerService.take().get(), Customer[].class);
-      products = gson.fromJson(productService.take().get(), Product[].class);
-      orders = gson.fromJson(orderService.take().get(), Order[].class);
-      orderProducts = gson.fromJson(orderProductService.take().get(), OrderProduct[].class);
-    } catch (ExecutionException e) {
-      e.printStackTrace();
-    } catch (InterruptedException e) {
-      e.printStackTrace();
-    }
   }
 
   private boolean isTestReady() {
