@@ -159,18 +159,6 @@ public class Test implements TestSuiteInterface {
 
   @Override
   public void update() {
-   /* // Update 5 random customers
-    final int numberOfCustomers = (int) daoSession.getCustomerDao().count();
-    for (int i = 1; i <= 5; i++) {
-      final long randomCustomer = getRandomNumberInRange(i, numberOfCustomers);
-
-      final Customer bernard = new Customer(randomCustomer, "Bernard Longho", "City");
-      final MethodTimer timer = new MethodTimer("Update customer number " + randomCustomer);
-      timer.start();
-      daoSession.getCustomerDao().update(bernard);
-      timer.stop();
-      timer.showResults();
-    }*/
     new ExecutorCompletionService<Void>(executor).submit(()->{
       final long customerCount = daoSession.getCustomerDao().count();
       final MethodTimer timer = new MethodTimer("Updating " + customerCount + " Customers");
