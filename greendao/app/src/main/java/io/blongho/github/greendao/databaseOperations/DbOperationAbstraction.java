@@ -26,15 +26,16 @@
 
 package io.blongho.github.greendao.databaseOperations;
 
+import androidx.annotation.Nullable;
 import io.blongho.github.greendao.model.DaoSession;
 import io.blongho.github.greendao.util.MethodTimer;
 
-abstract class DatabaseOperationAbstraction<T> {
+abstract class DbOperationAbstraction<T> {
   final DaoSession daosession;
   final MethodTimer timer;
   final T[] items;
 
-  DatabaseOperationAbstraction(DaoSession daosession, MethodTimer timer, T[] items) {
+  DbOperationAbstraction(DaoSession daosession, MethodTimer timer, @Nullable T[] items) {
     this.daosession = daosession;
     this.timer = timer;
     this.items = items;

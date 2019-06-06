@@ -33,8 +33,8 @@ import io.blongho.github.greendao.util.MethodTimer;
 
 public class AsyncDeleteAllFromDatabase extends AsyncTask<Void, Void, Void> {
   private static final String TAG = "AsyncDeleteAllFromDatabase";
+  private final static MethodTimer timer = new MethodTimer(TAG);
   private final DaoSession daoSession;
-  private MethodTimer timer = new MethodTimer(TAG);
 
   public AsyncDeleteAllFromDatabase(DaoSession daoSession) {
     this.daoSession = daoSession;
@@ -56,19 +56,19 @@ public class AsyncDeleteAllFromDatabase extends AsyncTask<Void, Void, Void> {
    */
   @Override
   protected Void doInBackground(Void... voids) {
-    timer.setTag("Dropping all " + daoSession.getCustomerDao().count() + " customers");
+    timer.setTag("Deleting all " + daoSession.getCustomerDao().count() + " customers");
     timer.start();
     daoSession.getCustomerDao().deleteAll();
     timer.stop();
-    timer.setTag("Dropping all " + daoSession.getProductDao().count() + " products");
+    timer.setTag("Deleting all " + daoSession.getProductDao().count() + " products");
     timer.start();
     daoSession.getProductDao().deleteAll();
     timer.stop();
-    timer.setTag("Dropping all " + daoSession.getOrderDao().count() + " orders");
+    timer.setTag("Deleting all " + daoSession.getOrderDao().count() + " orders");
     timer.start();
     daoSession.getOrderDao().deleteAll();
     timer.stop();
-    timer.setTag("Dropping all " + daoSession.getOrderProductDao().count() + " orderProducts");
+    timer.setTag("Deleting all " + daoSession.getOrderProductDao().count() + " orderProducts");
     timer.start();
     daoSession.getOrderProductDao().deleteAll();
     timer.stop();

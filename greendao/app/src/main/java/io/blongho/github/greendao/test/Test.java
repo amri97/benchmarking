@@ -40,11 +40,14 @@ import androidx.annotation.RawRes;
 import io.blongho.github.greendao.R;
 import io.blongho.github.greendao.database.DaoSessionInstance;
 import io.blongho.github.greendao.databaseOperations.AsyncDeleteAllFromDatabase;
-import io.blongho.github.greendao.databaseOperations.AsyncReadFromDatabase;
-import io.blongho.github.greendao.databaseOperations.WriteCustomers;
-import io.blongho.github.greendao.databaseOperations.WriteOrderProducts;
-import io.blongho.github.greendao.databaseOperations.WriteOrders;
-import io.blongho.github.greendao.databaseOperations.WriteProducts;
+import io.blongho.github.greendao.databaseOperations.InsertCustomers;
+import io.blongho.github.greendao.databaseOperations.InsertOrderProducts;
+import io.blongho.github.greendao.databaseOperations.InsertOrders;
+import io.blongho.github.greendao.databaseOperations.InsertProducts;
+import io.blongho.github.greendao.databaseOperations.ReadCustomer;
+import io.blongho.github.greendao.databaseOperations.ReadOrder;
+import io.blongho.github.greendao.databaseOperations.ReadOrderProducts;
+import io.blongho.github.greendao.databaseOperations.ReadProducts;
 import io.blongho.github.greendao.model.Customer;
 import io.blongho.github.greendao.model.DaoSession;
 import io.blongho.github.greendao.model.Order;
@@ -99,7 +102,7 @@ public class Test implements TestSuiteInterface {
 
   @Override
   public void init() {
-    MethodTimer.FILE_NAME = "greenDaoInsert_12_000.json";
+    MethodTimer.FILE_NAME = "greendao_5_000.json";
     final MethodTimer timer = new MethodTimer("Initializing the database");
     timer.start();
     getWritableDaoSession();
@@ -114,10 +117,10 @@ public class Test implements TestSuiteInterface {
    */
   private void getData() {
     initCompletionServices();
-    submitFileReadingRequest(productService, R.raw.products12000);
-    submitFileReadingRequest(customerService, R.raw.customers12000);
-    submitFileReadingRequest(orderService, R.raw.order12000);
-    submitFileReadingRequest(orderProductService, R.raw.order_products12000);
+    submitFileReadingRequest(productService, R.raw.products5000);
+    submitFileReadingRequest(customerService, R.raw.customers5000);
+    submitFileReadingRequest(orderService, R.raw.order5000);
+    submitFileReadingRequest(orderProductService, R.raw.order_products5000);
     final Gson gson = new Gson();
     try {
       customers = gson.fromJson(customerService.take().get(), Customer[].class);
@@ -135,10 +138,10 @@ public class Test implements TestSuiteInterface {
   public void create(Customer[] customers, Product[] products, Order[] orders, OrderProduct[] orderProducts) {
     if (isTestReady()) {
       new ExecutorCompletionService<Void>(executor).submit(() -> {
-        new WriteCustomers(daoSession, new MethodTimer("Create customers", context), customers);
-        new WriteProducts(daoSession, new MethodTimer("Create product", context), products);
-        new WriteOrders(daoSession, new MethodTimer("Create orders", context), orders);
-        new WriteOrderProducts(daoSession, new MethodTimer("Create OrderProducts", context), orderProducts);
+        new InsertCustomers(daoSession, new MethodTimer("Create customers"), customers);
+        new InsertProducts(daoSession, new MethodTimer("Create product"), products);
+        new InsertOrders(daoSession, new MethodTimer("Create orders"), orders);
+        new InsertOrderProducts(daoSession, new MethodTimer("Create OrderProducts"), orderProducts);
       }, null);
     }
 
@@ -151,15 +154,18 @@ public class Test implements TestSuiteInterface {
 
   @Override
   public void read() {
-    new AsyncReadFromDatabase<>(daoSession, Customer.class).execute();
-    new AsyncReadFromDatabase<>(daoSession, Product.class).execute();
-    new AsyncReadFromDatabase<>(daoSession, Order.class).execute();
-    new AsyncReadFromDatabase<>(daoSession, OrderProduct.class).execute();
+    new ExecutorCompletionService<Void>(executor).submit(() -> {
+      new ReadCustomer(daoSession, new MethodTimer(""), null);
+      new ReadProducts(daoSession, new MethodTimer(""), null);
+      new ReadOrder(daoSession, new MethodTimer(""), null);
+      new ReadOrderProducts(daoSession, new MethodTimer(""), null);
+      return null;
+    });
   }
 
   @Override
   public void update() {
-    new ExecutorCompletionService<Void>(executor).submit(()->{
+    new ExecutorCompletionService<Void>(executor).submit(() -> {
       final long customerCount = daoSession.getCustomerDao().count();
       final MethodTimer timer = new MethodTimer("Updating " + customerCount + " Customers");
       timer.start();
@@ -169,20 +175,17 @@ public class Test implements TestSuiteInterface {
       return null;
     });
 
-
   }
 
   @Override
   public void delete() {
     final int numberOfCustomers = (int) daoSession.getCustomerDao().count();
-    for (int i = 1; i <= 5; i++) {
-      final int randomCustomer = getRandomNumberInRange(1, numberOfCustomers);
-      final MethodTimer timer = new MethodTimer("Deleting customer number " + randomCustomer);
-      timer.start();
-      daoSession.getCustomerDao().deleteByKey((long) randomCustomer);
-      timer.stop();
-      timer.showResults();
-    }
+
+    final MethodTimer timer = new MethodTimer("Deleting " + numberOfCustomers + " customers");
+    timer.start();
+    daoSession.getCustomerDao().deleteAll();
+    timer.stop();
+    timer.showResults();
   }
 
   @Override
