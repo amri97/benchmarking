@@ -29,10 +29,8 @@ import androidx.annotation.Nullable;
 import androidx.room.ColumnInfo;
 import androidx.room.Entity;
 import androidx.room.Ignore;
+import androidx.room.Index;
 import androidx.room.PrimaryKey;
-
-import io.blongho.github.room.constants.Column;
-import io.blongho.github.room.constants.Table;
 
 /**
  * The type Product<br> A product has a name and a description
@@ -41,98 +39,100 @@ import io.blongho.github.room.constants.Table;
  * @version 1.0
  * @since 2019-05-10
  */
-@Entity (tableName = Table.PRODUCT)
+@Entity(tableName = "tb_product",
+    indices = {@Index(value = {"product_id"})}
+)
 public class Product {
-	@PrimaryKey
-	@ColumnInfo (name = Column.PRODUCT_ID)
-	private long id;
-	@ColumnInfo (name = Column.PRODUCT_NAME)
-	private String name;
-	@ColumnInfo (name = Column.PRODUCT_DESC)
-	private String description;
+  @PrimaryKey
+  @ColumnInfo(name = "product_id")
+  private long id;
+  @ColumnInfo(name = "product_name")
+  private String name;
+  @ColumnInfo(name = "product_desc")
+  private String description;
 
-	/**
-	 * Instantiates a new Product.
-	 */
-	public Product() {
-	}
+  /**
+   * Instantiates a new Product.
+   */
+  public Product() {
+  }
 
-	/**
-	 * Instantiates a new Product.
-	 *
-	 * @param product_id the product id
-	 * @param name the name
-	 * @param description the description
-	 */
-	@Ignore
-	public Product(@NonNull final long product_id, @NonNull final String name, @Nullable final String description) {
-		this.id = product_id;
-		this.name = name;
-		this.description = description;
-	}
+  /**
+   * Instantiates a new Product.
+   *
+   * @param product_id  the product id
+   * @param name        the name
+   * @param description the description
+   */
+  @Ignore
+  public Product(@NonNull final long product_id, @NonNull final String name, @Nullable final String description) {
+    this.id = product_id;
+    this.name = name;
+    this.description = description;
+  }
 
-	/**
-	 * Gets product id.
-	 *
-	 * @return the product id
-	 */
-	public long getId() {
-		return id;
-	}
+  /**
+   * Gets product id.
+   *
+   * @return the product id
+   */
+  public long getId() {
+    return id;
+  }
 
-	/**
-	 * Sets product id.
-	 *
-	 * @param id the product id
-	 */
-	public void setId(final long id) {
-		this.id = id;
-	}
+  /**
+   * Sets product id.
+   *
+   * @param id the product id
+   */
+  public void setId(final long id) {
+    this.id = id;
+  }
 
-	/**
-	 * Gets name.
-	 *
-	 * @return the name
-	 */
-	public String getName() {
-		return name;
-	}
+  /**
+   * Gets name.
+   *
+   * @return the name
+   */
+  public String getName() {
+    return name;
+  }
 
-	/**
-	 * Sets name.
-	 *
-	 * @param name the name
-	 */
-	public void setName(final String name) {
-		this.name = name;
-	}
+  /**
+   * Sets name.
+   *
+   * @param name the name
+   */
+  public void setName(final String name) {
+    this.name = name;
+  }
 
-	/**
-	 * Gets description.
-	 *
-	 * @return the description
-	 */
-	public String getDescription() {
-		return description;
-	}
+  /**
+   * Gets description.
+   *
+   * @return the description
+   */
+  public String getDescription() {
+    return description;
+  }
 
-	/**
-	 * Sets description.
-	 *
-	 * @param description the description
-	 */
-	public void setDescription(final String description) {
-		this.description = description;
-	}
+  /**
+   * Sets description.
+   *
+   * @param description the description
+   */
+  public void setDescription(final String description) {
+    this.description = description;
+  }
 
-	@Override
-	public String toString() {
-		final StringBuffer sb = new StringBuffer("Product{");
-		sb.append("id=").append(id);
-		sb.append(", name='").append(name).append('\'');
-		sb.append(", description='").append(description).append('\'');
-		sb.append('}');
-		return sb.toString();
-	}
+  @Override
+  public String toString() {
+    final StringBuffer sb = new StringBuffer("Product{");
+    sb.append("id=").append(id);
+    sb.append(", name='").append(name).append('\'');
+    sb.append(", description='").append(description).append('\'');
+    sb.append('}');
+    return sb.toString();
+  }
 
 }

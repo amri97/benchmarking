@@ -44,7 +44,7 @@ public interface OrderProductDao {
    *
    * @return the all order products
    */
-  @Query("SELECT * FROM TB_ORDER_PRODUCT")
+  @Query("SELECT * FROM tb_order_product")
   List<OrderProduct> getAllOrderProducts();
 
   /**

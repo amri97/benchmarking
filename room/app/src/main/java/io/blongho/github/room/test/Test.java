@@ -45,7 +45,6 @@ public class Test implements TestSuiteInterface {
   private OrderProduct[] orderProducts;
   private AppDatabaseRepository repository;
 
-
   public Test(Context context) {
     this.context = context;
     getData();
@@ -113,18 +112,12 @@ public class Test implements TestSuiteInterface {
   @Override
   public void update() {
     new ExecutorCompletionService<Void>(executor).submit(() -> {
-      // Update 5 random customers
-      final int numberOfCustomers = (int) repository.customerCount();
-      for (int i = 1; i <= 5; i++) {
-        final long randomCustomer = getRandomNumberInRange(i, numberOfCustomers);
-
-        final Customer bernard = new Customer(randomCustomer, "Bernard Longho", "City");
-        final MethodTimer timer = new MethodTimer("Update customer number " + randomCustomer);
-        timer.start();
-        repository.updateCustomer(bernard);
-        timer.stop();
-        timer.showResults();
-      }
+      final long customerCount = repository.customerCount();
+      final MethodTimer timer = new MethodTimer("Updating " + customerCount + " Customers");
+      timer.start();
+      repository.insertCustomer(customers);
+      timer.stop();
+      timer.showResults();
       return null;
     });
 
@@ -134,14 +127,13 @@ public class Test implements TestSuiteInterface {
   public void delete() {
     new ExecutorCompletionService<Void>(executor).submit(() -> {
       final int numberOfCustomers = (int) repository.customerCount();
-      for (int i = 1; i <= 5; i++) {
-        final int randomCustomer = getRandomNumberInRange(1, numberOfCustomers);
-        final MethodTimer timer = new MethodTimer("Deleting customer number " + randomCustomer);
-        timer.start();
-        repository.deleteCustomerWithId((long) randomCustomer);
-        timer.stop();
-        timer.showResults();
-      }
+
+      final MethodTimer timer = new MethodTimer("Deleting all " + numberOfCustomers);
+      timer.start();
+      repository.deleteAllCustomers();
+      timer.stop();
+      timer.showResults();
+
       return null;
     });
 
@@ -172,7 +164,7 @@ public class Test implements TestSuiteInterface {
     initCompletionServices();
     submitFileReadingRequest(productService, R.raw.products1000);
     submitFileReadingRequest(customerService, R.raw.customers1000);
-    submitFileReadingRequest(orderService, R.raw.order1000);
+    submitFileReadingRequest(orderService, R.raw.orders1000);
     submitFileReadingRequest(orderProductService, R.raw.order_products1000);
     final Gson gson = new Gson();
     try {

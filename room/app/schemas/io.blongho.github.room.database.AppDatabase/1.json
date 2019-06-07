@@ -2,7 +2,7 @@
   "formatVersion": 1,
   "database": {
     "version": 1,
-    "identityHash": "3437a9c0eb3777cb5f843e2d6efc3481",
+    "identityHash": "c5d9df66855114c44a5b9b7104646d56",
     "entities": [
       {
         "tableName": "tb_customer",
@@ -65,19 +65,22 @@
           ],
           "autoGenerate": false
         },
-        "indices": [],
+        "indices": [
+          {
+            "name": "index_tb_product_product_id",
+            "unique": false,
+            "columnNames": [
+              "product_id"
+            ],
+            "createSql": "CREATE  INDEX `index_tb_product_product_id` ON `${TABLE_NAME}` (`product_id`)"
+          }
+        ],
         "foreignKeys": []
       },
       {
         "tableName": "tb_order",
-        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`order_date` INTEGER, `order_id` INTEGER NOT NULL, `customer_id` INTEGER NOT NULL, PRIMARY KEY(`order_id`), FOREIGN KEY(`customer_id`) REFERENCES `tb_customer`(`customer_id`) ON UPDATE CASCADE ON DELETE CASCADE )",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`order_id` INTEGER NOT NULL, `order_customer` INTEGER NOT NULL, `order_date` INTEGER, PRIMARY KEY(`order_id`), FOREIGN KEY(`order_customer`) REFERENCES `tb_customer`(`customer_id`) ON UPDATE CASCADE ON DELETE CASCADE )",
         "fields": [
-          {
-            "fieldPath": "date",
-            "columnName": "order_date",
-            "affinity": "INTEGER",
-            "notNull": false
-          },
           {
             "fieldPath": "id",
             "columnName": "order_id",
@@ -86,9 +89,15 @@
           },
           {
             "fieldPath": "customer",
-            "columnName": "customer_id",
+            "columnName": "order_customer",
             "affinity": "INTEGER",
             "notNull": true
+          },
+          {
+            "fieldPath": "date",
+            "columnName": "order_date",
+            "affinity": "INTEGER",
+            "notNull": false
           }
         ],
         "primaryKey": {
@@ -99,13 +108,20 @@
         },
         "indices": [
           {
-            "name": "index_tb_order_order_id_customer_id",
+            "name": "index_tb_order_order_id",
             "unique": true,
             "columnNames": [
-              "order_id",
-              "customer_id"
+              "order_id"
             ],
-            "createSql": "CREATE UNIQUE INDEX `index_tb_order_order_id_customer_id` ON `${TABLE_NAME}` (`order_id`, `customer_id`)"
+            "createSql": "CREATE UNIQUE INDEX `index_tb_order_order_id` ON `${TABLE_NAME}` (`order_id`)"
+          },
+          {
+            "name": "index_tb_order_order_customer",
+            "unique": false,
+            "columnNames": [
+              "order_customer"
+            ],
+            "createSql": "CREATE  INDEX `index_tb_order_order_customer` ON `${TABLE_NAME}` (`order_customer`)"
           }
         ],
         "foreignKeys": [
@@ -114,7 +130,7 @@
             "onDelete": "CASCADE",
             "onUpdate": "CASCADE",
             "columns": [
-              "customer_id"
+              "order_customer"
             ],
             "referencedColumns": [
               "customer_id"
@@ -124,43 +140,57 @@
       },
       {
         "tableName": "tb_order_product",
-        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`order_product_id` INTEGER NOT NULL, `op_order_id` INTEGER NOT NULL, `op_product_id` INTEGER NOT NULL, PRIMARY KEY(`order_product_id`), FOREIGN KEY(`op_order_id`) REFERENCES `tb_order`(`order_id`) ON UPDATE CASCADE ON DELETE CASCADE , FOREIGN KEY(`op_product_id`) REFERENCES `tb_product`(`product_id`) ON UPDATE CASCADE ON DELETE CASCADE )",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`op_id` INTEGER NOT NULL, `op_order` INTEGER NOT NULL, `op_product` INTEGER NOT NULL, PRIMARY KEY(`op_id`), FOREIGN KEY(`op_order`) REFERENCES `tb_order`(`order_id`) ON UPDATE CASCADE ON DELETE CASCADE , FOREIGN KEY(`op_product`) REFERENCES `tb_product`(`product_id`) ON UPDATE CASCADE ON DELETE CASCADE )",
         "fields": [
           {
             "fieldPath": "id",
-            "columnName": "order_product_id",
+            "columnName": "op_id",
             "affinity": "INTEGER",
             "notNull": true
           },
           {
             "fieldPath": "order",
-            "columnName": "op_order_id",
+            "columnName": "op_order",
             "affinity": "INTEGER",
             "notNull": true
           },
           {
             "fieldPath": "product",
-            "columnName": "op_product_id",
+            "columnName": "op_product",
             "affinity": "INTEGER",
             "notNull": true
           }
         ],
         "primaryKey": {
           "columnNames": [
-            "order_product_id"
+            "op_id"
           ],
           "autoGenerate": false
         },
         "indices": [
           {
-            "name": "index_tb_order_product_order_product_id_op_order_id_op_product_id",
+            "name": "index_tb_order_product_op_id",
             "unique": true,
             "columnNames": [
-              "order_product_id",
-              "op_order_id",
-              "op_product_id"
+              "op_id"
             ],
-            "createSql": "CREATE UNIQUE INDEX `index_tb_order_product_order_product_id_op_order_id_op_product_id` ON `${TABLE_NAME}` (`order_product_id`, `op_order_id`, `op_product_id`)"
+            "createSql": "CREATE UNIQUE INDEX `index_tb_order_product_op_id` ON `${TABLE_NAME}` (`op_id`)"
+          },
+          {
+            "name": "index_tb_order_product_op_order",
+            "unique": false,
+            "columnNames": [
+              "op_order"
+            ],
+            "createSql": "CREATE  INDEX `index_tb_order_product_op_order` ON `${TABLE_NAME}` (`op_order`)"
+          },
+          {
+            "name": "index_tb_order_product_op_product",
+            "unique": false,
+            "columnNames": [
+              "op_product"
+            ],
+            "createSql": "CREATE  INDEX `index_tb_order_product_op_product` ON `${TABLE_NAME}` (`op_product`)"
           }
         ],
         "foreignKeys": [
@@ -169,7 +199,7 @@
             "onDelete": "CASCADE",
             "onUpdate": "CASCADE",
             "columns": [
-              "op_order_id"
+              "op_order"
             ],
             "referencedColumns": [
               "order_id"
@@ -180,7 +210,7 @@
             "onDelete": "CASCADE",
             "onUpdate": "CASCADE",
             "columns": [
-              "op_product_id"
+              "op_product"
             ],
             "referencedColumns": [
               "product_id"
@@ -192,7 +222,7 @@
     "views": [],
     "setupQueries": [
       "CREATE TABLE IF NOT EXISTS room_master_table (id INTEGER PRIMARY KEY,identity_hash TEXT)",
-      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, \"3437a9c0eb3777cb5f843e2d6efc3481\")"
+      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, \"c5d9df66855114c44a5b9b7104646d56\")"
     ]
   }
 }
