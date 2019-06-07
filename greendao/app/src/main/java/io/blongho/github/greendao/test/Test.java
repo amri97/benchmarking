@@ -30,6 +30,7 @@ import android.content.Context;
 
 import com.google.gson.Gson;
 
+import java.util.List;
 import java.util.Random;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.Executor;
@@ -51,6 +52,7 @@ import io.blongho.github.greendao.databaseOperations.ReadProducts;
 import io.blongho.github.greendao.model.Customer;
 import io.blongho.github.greendao.model.DaoSession;
 import io.blongho.github.greendao.model.Order;
+import io.blongho.github.greendao.model.OrderDao;
 import io.blongho.github.greendao.model.OrderProduct;
 import io.blongho.github.greendao.model.Product;
 import io.blongho.github.greendao.util.MethodTimer;
@@ -119,7 +121,7 @@ public class Test implements TestSuiteInterface {
     initCompletionServices();
     submitFileReadingRequest(productService, R.raw.products5000);
     submitFileReadingRequest(customerService, R.raw.customers5000);
-    submitFileReadingRequest(orderService, R.raw.order5000);
+    submitFileReadingRequest(orderService, R.raw.orders5000);
     submitFileReadingRequest(orderProductService, R.raw.order_products5000);
     final Gson gson = new Gson();
     try {
@@ -177,8 +179,19 @@ public class Test implements TestSuiteInterface {
 
   }
 
+  //**** greenDAO does not enforce cascading ****
   @Override
   public void delete() {
+    // to delete all orders, uncomment this
+    /*final List<Customer> customers = daoSession.getCustomerDao().loadAll();
+    final OrderDao orderDao = daoSession.getOrderDao();
+    final List<Order> orders = orderDao.loadAll();
+    for (Order order : orders) {
+      if (customers.contains(order.getOrderCustomer())) {
+        orderDao.deleteByKey(order.getId());
+      }
+    }
+    */
     final int numberOfCustomers = (int) daoSession.getCustomerDao().count();
 
     final MethodTimer timer = new MethodTimer("Deleting " + numberOfCustomers + " customers");
