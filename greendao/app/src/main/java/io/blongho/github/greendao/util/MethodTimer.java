@@ -87,7 +87,7 @@ final public class MethodTimer {
         sec = milli / 1_000;
         Log.i(key, "" + results + " ns (" + milli + " ms, " + sec + " s)");
       }
-      fileWriter.writeStringAsFile(new ResultsFileWriter(key, results, milli, sec));
+      fileWriter.writeToFile(new ResultsFileWriter(key, results, milli, sec));
     }
     resultsMap = new HashMap<>();
   }
@@ -101,5 +101,4 @@ final public class MethodTimer {
   public final synchronized void setTag(String tag) {
     method = tag;
   }
-
 }

@@ -69,7 +69,7 @@ final class ResultsFileWriter {
     return sb.toString();
   }
 
-  synchronized <T> void writeStringAsFile(T src) {
+  synchronized <T> void writeToFile(T src) {
     final File file = createFile();
     try (Writer writer = new FileWriter(file, true)) {
       if (file.length() == 0) {
@@ -80,7 +80,7 @@ final class ResultsFileWriter {
       writer.write("\n,");
     } catch (IOException e) {
       e.printStackTrace();
-      Log.d(TAG, "writeStringAsFile() called with: fileContents = [" + src.toString() + "]");
+      Log.d(TAG, "writeToFile() called with: fileContents = [" + src.toString() + "]");
     }
   }
 
