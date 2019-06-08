@@ -41,10 +41,10 @@ import io.blongho.github.sqlite.model.Product;
 
 public class DatabaseManager implements DatabaseOperations {
   // tables
-  public static final String TB_CUSTOMER = "tb_customer";
-  public static final String TB_ORDER = "tb_order";
-  public static final String TB_PRODUCT = "tb_product";
-  public static final String TB_ORDER_PRODUCT = "tb_order_product";
+  private static final String TB_CUSTOMER = "tb_customer";
+  private static final String TB_ORDER = "tb_order";
+  private static final String TB_PRODUCT = "tb_product";
+  private static final String TB_ORDER_PRODUCT = "tb_order_product";
   // COLUMNS
   // Customer columns
   private final static String COL_CUSTOMER_ID = "customer_id";

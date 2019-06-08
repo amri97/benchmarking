@@ -29,7 +29,6 @@ import io.blongho.github.sqlite.util.MethodTimer;
 import io.blongho.github.sqlite.util.ReadFromFile;
 
 public class Test implements TestSuiteInterface {
-  private static final String TAG = "Test";
   private static Executor executor = Executors.newCachedThreadPool();
   private static DatabaseManager dbManager;
   private final Context context;
@@ -46,21 +45,6 @@ public class Test implements TestSuiteInterface {
     this.context = context;
     getData();
     init();
-  }
-
-  /**
-   * Generate a random number in the range min and max
-   *
-   * @param min the minimum number
-   * @param max the upper bound
-   * @return a random integer
-   */
-  private static int getRandomNumberInRange(int min, int max) {
-    if (min >= max) {
-      throw new IllegalArgumentException("max must be greater than min");
-    }
-    Random r = new Random();
-    return r.nextInt((max - min) + 1) + min;
   }
 
   @Override
