@@ -85,7 +85,7 @@ public class Test implements TestSuiteInterface {
     initCompletionServices();
     submitFileReadingRequest(productService, R.raw.products1000);
     submitFileReadingRequest(customerService, R.raw.customers1000);
-    submitFileReadingRequest(orderService, R.raw.order1000);
+    submitFileReadingRequest(orderService, R.raw.orders1000);
     submitFileReadingRequest(orderProductService, R.raw.order_products1000);
     final Gson gson = new Gson();
     try {

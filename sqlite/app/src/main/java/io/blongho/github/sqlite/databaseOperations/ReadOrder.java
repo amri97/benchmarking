@@ -17,10 +17,10 @@ public class ReadOrder extends DbOperationAbstraction<Void> {
   protected void doWork() {
     final long orders = databaseManger.orderCount();
     if (orders == 0) {
-      Log.e(TAG, "doWork() called with [" + orders + "] Products");
+      Log.e(TAG, "doWork() called with [" + orders + "] Orders");
       return;
     }
-    final MethodTimer timer = new MethodTimer("Reading " + orders + " Products");
+    final MethodTimer timer = new MethodTimer("Reading " + orders + " Orders");
     timer.start();
     databaseManger.getAllOrders();
     timer.stop();

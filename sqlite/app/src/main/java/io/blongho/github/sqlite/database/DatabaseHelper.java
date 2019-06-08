@@ -48,7 +48,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
       "order_customer INTEGER NOT NULL," +
       "order_date DATETIME DEFAULT current_timestamp," +
       "FOREIGN KEY(order_customer) " +
-      "REFERENCES tb_customer(customer_id)" +
+      "REFERENCES tb_customer(customer_id) " +
       "ON DELETE CASCADE ON UPDATE CASCADE);";
   private final static String CREATE_ORDER_PRODUCT_TABLE = "CREATE TABLE IF NOT EXISTS tb_order_product (" +
       "op_id INTEGER PRIMARY KEY, " +
@@ -102,6 +102,10 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     db.execSQL(CREATE_PRODUCT_TABLE);
     db.execSQL(CREATE_ORDER_TABLE);
     db.execSQL(CREATE_ORDER_PRODUCT_TABLE);
+    Log.d(TAG, "onCreate() called with: db = [" + CREATE_CUSTOMER_TABLE + "]");
+    Log.d(TAG, "onCreate() called with: db = [" + CREATE_PRODUCT_TABLE + "]");
+    Log.d(TAG, "onCreate() called with: db = [" + CREATE_ORDER_TABLE + "]");
+    Log.d(TAG, "onCreate() called with: db = [" + CREATE_ORDER_PRODUCT_TABLE + "]");
     Log.d(TAG, "onCreate() called with: db = [" + db + "]");
   }
 
