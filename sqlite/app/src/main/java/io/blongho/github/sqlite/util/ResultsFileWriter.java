@@ -11,22 +11,22 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.io.Writer;
 
-class Results {
-  private static final String TAG = "Results";
+class ResultsFileWriter {
+  private static final String TAG = "ResultsFileWriter";
   private final String method;
   private final long nanoTime;
   private final long milliTime;
   private final long secTime;
   private String fileName;
 
-  Results(String method, long nanoTime, long milliTime, long secTime) {
+  ResultsFileWriter(String method, long nanoTime, long milliTime, long secTime) {
     this.method = method;
     this.nanoTime = nanoTime;
     this.milliTime = milliTime;
     this.secTime = secTime;
   }
 
-  Results(final String fileName) {
+  ResultsFileWriter(final String fileName) {
     this(null, 0, 0, 0);
     this.fileName = fileName;
     createFile();
@@ -34,7 +34,7 @@ class Results {
 
   @Override
   public String toString() {
-    final StringBuffer sb = new StringBuffer("Results{");
+    final StringBuffer sb = new StringBuffer("ResultsFileWriter{");
     sb.append("method='").append(method).append('\'');
     sb.append(", nanoTime=").append(nanoTime);
     sb.append(", milliTime=").append(milliTime);

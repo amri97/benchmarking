@@ -66,7 +66,7 @@ public class Test implements TestSuiteInterface {
   @Override
   public void init() {
     new ExecutorCompletionService<Void>(executor).submit(() -> {
-      MethodTimer.FILE_NAME = "sql_1_000.json";
+      MethodTimer.FILE_NAME = "sqlInsert_1_000.json";
       final MethodTimer timer = new MethodTimer("Initializing the database");
       timer.start();
       dbManager = new DatabaseManager(context);
@@ -75,6 +75,29 @@ public class Test implements TestSuiteInterface {
       timer.showResults();
       return null;
     });
+  }
+
+  /**
+   * Read all the data from file
+   * <p>Call this method before running Create()</p>
+   */
+  private void getData() {
+    initCompletionServices();
+    submitFileReadingRequest(productService, R.raw.products1000);
+    submitFileReadingRequest(customerService, R.raw.customers1000);
+    submitFileReadingRequest(orderService, R.raw.order1000);
+    submitFileReadingRequest(orderProductService, R.raw.order_products1000);
+    final Gson gson = new Gson();
+    try {
+      customers = gson.fromJson(customerService.take().get(), Customer[].class);
+      products = gson.fromJson(productService.take().get(), Product[].class);
+      orders = gson.fromJson(orderService.take().get(), Order[].class);
+      orderProducts = gson.fromJson(orderProductService.take().get(), OrderProduct[].class);
+    } catch (ExecutionException e) {
+      e.printStackTrace();
+    } catch (InterruptedException e) {
+      e.printStackTrace();
+    }
   }
 
   @Override
@@ -105,35 +128,28 @@ public class Test implements TestSuiteInterface {
   @Override
   public void update() {
     new ExecutorCompletionService<Void>(executor).submit(() -> {
-      // Update 5 random customers
-      final int numberOfCustomers = (int) dbManager.customerCount();
-      for (int i = 1; i <= 5; i++) {
-        final long randomCustomer = getRandomNumberInRange(i, numberOfCustomers);
-
-        final Customer bernard = new Customer(randomCustomer, "Bernard Longho", "City");
-        final MethodTimer timer = new MethodTimer("Update customer number " + randomCustomer);
-        timer.start();
-        dbManager.updateCustomer(bernard);
-        timer.stop();
-        timer.showResults();
-      }
+      final long customersInSystem = dbManager.customerCount();
+      final MethodTimer update = new MethodTimer("Updating " + customersInSystem + " Customers");
+      update.start();
+      dbManager.updateCustomer(customers);
+      update.stop();
+      update.showResults();
       return null;
     });
 
   }
 
+  // run this and then call read to see if orders and OrderProducts are null.
+  // If they are null, then cascading has been enforced
   @Override
   public void delete() {
     new ExecutorCompletionService<Void>(executor).submit(() -> {
       final int numberOfCustomers = (int) dbManager.customerCount();
-      for (int i = 1; i <= 5; i++) {
-        final int randomCustomer = getRandomNumberInRange(1, numberOfCustomers);
-        final MethodTimer timer = new MethodTimer("Deleting customer number " + randomCustomer);
-        timer.start();
-        dbManager.deleteCustomerWithId((long) randomCustomer);
-        timer.stop();
-        timer.showResults();
-      }
+      final MethodTimer timer = new MethodTimer("Deleting all " + numberOfCustomers + " Customers");
+      timer.start();
+      dbManager.deleteAllCustomers();
+      timer.stop();
+      timer.showResults();
       return null;
     });
 
@@ -141,7 +157,7 @@ public class Test implements TestSuiteInterface {
 
   @Override
   public void deleteAll() {
-    new AsyncDeleteAll(dbManager).executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
+    new AsyncDeleteAll(dbManager).execute();
   }
 
   private void initCompletionServices() {
@@ -154,29 +170,6 @@ public class Test implements TestSuiteInterface {
   private void submitFileReadingRequest(ExecutorCompletionService<String> completionService,
                                         @RawRes int fileResourceID) {
     completionService.submit(new ReadFromFile(context.getApplicationContext(), fileResourceID));
-  }
-
-  /**
-   * Read all the data from file
-   * <p>Call this method before running Create()</p>
-   */
-  private void getData() {
-    initCompletionServices();
-    submitFileReadingRequest(productService, R.raw.products1000);
-    submitFileReadingRequest(customerService, R.raw.customers1000);
-    submitFileReadingRequest(orderService, R.raw.order1000);
-    submitFileReadingRequest(orderProductService, R.raw.order_products1000);
-    final Gson gson = new Gson();
-    try {
-      customers = gson.fromJson(customerService.take().get(), Customer[].class);
-      products = gson.fromJson(productService.take().get(), Product[].class);
-      orders = gson.fromJson(orderService.take().get(), Order[].class);
-      orderProducts = gson.fromJson(orderProductService.take().get(), OrderProduct[].class);
-    } catch (ExecutionException e) {
-      e.printStackTrace();
-    } catch (InterruptedException e) {
-      e.printStackTrace();
-    }
   }
 
   private boolean isTestReady() {

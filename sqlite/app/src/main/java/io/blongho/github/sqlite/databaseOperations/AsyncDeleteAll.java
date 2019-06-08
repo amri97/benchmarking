@@ -7,9 +7,19 @@ import io.blongho.github.sqlite.util.MethodTimer;
 
 public class AsyncDeleteAll extends AsyncTask<Void, Void, Void> {
   private final DatabaseManager manager;
+  private long customers, products, orders, orderPrdts;
 
   public AsyncDeleteAll(DatabaseManager manager) {
     this.manager = manager;
+  }
+
+  @Override
+  protected void onPreExecute() {
+    super.onPreExecute();
+    customers = manager.customerCount();
+    products = manager.productCount();
+    orders = manager.orderCount();
+    orderPrdts = manager.orderProductCount();
   }
 
   /**
@@ -28,25 +38,25 @@ public class AsyncDeleteAll extends AsyncTask<Void, Void, Void> {
    */
   @Override
   protected Void doInBackground(Void... voids) {
-    final MethodTimer timer = new MethodTimer("Deleting all " + manager.customerCount() + " Customers");
+    final MethodTimer timer = new MethodTimer("Deleting all " + customers + " Customers");
     timer.start();
     manager.deleteAllCustomers();
     timer.stop();
     timer.showResults();
 
-    final MethodTimer productTimer = new MethodTimer("Deleting all " + manager.productCount() + " Products");
+    final MethodTimer productTimer = new MethodTimer("Deleting all " + products + " Products");
     productTimer.start();
     manager.deleteAllProducts();
     productTimer.stop();
     productTimer.showResults();
 
-    final MethodTimer orderTimer = new MethodTimer("Deleting all " + manager.orderCount() + " Orders");
+    final MethodTimer orderTimer = new MethodTimer("Deleting all " + orders + " Orders");
     orderTimer.start();
     manager.deleteAllOrders();
     orderTimer.stop();
     orderTimer.showResults();
 
-    final MethodTimer opTimer = new MethodTimer("Deleting all " + manager.orderProductCount() + " OrderProducts");
+    final MethodTimer opTimer = new MethodTimer("Deleting all " + orderPrdts + " OrderProducts");
     opTimer.start();
     manager.deleteAllOrderProducts();
     opTimer.stop();
