@@ -26,9 +26,9 @@
   -->
 
 <resources>
-    <dimen name="defaultWidth">16dp</dimen>
-    <dimen name="defaultMargin">@dimen/defaultWidth</dimen>
-    <dimen name="linearHeight">100dp</dimen>
-    <dimen name="zero_dp">0dp</dimen>
-    <item name="button95" type="dimen" format="float">0.95</item>
+  <dimen name="defaultWidth">16dp</dimen>
+  <dimen name="defaultMargin">@dimen/defaultWidth</dimen>
+  <dimen name="linearHeight">100dp</dimen>
+  <dimen name="zero_dp">0dp</dimen>
+  <item name="button95" format="float" type="dimen">0.95</item>
 </resources>

@@ -288,10 +288,12 @@ public class Order {
     myDao.update(this);
   }
 
-  /** called by internal mechanisms, do not call yourself. */
+  /**
+   * called by internal mechanisms, do not call yourself.
+   */
   @Generated(hash = 965731666)
   public void __setDaoSession(DaoSession daoSession) {
-      this.daoSession = daoSession;
-      myDao = daoSession != null ? daoSession.getOrderDao() : null;
+    this.daoSession = daoSession;
+    myDao = daoSession != null ? daoSession.getOrderDao() : null;
   }
 }

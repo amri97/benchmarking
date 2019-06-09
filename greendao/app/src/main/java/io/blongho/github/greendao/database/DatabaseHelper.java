@@ -33,10 +33,10 @@ import org.greenrobot.greendao.database.Database;
 
 import io.blongho.github.greendao.model.DaoMaster;
 
-public class DatabaseHelper extends DaoMaster.OpenHelper {
+class DatabaseHelper extends DaoMaster.OpenHelper {
   private static final String TAG = "DatabaseHelper";
 
-  public DatabaseHelper(Context context, String name) {
+  DatabaseHelper(Context context, String name) {
     super(context, name);
   }
 

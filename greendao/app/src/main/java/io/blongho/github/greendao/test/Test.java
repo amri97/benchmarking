@@ -30,8 +30,6 @@ import android.content.Context;
 
 import com.google.gson.Gson;
 
-import java.util.List;
-import java.util.Random;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.Executor;
 import java.util.concurrent.ExecutorCompletionService;
@@ -52,7 +50,6 @@ import io.blongho.github.greendao.databaseOperations.ReadProducts;
 import io.blongho.github.greendao.model.Customer;
 import io.blongho.github.greendao.model.DaoSession;
 import io.blongho.github.greendao.model.Order;
-import io.blongho.github.greendao.model.OrderDao;
 import io.blongho.github.greendao.model.OrderProduct;
 import io.blongho.github.greendao.model.Product;
 import io.blongho.github.greendao.util.MethodTimer;
@@ -88,13 +85,15 @@ public class Test implements TestSuiteInterface {
 
   @Override
   public void init() {
-    MethodTimer.FILE_NAME = "greendao_5_000.json";
-    final MethodTimer timer = new MethodTimer("Initializing the database");
-    timer.start();
-    getWritableDaoSession();
-    timer.stop();
-    timer.showResults();
-
+    Executors.newCachedThreadPool().submit(() -> {
+      MethodTimer.FILE_NAME = "prof-gd_1_000.json";
+      final MethodTimer timer = new MethodTimer("Initializing the database");
+      timer.start();
+      getWritableDaoSession();
+      timer.stop();
+      timer.showResults();
+      return null;
+    });
   }
 
   /**
@@ -103,10 +102,10 @@ public class Test implements TestSuiteInterface {
    */
   private void getData() {
     initCompletionServices();
-    submitFileReadingRequest(productService, R.raw.products5000);
-    submitFileReadingRequest(customerService, R.raw.customers5000);
-    submitFileReadingRequest(orderService, R.raw.orders5000);
-    submitFileReadingRequest(orderProductService, R.raw.order_products5000);
+    submitFileReadingRequest(productService, R.raw.products1000);
+    submitFileReadingRequest(customerService, R.raw.customers1000);
+    submitFileReadingRequest(orderService, R.raw.orders1000);
+    submitFileReadingRequest(orderProductService, R.raw.order_products1000);
     final Gson gson = new Gson();
     try {
       customers = gson.fromJson(customerService.take().get(), Customer[].class);
@@ -151,7 +150,7 @@ public class Test implements TestSuiteInterface {
 
   @Override
   public void update() {
-    new ExecutorCompletionService<Void>(executor).submit(() -> {
+    Executors.newCachedThreadPool().submit(() -> {
       final long customerCount = daoSession.getCustomerDao().count();
       final MethodTimer timer = new MethodTimer("Updating " + customerCount + " Customers");
       timer.start();
@@ -160,19 +159,24 @@ public class Test implements TestSuiteInterface {
       timer.showResults();
       return null;
     });
-
   }
 
   //**** greenDAO does not enforce cascading ****
+
+  /**
+   * Run potentially long-running actions on background thread
+   */
   @Override
   public void delete() {
-    final int numberOfCustomers = (int) daoSession.getCustomerDao().count();
-
-    final MethodTimer timer = new MethodTimer("Deleting " + numberOfCustomers + " customers");
-    timer.start();
-    daoSession.getCustomerDao().deleteAll();
-    timer.stop();
-    timer.showResults();
+    Executors.newCachedThreadPool().submit(() -> {
+      final int numberOfCustomers = (int) daoSession.getCustomerDao().count();
+      final MethodTimer timer = new MethodTimer("Deleting " + numberOfCustomers + " customers");
+      timer.start();
+      daoSession.getCustomerDao().deleteAll();
+      timer.stop();
+      timer.showResults();
+      return null;
+    });
   }
 
   @Override
@@ -185,6 +189,7 @@ public class Test implements TestSuiteInterface {
     productService = new ExecutorCompletionService<>(executor);
     orderService = new ExecutorCompletionService<>(executor);
     orderProductService = new ExecutorCompletionService<>(executor);
+
   }
 
   private void submitFileReadingRequest(ExecutorCompletionService<String> completionService,
@@ -203,4 +208,8 @@ public class Test implements TestSuiteInterface {
     return (customers.length > 0 && products.length > 0 && orders.length > 0 && orderProducts.length > 0);
   }
 
+  @Override
+  public void destroy() {
+    daoSession.clear();
+  }
 }
