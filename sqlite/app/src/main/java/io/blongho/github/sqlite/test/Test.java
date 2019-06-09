@@ -6,7 +6,6 @@ import android.widget.Toast;
 
 import com.google.gson.Gson;
 
-import java.util.Random;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.Executor;
 import java.util.concurrent.ExecutorCompletionService;
@@ -142,6 +141,15 @@ public class Test implements TestSuiteInterface {
   @Override
   public void deleteAll() {
     new AsyncDeleteAll(dbManager).execute();
+  }
+
+  @Override
+  public void destroy() {
+    Executors.newSingleThreadExecutor().submit(() -> {
+      dbManager.close();
+      return null;
+    });
+
   }
 
   private void initCompletionServices() {

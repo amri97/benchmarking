@@ -394,7 +394,7 @@ public class DatabaseManager implements DatabaseOperations {
    * Typically, it is optimal to close the database in the onDestroy() of the calling Activity.
    */
   // Close opened database instances in a thread-safe manner
-  private void close() {
+  public void close() {
     if (dbWriter.inTransaction()) {
       synchronized (writeLock) {
         dbWriter.close();
