@@ -172,12 +172,10 @@ public class OrderProduct {
     myDao.update(this);
   }
 
-  /**
-   * called by internal mechanisms, do not call yourself.
-   */
+  /** called by internal mechanisms, do not call yourself. */
   @Generated(hash = 1412736234)
   public void __setDaoSession(DaoSession daoSession) {
-    this.daoSession = daoSession;
-    myDao = daoSession != null ? daoSession.getOrderProductDao() : null;
+      this.daoSession = daoSession;
+      myDao = daoSession != null ? daoSession.getOrderProductDao() : null;
   }
 }
