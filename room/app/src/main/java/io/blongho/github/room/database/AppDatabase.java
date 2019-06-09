@@ -29,7 +29,6 @@ import android.content.Context;
 import androidx.room.Database;
 import androidx.room.Room;
 import androidx.room.RoomDatabase;
-
 import androidx.room.TypeConverters;
 import io.blongho.github.room.database.dao.CustomerDao;
 import io.blongho.github.room.database.dao.OrderDao;
@@ -41,32 +40,38 @@ import io.blongho.github.room.model.Order;
 import io.blongho.github.room.model.OrderProduct;
 import io.blongho.github.room.model.Product;
 
-@Database (entities = {Customer.class, Product.class, Order.class, OrderProduct.class}, version = 1)
+@Database(entities = {Customer.class, Product.class, Order.class, OrderProduct.class}, version = 1)
 @TypeConverters({DateConverter.class})
 abstract class AppDatabase extends RoomDatabase {
-	private final static String databaseName = "customer_order_room";
+  private final static String databaseName = "customer_order_room";
 
-	private static AppDatabase instance;
+  private static AppDatabase instance;
 
-	static AppDatabase getInstance(final Context context) {
-		if (instance == null) {
-			synchronized (AppDatabase.class) {
-				if (instance == null) {
-					instance = Room.databaseBuilder(context, AppDatabase.class, databaseName).build();
-				}
-			}
-		}
-		return instance;
-	}
+  static AppDatabase getInstance(final Context context) {
+    if (instance == null) {
+      synchronized (AppDatabase.class) {
+        if (instance == null) {
+          instance = Room.databaseBuilder(context, AppDatabase.class, databaseName).build();
+        }
+      }
+    }
+    return instance;
+  }
 
-	public static void destroyInstance() { instance = null; }
+  static void destroyInstance() {
+    if (instance != null) {
+      synchronized (AppDatabase.class) {
+        instance = null;
+      }
+    }
+  }
 
-	abstract CustomerDao customerDao();
+  abstract CustomerDao customerDao();
 
-	abstract ProductDao productDao();
+  abstract ProductDao productDao();
 
-	abstract OrderDao orderDao();
+  abstract OrderDao orderDao();
 
-	abstract OrderProductDao orderProductDao();
+  abstract OrderProductDao orderProductDao();
 
 }

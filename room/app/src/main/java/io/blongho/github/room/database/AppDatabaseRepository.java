@@ -41,10 +41,11 @@ import io.blongho.github.room.model.Product;
  * The type App database repository.
  */
 public class AppDatabaseRepository implements DatabaseOperations {
-  private CustomerDao customerDao;
-  private ProductDao productDao;
-  private OrderDao orderDao;
-  private OrderProductDao orderProductDao;
+  private final CustomerDao customerDao;
+  private final ProductDao productDao;
+  private final OrderDao orderDao;
+  private final OrderProductDao orderProductDao;
+  private final AppDatabase db;
 
   /**
    * Instantiates a new App database repository.
@@ -52,7 +53,7 @@ public class AppDatabaseRepository implements DatabaseOperations {
    * @param context the context
    */
   public AppDatabaseRepository(final Context context) {
-    final AppDatabase db = AppDatabase.getInstance(context);
+    db = AppDatabase.getInstance(context);
     customerDao = db.customerDao();
     productDao = db.productDao();
     orderDao = db.orderDao();
@@ -233,5 +234,9 @@ public class AppDatabaseRepository implements DatabaseOperations {
   @Override
   public void deleteAllOrderProducts() {
     orderProductDao.deleteAllOrderProducts();
+  }
+
+  public void clear() {
+    AppDatabase.destroyInstance();
   }
 }

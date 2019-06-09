@@ -1,10 +1,12 @@
 package io.blongho.github.room.test;
 
 import android.content.Context;
+import android.util.Log;
 import android.widget.Toast;
 
 import com.google.gson.Gson;
 
+import java.util.List;
 import java.util.Random;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.Executor;
@@ -51,20 +53,6 @@ public class Test implements TestSuiteInterface {
     init();
   }
 
-  /**
-   * Generate a random number in the range min and max
-   *
-   * @param min the minimum number
-   * @param max the upper bound
-   * @return a random integer
-   */
-  private static int getRandomNumberInRange(int min, int max) {
-    if (min >= max) {
-      throw new IllegalArgumentException("max must be greater than min");
-    }
-    Random r = new Random();
-    return r.nextInt((max - min) + 1) + min;
-  }
 
   @Override
   public void init() {
@@ -77,8 +65,7 @@ public class Test implements TestSuiteInterface {
         timer.stop();
         timer.showResults();
       } else {
-        Toast.makeText(context.getApplicationContext(), TAG + "::init() called but db already initialized",
-            Toast.LENGTH_SHORT).show();
+        Log.e(TAG , "::init() called but db already initialized");
       }
       return null;
     });
@@ -107,6 +94,13 @@ public class Test implements TestSuiteInterface {
     new AsyncReadProduct(repository).execute();
     new AsyncReadOrders(repository).execute();
     new AsyncReadOrderProduct(repository).execute();
+    Executors.newSingleThreadExecutor().submit(()->{
+      List<Order> orders = repository.ordersByCustomer(10);
+      for (Order order : orders) {
+        Log.d(TAG, "read() called " + order);
+      }
+      return null;
+    });
   }
 
   @Override
@@ -142,6 +136,11 @@ public class Test implements TestSuiteInterface {
   @Override
   public void deleteAll() {
     new AsyncDeleteAllEntries(repository).execute();
+  }
+
+  @Override
+  public void destroy() {
+    repository.clear();
   }
 
   private void initCompletionServices() {

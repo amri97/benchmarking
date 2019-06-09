@@ -42,7 +42,7 @@ public class AsyncReadOrders extends AsyncTask<Void, Void, Void> {
   protected Void doInBackground(final Void... voids) {
     final long orders = repository.orderCount();
     if (orders == 0) {
-      Log.d(TAG, "doInBackground() called with: Orders = [" + orders + "]");
+      Log.e(TAG, "doInBackground() called with: Orders = [" + orders + "]");
       return null;
     }
     final MethodTimer timer = new MethodTimer("Reading " + orders + " Orders");
