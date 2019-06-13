@@ -1,10 +1,12 @@
 package io.blongho.github.room.test;
 
 import android.content.Context;
+import android.util.Log;
 import android.widget.Toast;
 
 import com.google.gson.Gson;
 
+import java.util.List;
 import java.util.Random;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.Executor;
@@ -51,34 +53,19 @@ public class Test implements TestSuiteInterface {
     init();
   }
 
-  /**
-   * Generate a random number in the range min and max
-   *
-   * @param min the minimum number
-   * @param max the upper bound
-   * @return a random integer
-   */
-  private static int getRandomNumberInRange(int min, int max) {
-    if (min >= max) {
-      throw new IllegalArgumentException("max must be greater than min");
-    }
-    Random r = new Random();
-    return r.nextInt((max - min) + 1) + min;
-  }
 
   @Override
   public void init() {
     new ExecutorCompletionService<Void>(executor).submit(() -> {
       if (repository == null) {
-        MethodTimer.FILE_NAME = "room_12_000.json";
+        MethodTimer.FILE_NAME = "roomInsert_1_000.json";
         final MethodTimer timer = new MethodTimer("Initializing the database");
         timer.start();
         repository = new AppDatabaseRepository(context);
         timer.stop();
         timer.showResults();
       } else {
-        Toast.makeText(context.getApplicationContext(), TAG + "::init() called but db already initialized",
-            Toast.LENGTH_SHORT).show();
+        Log.e(TAG , "::init() called but db already initialized");
       }
       return null;
     });
@@ -107,23 +94,24 @@ public class Test implements TestSuiteInterface {
     new AsyncReadProduct(repository).execute();
     new AsyncReadOrders(repository).execute();
     new AsyncReadOrderProduct(repository).execute();
+    Executors.newSingleThreadExecutor().submit(()->{
+      List<Order> orders = repository.ordersByCustomer(10);
+      for (Order order : orders) {
+        Log.d(TAG, "read() called " + order);
+      }
+      return null;
+    });
   }
 
   @Override
   public void update() {
     new ExecutorCompletionService<Void>(executor).submit(() -> {
-      // Update 5 random customers
-      final int numberOfCustomers = (int) repository.customerCount();
-      for (int i = 1; i <= 5; i++) {
-        final long randomCustomer = getRandomNumberInRange(i, numberOfCustomers);
-
-        final Customer bernard = new Customer(randomCustomer, "Bernard Longho", "City");
-        final MethodTimer timer = new MethodTimer("Update customer number " + randomCustomer);
-        timer.start();
-        repository.updateCustomer(bernard);
-        timer.stop();
-        timer.showResults();
-      }
+      final long customerCount = repository.customerCount();
+      final MethodTimer timer = new MethodTimer("Updating " + customerCount + " Customers");
+      timer.start();
+      repository.insertCustomer(customers);
+      timer.stop();
+      timer.showResults();
       return null;
     });
 
@@ -133,14 +121,13 @@ public class Test implements TestSuiteInterface {
   public void delete() {
     new ExecutorCompletionService<Void>(executor).submit(() -> {
       final int numberOfCustomers = (int) repository.customerCount();
-      for (int i = 1; i <= 5; i++) {
-        final int randomCustomer = getRandomNumberInRange(1, numberOfCustomers);
-        final MethodTimer timer = new MethodTimer("Deleting customer number " + randomCustomer);
-        timer.start();
-        repository.deleteCustomerWithId((long) randomCustomer);
-        timer.stop();
-        timer.showResults();
-      }
+
+      final MethodTimer timer = new MethodTimer("Deleting all " + numberOfCustomers);
+      timer.start();
+      repository.deleteAllCustomers();
+      timer.stop();
+      timer.showResults();
+
       return null;
     });
 
@@ -149,6 +136,11 @@ public class Test implements TestSuiteInterface {
   @Override
   public void deleteAll() {
     new AsyncDeleteAllEntries(repository).execute();
+  }
+
+  @Override
+  public void destroy() {
+    repository.clear();
   }
 
   private void initCompletionServices() {
@@ -169,10 +161,10 @@ public class Test implements TestSuiteInterface {
    */
   private void getData() {
     initCompletionServices();
-    submitFileReadingRequest(productService, R.raw.products12000);
-    submitFileReadingRequest(customerService, R.raw.customers12000);
-    submitFileReadingRequest(orderService, R.raw.order12000);
-    submitFileReadingRequest(orderProductService, R.raw.order_products12000);
+    submitFileReadingRequest(productService, R.raw.products1000);
+    submitFileReadingRequest(customerService, R.raw.customers1000);
+    submitFileReadingRequest(orderService, R.raw.orders1000);
+    submitFileReadingRequest(orderProductService, R.raw.order_products1000);
     final Gson gson = new Gson();
     try {
       customers = gson.fromJson(customerService.take().get(), Customer[].class);

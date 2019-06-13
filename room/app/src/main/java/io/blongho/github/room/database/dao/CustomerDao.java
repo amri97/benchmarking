@@ -45,7 +45,7 @@ public interface CustomerDao {
    *
    * @return the all customers
    */
-  @Query("SELECT * FROM TB_CUSTOMER")
+  @Query("SELECT * FROM tb_customer")
   List<Customer> getAllCustomers();
 
   /**
@@ -80,15 +80,6 @@ public interface CustomerDao {
   void deleteAllCustomers();
 
   /**
-   * Gets order by customer.
-   *
-   * @param customerID the customer id
-   * @return the orders by customer
-   */
-  @Query("SELECT * FROM TB_ORDER WHERE TB_ORDER.customer_id=:customerID")
-  List<Order> getOrderByCustomer(final long customerID);
-
-  /**
    * Delete customer with attribute.
    *
    * @param attribute the attribute
@@ -106,7 +97,7 @@ public interface CustomerDao {
   @Query("SELECT COUNT(*) FROM TB_CUSTOMER")
   long customerCount();
 
-  @Query("SELECT * FROM TB_ORDER o " +
-      "WHERE o.customer_id=:customerID")
+  @Query("SELECT * FROM tb_order o " +
+      "WHERE o.order_customer=:customerID")
   List<Order> ordersByCustomer(final long customerID);
 }

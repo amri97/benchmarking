@@ -24,15 +24,14 @@
 
 package io.blongho.github.room.database.dao;
 
+import java.util.List;
+
 import androidx.room.Dao;
 import androidx.room.Delete;
 import androidx.room.Insert;
 import androidx.room.OnConflictStrategy;
 import androidx.room.Query;
 import androidx.room.Update;
-
-import java.util.List;
-
 import io.blongho.github.room.model.Product;
 
 /**
@@ -40,57 +39,56 @@ import io.blongho.github.room.model.Product;
  */
 @Dao
 public interface ProductDao {
-	/**
-	 * Gets all products.
-	 *
-	 * @return the all products
-	 */
-	@Query ("SELECT * FROM TB_PRODUCT")
-	List<Product> getAllProducts();
+  /**
+   * Gets all products.
+   *
+   * @return the all products
+   */
+  @Query("SELECT * FROM tb_product")
+  List<Product> getAllProducts();
 
-	/**
-	 * Insert products.
-	 *
-	 * @param products the products
-	 */
-	@Insert(onConflict = OnConflictStrategy.REPLACE)
-	void insertProducts(Product... products);
+  /**
+   * Insert products.
+   *
+   * @param products the products
+   */
+  @Insert(onConflict = OnConflictStrategy.REPLACE)
+  void insertProducts(Product... products);
 
-	/**
-	 * Update product.
-	 *
-	 * @param product the product
-	 *
-	 * @return the affected row.
-	 */
-	@Update(onConflict = OnConflictStrategy.REPLACE)
-	int updateProduct(Product... product);
+  /**
+   * Update product.
+   *
+   * @param product the product
+   * @return the affected row.
+   */
+  @Update(onConflict = OnConflictStrategy.REPLACE)
+  int updateProduct(Product... product);
 
-	/**
-	 * Delete product.
-	 *
-	 * @param product the product
-	 */
-	@Delete
-	void deleteProduct(Product... product);
+  /**
+   * Delete product.
+   *
+   * @param product the product
+   */
+  @Delete
+  void deleteProduct(Product... product);
 
-	/**
-	 * Delete all products.
-	 */
-	@Query ("DELETE FROM TB_PRODUCT")
-	void deleteAllProducts();
+  /**
+   * Delete all products.
+   */
+  @Query("DELETE FROM tb_product")
+  void deleteAllProducts();
 
-	/**
-	 * Delete product with attribute.
-	 * <p> This method gets an order based on the id, the date, the id of the
-	 * customer</p>
-	 *
-	 * @param attribute the attribute
-	 */
-	@Query ("DELETE FROM TB_PRODUCT WHERE product_id =:attribute OR product_name=:attribute OR " +
-	        "product_desc=:attribute")
-	void deleteProductWithAttribute(final String attribute);
+  /**
+   * Delete product with attribute.
+   * <p> This method gets an order based on the id, the date, the id of the
+   * customer</p>
+   *
+   * @param attribute the attribute
+   */
+  @Query("DELETE FROM tb_product WHERE product_id =:attribute OR product_name=:attribute OR " +
+      "product_desc=:attribute")
+  void deleteProductWithAttribute(final String attribute);
 
-	@Query("SELECT COUNT(*) FROM TB_PRODUCT")
-	long productCount();
+  @Query("SELECT COUNT(*) FROM TB_PRODUCT")
+  long productCount();
 }

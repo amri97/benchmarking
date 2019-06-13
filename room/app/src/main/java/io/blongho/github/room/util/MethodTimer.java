@@ -1,6 +1,5 @@
 package io.blongho.github.room.util;
 
-import android.content.Context;
 import android.util.Log;
 
 import java.util.HashMap;
@@ -9,37 +8,31 @@ import java.util.Map;
 /**
  * The type Method timer.
  */
-public class MethodTimer {
+final public class MethodTimer {
   public static String FILE_NAME = "test.json";
-  private final Context context;
   private String method;
   private long start;
   private long stop;
   private Map<String, Long> resultsMap;
-  private Results fileWriter;
+  private ResultsFileWriter fileWriter;
 
   /**
    * Instantiates a new Method timer.
    *
    * @param method the method
    */
-  public MethodTimer(String method) {
-    this(method, null);
-  }
-
-  public MethodTimer(final String method, final Context context) {
+  public MethodTimer(final String method) {
     this.method = method;
     start = stop = 0;
     resultsMap = new HashMap<>();
-    this.context = null;
-    fileWriter = new Results(FILE_NAME);
+    fileWriter = new ResultsFileWriter(FILE_NAME);
   }
 
   /**
    * Start.
    * <p>Start the timing</p>
    */
-  public final void start() {
+  public final synchronized void start() {
     start = System.nanoTime();
   }
 
@@ -47,7 +40,7 @@ public class MethodTimer {
    * Stop.
    * <p>Stop the timing</p>
    */
-  public final void stop() {
+  public final synchronized void stop() {
     stop = System.nanoTime();
     final long results = stop - start;
     resultsMap.put(method, results);
@@ -57,7 +50,7 @@ public class MethodTimer {
    * Show results.
    * <p>Displays the results in the logcat in nanoseconds, milliseconds and seconds</p>
    */
-  public final void showResults() {
+  public final synchronized void showResults() {
     long results;
     long milli;
     long sec;
@@ -68,7 +61,7 @@ public class MethodTimer {
         sec = milli / 1_000;
         Log.i(key, "" + results + " ns (" + milli + " ms, " + sec + " s)");
       }
-      fileWriter.writeStringAsFile(new Results(key, results, milli, sec));
+      fileWriter.writeToFile(new ResultsFileWriter(key, results, milli, sec));
     }
     resultsMap = new HashMap<>();
   }
@@ -79,7 +72,7 @@ public class MethodTimer {
    *
    * @param tag the tag
    */
-  public final void setTag(String tag) {
+  public final synchronized void setTag(String tag) {
     method = tag;
   }
 }

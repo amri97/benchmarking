@@ -32,9 +32,6 @@ import androidx.room.Entity;
 import androidx.room.ForeignKey;
 import androidx.room.Ignore;
 import androidx.room.Index;
-import androidx.room.TypeConverters;
-import io.blongho.github.room.constants.Column;
-import io.blongho.github.room.constants.Table;
 
 /**
  * The type Order<br> An order holds an identifier to the customer and the list of products ordered.
@@ -43,33 +40,30 @@ import io.blongho.github.room.constants.Table;
  * @version 1.0
  * @since 2019-05-10
  */
-@Entity(tableName = Table.ORDER,
-    primaryKeys = {Column.ORDER_ID},
+@Entity(tableName = "tb_order",
+    primaryKeys = {"order_id"},
     foreignKeys = {
         @ForeignKey(
             entity = Customer.class,
-            parentColumns = Column.CUSTOMER_ID,
-            childColumns = Column.ORDER_CUSTOMER,
+            parentColumns = "customer_id",
+            childColumns = "order_customer",
             onUpdate = ForeignKey.CASCADE,
             onDelete = ForeignKey.CASCADE
         )
     },
     indices = {
-        @Index(
-            value = {
-                Column.ORDER_ID,
-                Column.ORDER_CUSTOMER
-            },
-            unique = true)
-    })
+        @Index(value = {"order_id"}, unique = true),
+        @Index(value = {"order_customer"})
+    }
+)
 public class Order {
-  @ColumnInfo(name = Column.ORDER_DATE)
-  @TypeConverters(DateConverter.class)
-  private Date date;
-  @ColumnInfo(name = Column.ORDER_ID)
+  @ColumnInfo(name = "order_id")
   private long id;
-  @ColumnInfo(name = Column.ORDER_CUSTOMER)
+  @ColumnInfo(name = "order_customer")
   private long customer;
+  @ColumnInfo(name = "order_date")
+  private Date date;
+
   @Ignore
   private List<Product> products;
 

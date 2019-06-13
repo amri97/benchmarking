@@ -27,16 +27,13 @@ package io.blongho.github.sqlite.model;
 =======
 package io.blongho.github.room.model;
 
+import java.util.List;
+
 import androidx.room.ColumnInfo;
 import androidx.room.Entity;
 import androidx.room.Ignore;
 import androidx.room.PrimaryKey;
 >>>>>>> room:room/app/src/main/java/io/blongho/github/room/model/Customer.java
-
-import java.util.List;
-
-import io.blongho.github.room.constants.Column;
-import io.blongho.github.room.constants.Table;
 
 /**
 <<<<<<< HEAD:sqlite/app/src/main/java/io/blongho/github/sqlite/model/Customer.java
@@ -51,8 +48,9 @@ import io.blongho.github.room.constants.Table;
  * @version 1.0
  * @since 2019-05-10
  */
-@Entity (tableName = Table.CUSTOMER)
+@Entity(tableName = "tb_customer")
 public class Customer {
+<<<<<<< HEAD
 <<<<<<< HEAD:sqlite/app/src/main/java/io/blongho/github/sqlite/model/Customer.java
 
   private String city;
@@ -61,6 +59,17 @@ public class Customer {
 
   private String name;
 
+=======
+  @PrimaryKey
+  @ColumnInfo(name = "customer_id")
+  private Long id;
+  @ColumnInfo(name = "customer_name")
+  private String name;
+  @ColumnInfo(name = "customer_addr")
+  private String city;
+
+  @Ignore
+>>>>>>> room
   private List<Order> orders;
 
   /**
@@ -74,8 +83,14 @@ public class Customer {
    *
    * @param customer_id the customer id
    * @param name        the name
+<<<<<<< HEAD
    * @param address     the address
    */
+=======
+   * @param address     the city
+   */
+  @Ignore
+>>>>>>> room
   public Customer(final Long customer_id, final String name, final String address) {
     this.id = customer_id;
     this.name = name;
@@ -119,6 +134,11 @@ public class Customer {
   }
 
   /**
+<<<<<<< HEAD
+=======
+   * Gets city.
+   *
+>>>>>>> room
    * @return the city
    */
   public String getCity() {
@@ -126,7 +146,13 @@ public class Customer {
   }
 
   /**
+<<<<<<< HEAD
    * @param city the city to set
+=======
+   * Sets city.
+   *
+   * @param city the city
+>>>>>>> room
    */
   public void setCity(final String city) {
     this.city = city;
@@ -155,6 +181,7 @@ public class Customer {
     final StringBuffer sb = new StringBuffer("Customer{");
     sb.append("id=").append(id);
     sb.append(", name='").append(name).append('\'');
+<<<<<<< HEAD
     sb.append(", address=").append(city);
     sb.append('}');
     return sb.toString();
@@ -273,5 +300,11 @@ public class Customer {
 		return sb.toString();
 	}
 >>>>>>> room:room/app/src/main/java/io/blongho/github/room/model/Customer.java
+=======
+    sb.append(", city=").append(city);
+    sb.append('}');
+    return sb.toString();
+  }
+>>>>>>> room
 
 }

@@ -31,7 +31,6 @@ import io.blongho.github.room.model.Product;
 import io.blongho.github.room.util.MethodTimer;
 
 public class AsyncAddProduct extends AsyncTask<Product, Void, Void> {
-  private static final String TAG = "AsyncAddProduct";
   private final AppDatabaseRepository repository;
 
   public AsyncAddProduct(final AppDatabaseRepository repository) {

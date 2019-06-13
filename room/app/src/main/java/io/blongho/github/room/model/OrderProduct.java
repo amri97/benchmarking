@@ -29,47 +29,41 @@ import androidx.room.Entity;
 import androidx.room.ForeignKey;
 import androidx.room.Ignore;
 import androidx.room.Index;
-import io.blongho.github.room.constants.Column;
-import io.blongho.github.room.constants.Table;
 
 /**
  * The type Order product.
  */
-@Entity(tableName = Table.ORDER_PRODUCT,
-    primaryKeys = {
-        Column.ORDER_PRODUCT_ID
-    },
+@Entity(tableName = "tb_order_product",
+    primaryKeys = {"op_id"},
     foreignKeys = {
         @ForeignKey(
             entity = Order.class,
-            parentColumns = Column.ORDER_ID,
-            childColumns = Column.ORDER_PRODUCT_ORDER,
+            parentColumns = "order_id",
+            childColumns = "op_order",
             onUpdate = ForeignKey.CASCADE,
             onDelete = ForeignKey.CASCADE
         ),
         @ForeignKey(
             entity = Product.class,
-            parentColumns = Column.PRODUCT_ID,
-            childColumns = Column.ORDER_PRODUCT_PRODUCT,
+            parentColumns = "product_id",
+            childColumns = "op_product",
             onUpdate = ForeignKey.CASCADE,
             onDelete = ForeignKey.CASCADE
         )
     },
+    // gradle build complains if these indices are not defined separately
     indices = {
-        @Index(
-            value = {
-                Column.ORDER_PRODUCT_ID,
-                Column.ORDER_PRODUCT_ORDER,
-                Column.ORDER_PRODUCT_PRODUCT},
-            unique = true
-        )
-    })
+        @Index(value = {"op_id"}, unique = true),
+        @Index(value = {"op_order"}),
+        @Index(value = {"op_product"})
+    }
+)
 public class OrderProduct {
-  @ColumnInfo(name = Column.ORDER_PRODUCT_ID)
+  @ColumnInfo(name = "op_id")
   private long id;
-  @ColumnInfo(name = Column.ORDER_PRODUCT_ORDER)
+  @ColumnInfo(name = "op_order")
   private long order;
-  @ColumnInfo(name = Column.ORDER_PRODUCT_PRODUCT)
+  @ColumnInfo(name = "op_product")
   private long product;
 
   /**

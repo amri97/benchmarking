@@ -45,7 +45,7 @@ public interface OrderDao {
    *
    * @return the all orders
    */
-  @Query("SELECT * FROM TB_ORDER")
+  @Query("SELECT * FROM tb_order")
   List<Order> getAllOrders();
 
   /**
@@ -88,8 +88,8 @@ public interface OrderDao {
 
   @Query("SELECT * FROM TB_PRODUCT p " +
       "WHERE p.product_id " +
-      "IN (SELECT o.op_product_id FROM tb_order_product o " +
-      "WHERE o.op_order_id=:orderID)")
+      "IN (SELECT o.op_product FROM tb_order_product o " +
+      "WHERE o.op_order=:orderID)")
   List<Product> getProductsInOrder(final long orderID);
 
   /**
@@ -97,7 +97,7 @@ public interface OrderDao {
    *
    * @param attribute the attribute
    */
-  @Query("DELETE FROM TB_ORDER WHERE order_id=:attribute OR customer_id=:attribute OR order_date=:attribute")
+  @Query("DELETE FROM tb_order WHERE order_id=:attribute OR order_customer=:attribute OR order_date=:attribute")
   void deleteOrderWithAttribute(final String attribute);
 
   @Query("SELECT COUNT(*) FROM tb_order")
