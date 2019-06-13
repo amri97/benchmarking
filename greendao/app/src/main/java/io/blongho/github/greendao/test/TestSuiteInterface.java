@@ -45,4 +45,6 @@ interface TestSuiteInterface {
   void delete();
 
   void deleteAll();
+
+  void destroy();
 }

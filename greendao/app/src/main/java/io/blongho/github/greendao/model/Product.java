@@ -26,6 +26,7 @@
 
 package io.blongho.github.greendao.model;
 
+import org.greenrobot.greendao.DaoException;
 import org.greenrobot.greendao.annotation.Entity;
 import org.greenrobot.greendao.annotation.Generated;
 import org.greenrobot.greendao.annotation.Id;
@@ -36,7 +37,6 @@ import org.greenrobot.greendao.annotation.Property;
 import org.greenrobot.greendao.annotation.ToMany;
 
 import java.util.List;
-import org.greenrobot.greendao.DaoException;
 
 /**
  * The type Product<br>
@@ -68,10 +68,14 @@ public class Product {
       targetProperty = "order"
   )
   private List<Order> ordersWithThisProduct;
-  /** Used to resolve relations */
+  /**
+   * Used to resolve relations
+   */
   @Generated(hash = 2040040024)
   private transient DaoSession daoSession;
-  /** Used for active entity operations. */
+  /**
+   * Used for active entity operations.
+   */
   @Generated(hash = 694336451)
   private transient ProductDao myDao;
 
@@ -83,9 +87,9 @@ public class Product {
 
   @Generated(hash = 517059296)
   public Product(long id, @NotNull String name, String description) {
-      this.id = id;
-      this.name = name;
-      this.description = description;
+    this.id = id;
+    this.name = name;
+    this.description = description;
   }
 
   /**
@@ -94,21 +98,21 @@ public class Product {
    */
   @Generated(hash = 1365647064)
   public List<Order> getOrdersWithThisProduct() {
-      if (ordersWithThisProduct == null) {
-          final DaoSession daoSession = this.daoSession;
-          if (daoSession == null) {
-              throw new DaoException("Entity is detached from DAO context");
-          }
-          OrderDao targetDao = daoSession.getOrderDao();
-          List<Order> ordersWithThisProductNew = targetDao
-                  ._queryProduct_OrdersWithThisProduct(id);
-          synchronized (this) {
-              if (ordersWithThisProduct == null) {
-                  ordersWithThisProduct = ordersWithThisProductNew;
-              }
-          }
+    if (ordersWithThisProduct == null) {
+      final DaoSession daoSession = this.daoSession;
+      if (daoSession == null) {
+        throw new DaoException("Entity is detached from DAO context");
       }
-      return ordersWithThisProduct;
+      OrderDao targetDao = daoSession.getOrderDao();
+      List<Order> ordersWithThisProductNew = targetDao
+          ._queryProduct_OrdersWithThisProduct(id);
+      synchronized (this) {
+        if (ordersWithThisProduct == null) {
+          ordersWithThisProduct = ordersWithThisProductNew;
+        }
+      }
+    }
+    return ordersWithThisProduct;
   }
 
   /**
@@ -175,10 +179,12 @@ public class Product {
     return sb.toString();
   }
 
-  /** Resets a to-many relationship, making the next get call to query for a fresh result. */
+  /**
+   * Resets a to-many relationship, making the next get call to query for a fresh result.
+   */
   @Generated(hash = 1032865744)
   public synchronized void resetOrdersWithThisProduct() {
-      ordersWithThisProduct = null;
+    ordersWithThisProduct = null;
   }
 
   /**
@@ -187,10 +193,10 @@ public class Product {
    */
   @Generated(hash = 128553479)
   public void delete() {
-      if (myDao == null) {
-          throw new DaoException("Entity is detached from DAO context");
-      }
-      myDao.delete(this);
+    if (myDao == null) {
+      throw new DaoException("Entity is detached from DAO context");
+    }
+    myDao.delete(this);
   }
 
   /**
@@ -199,10 +205,10 @@ public class Product {
    */
   @Generated(hash = 1942392019)
   public void refresh() {
-      if (myDao == null) {
-          throw new DaoException("Entity is detached from DAO context");
-      }
-      myDao.refresh(this);
+    if (myDao == null) {
+      throw new DaoException("Entity is detached from DAO context");
+    }
+    myDao.refresh(this);
   }
 
   /**
@@ -211,16 +217,16 @@ public class Product {
    */
   @Generated(hash = 713229351)
   public void update() {
-      if (myDao == null) {
-          throw new DaoException("Entity is detached from DAO context");
-      }
-      myDao.update(this);
+    if (myDao == null) {
+      throw new DaoException("Entity is detached from DAO context");
+    }
+    myDao.update(this);
   }
 
   /** called by internal mechanisms, do not call yourself. */
-@Generated(hash = 1171535257)
-public void __setDaoSession(DaoSession daoSession) {
-    this.daoSession = daoSession;
-    myDao = daoSession != null ? daoSession.getProductDao() : null;
-}
+  @Generated(hash = 1171535257)
+  public void __setDaoSession(DaoSession daoSession) {
+      this.daoSession = daoSession;
+      myDao = daoSession != null ? daoSession.getProductDao() : null;
+  }
 }

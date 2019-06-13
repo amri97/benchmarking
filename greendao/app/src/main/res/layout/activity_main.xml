@@ -26,70 +26,70 @@
   -->
 
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:orientation="vertical"
-    tools:context=".MainActivity">
+              xmlns:tools="http://schemas.android.com/tools"
+              android:layout_width="match_parent"
+              android:layout_height="match_parent"
+              android:orientation="vertical"
+              tools:context=".MainActivity">
+
+  <Button
+      style="@style/buttonFullStyle"
+      android:layout_marginTop="64dp"
+      android:onClick="createDb"
+      android:text="@string/dbInitialize"
+      />
+
+  <LinearLayout
+      android:layout_width="match_parent"
+      android:layout_height="@dimen/linearHeight"
+      android:layout_marginTop="@dimen/defaultMargin"
+      android:orientation="horizontal">
 
     <Button
-        style="@style/buttonFullStyle"
-        android:layout_marginTop="64dp"
-        android:text="@string/dbInitialize"
-        android:onClick="createDb"
-        />
-
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="@dimen/linearHeight"
-        android:layout_marginTop="@dimen/defaultMargin"
-        android:orientation="horizontal">
-
-        <Button
-            style="@style/buttonSideBySide"
-            android:text="@string/dbCreate"
-            android:onClick="loadData"/>
-
-        <View
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="0.05" />
-
-        <Button
-            style="@style/buttonSideBySide"
-            android:onClick="readData"
-            android:text="@string/dbRead" />
-    </LinearLayout>
+        style="@style/buttonSideBySide"
+        android:onClick="loadData"
+        android:text="@string/dbCreate"/>
 
     <View
-        android:layout_width="wrap_content"
-        android:layout_height="@dimen/defaultMargin" />
-
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="@dimen/linearHeight"
-        android:layout_marginTop="@dimen/defaultMargin"
-        android:orientation="horizontal">
-
-        <Button
-            style="@style/buttonSideBySide"
-            android:onClick="updateEntry"
-            android:text="@string/dbUpdate" />
-
-        <View
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="0.05" />
-
-        <Button
-            style="@style/buttonSideBySide"
-            android:onClick="deleteFromDb"
-            android:text="@string/dbDelete" />
-    </LinearLayout>
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_weight="0.05"/>
 
     <Button
-        android:onClick="clearDb"
-        style="@style/buttonFullStyle"
-        android:layout_marginTop="@dimen/defaultMargin"
-        android:text="@string/dbDropAll" />
+        style="@style/buttonSideBySide"
+        android:onClick="readData"
+        android:text="@string/dbRead"/>
+  </LinearLayout>
+
+  <View
+      android:layout_width="wrap_content"
+      android:layout_height="@dimen/defaultMargin"/>
+
+  <LinearLayout
+      android:layout_width="match_parent"
+      android:layout_height="@dimen/linearHeight"
+      android:layout_marginTop="@dimen/defaultMargin"
+      android:orientation="horizontal">
+
+    <Button
+        style="@style/buttonSideBySide"
+        android:onClick="updateEntry"
+        android:text="@string/dbUpdate"/>
+
+    <View
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_weight="0.05"/>
+
+    <Button
+        style="@style/buttonSideBySide"
+        android:onClick="deleteFromDb"
+        android:text="@string/dbDelete"/>
+  </LinearLayout>
+
+  <Button
+      style="@style/buttonFullStyle"
+      android:layout_marginTop="@dimen/defaultMargin"
+      android:onClick="clearDb"
+      android:text="@string/dbDropAll"/>
 </LinearLayout>
