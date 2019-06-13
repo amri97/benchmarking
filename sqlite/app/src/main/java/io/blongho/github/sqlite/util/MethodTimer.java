@@ -14,7 +14,7 @@ public class MethodTimer {
   private long start;
   private long stop;
   private Map<String, Long> resultsMap;
-  private Results fileWriter;
+  private ResultsFileWriter fileWriter;
 
   /**
    * Instantiates a new Method timer.
@@ -30,7 +30,7 @@ public class MethodTimer {
     start = stop = 0;
     resultsMap = new HashMap<>();
     this.context = null;
-    fileWriter = new Results(FILE_NAME);
+    fileWriter = new ResultsFileWriter(FILE_NAME);
   }
 
   /**
@@ -66,7 +66,7 @@ public class MethodTimer {
         sec = milli / 1_000;
         Log.i(key, "" + results + " ns (" + milli + " ms, " + sec + " s)");
       }
-      fileWriter.writeStringAsFile(new Results(key, results, milli, sec));
+      fileWriter.writeStringAsFile(new ResultsFileWriter(key, results, milli, sec));
     }
     resultsMap = new HashMap<>();
   }

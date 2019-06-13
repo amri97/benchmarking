@@ -6,7 +6,6 @@ import android.widget.Toast;
 
 import com.google.gson.Gson;
 
-import java.util.Random;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.Executor;
 import java.util.concurrent.ExecutorCompletionService;
@@ -29,7 +28,6 @@ import io.blongho.github.sqlite.util.MethodTimer;
 import io.blongho.github.sqlite.util.ReadFromFile;
 
 public class Test implements TestSuiteInterface {
-  private static final String TAG = "Test";
   private static Executor executor = Executors.newCachedThreadPool();
   private static DatabaseManager dbManager;
   private final Context context;
@@ -48,25 +46,10 @@ public class Test implements TestSuiteInterface {
     init();
   }
 
-  /**
-   * Generate a random number in the range min and max
-   *
-   * @param min the minimum number
-   * @param max the upper bound
-   * @return a random integer
-   */
-  private static int getRandomNumberInRange(int min, int max) {
-    if (min >= max) {
-      throw new IllegalArgumentException("max must be greater than min");
-    }
-    Random r = new Random();
-    return r.nextInt((max - min) + 1) + min;
-  }
-
   @Override
   public void init() {
     new ExecutorCompletionService<Void>(executor).submit(() -> {
-      MethodTimer.FILE_NAME = "sql_12_000.json";
+      MethodTimer.FILE_NAME = "sqlInsert_1_000.json";
       final MethodTimer timer = new MethodTimer("Initializing the database");
       timer.start();
       dbManager = new DatabaseManager(context);
@@ -75,6 +58,29 @@ public class Test implements TestSuiteInterface {
       timer.showResults();
       return null;
     });
+  }
+
+  /**
+   * Read all the data from file
+   * <p>Call this method before running Create()</p>
+   */
+  private void getData() {
+    initCompletionServices();
+    submitFileReadingRequest(productService, R.raw.products1000);
+    submitFileReadingRequest(customerService, R.raw.customers1000);
+    submitFileReadingRequest(orderService, R.raw.orders1000);
+    submitFileReadingRequest(orderProductService, R.raw.order_products1000);
+    final Gson gson = new Gson();
+    try {
+      customers = gson.fromJson(customerService.take().get(), Customer[].class);
+      products = gson.fromJson(productService.take().get(), Product[].class);
+      orders = gson.fromJson(orderService.take().get(), Order[].class);
+      orderProducts = gson.fromJson(orderProductService.take().get(), OrderProduct[].class);
+    } catch (ExecutionException e) {
+      e.printStackTrace();
+    } catch (InterruptedException e) {
+      e.printStackTrace();
+    }
   }
 
   @Override
@@ -105,35 +111,28 @@ public class Test implements TestSuiteInterface {
   @Override
   public void update() {
     new ExecutorCompletionService<Void>(executor).submit(() -> {
-      // Update 5 random customers
-      final int numberOfCustomers = (int) dbManager.customerCount();
-      for (int i = 1; i <= 5; i++) {
-        final long randomCustomer = getRandomNumberInRange(i, numberOfCustomers);
-
-        final Customer bernard = new Customer(randomCustomer, "Bernard Longho", "City");
-        final MethodTimer timer = new MethodTimer("Update customer number " + randomCustomer);
-        timer.start();
-        dbManager.updateCustomer(bernard);
-        timer.stop();
-        timer.showResults();
-      }
+      final long customersInSystem = dbManager.customerCount();
+      final MethodTimer update = new MethodTimer("Updating " + customersInSystem + " Customers");
+      update.start();
+      dbManager.updateCustomer(customers);
+      update.stop();
+      update.showResults();
       return null;
     });
 
   }
 
+  // run this and then call read to see if orders and OrderProducts are null.
+  // If they are null, then cascading has been enforced
   @Override
   public void delete() {
     new ExecutorCompletionService<Void>(executor).submit(() -> {
       final int numberOfCustomers = (int) dbManager.customerCount();
-      for (int i = 1; i <= 5; i++) {
-        final int randomCustomer = getRandomNumberInRange(1, numberOfCustomers);
-        final MethodTimer timer = new MethodTimer("Deleting customer number " + randomCustomer);
-        timer.start();
-        dbManager.deleteCustomerWithId((long) randomCustomer);
-        timer.stop();
-        timer.showResults();
-      }
+      final MethodTimer timer = new MethodTimer("Deleting all " + numberOfCustomers + " Customers");
+      timer.start();
+      dbManager.deleteAllCustomers();
+      timer.stop();
+      timer.showResults();
       return null;
     });
 
@@ -141,7 +140,16 @@ public class Test implements TestSuiteInterface {
 
   @Override
   public void deleteAll() {
-    new AsyncDeleteAll(dbManager).executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
+    new AsyncDeleteAll(dbManager).execute();
+  }
+
+  @Override
+  public void destroy() {
+    Executors.newSingleThreadExecutor().submit(() -> {
+      dbManager.close();
+      return null;
+    });
+
   }
 
   private void initCompletionServices() {
@@ -154,29 +162,6 @@ public class Test implements TestSuiteInterface {
   private void submitFileReadingRequest(ExecutorCompletionService<String> completionService,
                                         @RawRes int fileResourceID) {
     completionService.submit(new ReadFromFile(context.getApplicationContext(), fileResourceID));
-  }
-
-  /**
-   * Read all the data from file
-   * <p>Call this method before running Create()</p>
-   */
-  private void getData() {
-    initCompletionServices();
-    submitFileReadingRequest(productService, R.raw.products12000);
-    submitFileReadingRequest(customerService, R.raw.customers12000);
-    submitFileReadingRequest(orderService, R.raw.order12000);
-    submitFileReadingRequest(orderProductService, R.raw.order_products12000);
-    final Gson gson = new Gson();
-    try {
-      customers = gson.fromJson(customerService.take().get(), Customer[].class);
-      products = gson.fromJson(productService.take().get(), Product[].class);
-      orders = gson.fromJson(orderService.take().get(), Order[].class);
-      orderProducts = gson.fromJson(orderProductService.take().get(), OrderProduct[].class);
-    } catch (ExecutionException e) {
-      e.printStackTrace();
-    } catch (InterruptedException e) {
-      e.printStackTrace();
-    }
   }
 
   private boolean isTestReady() {
